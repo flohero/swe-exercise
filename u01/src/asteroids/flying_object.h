@@ -1,7 +1,9 @@
 #include <ml5/ml5.h>
 #pragma once
-class flying_object: public ml5::object {
+class flying_object {
 public:
+
+	using context_t = ml5::paint_event::context_t;
 
 	flying_object(wxPoint pos) : position{ pos } {}
 
@@ -13,7 +15,11 @@ public:
 		return this->position;
 	}
 
-	flying_object operator=(const flying_object obj) = default;
+	void draw(context_t & ctx) {
+		ctx.SetBrush(*wxWHITE_BRUSH);
+		ctx.SetPen(*wxBLACK_PEN);
+		ctx.DrawRectangle(wxRect{ this->position, wxSize{10, 10} });
+	}
 
 
 private:
