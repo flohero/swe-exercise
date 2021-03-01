@@ -21,7 +21,6 @@ public:
 	}
 
 	void on_timer(ml5::timer_event const& event) override {
-		stop_timer();
 		ship.move();
 
 		/* Ugly hack since there is no key up or down event.*/
@@ -31,7 +30,6 @@ public:
 			not_accelerated_count += 1;
 		}
 		refresh();
-		start_timer(std::chrono::milliseconds{ TICK_INTERVAL });
 	}
 
 	void on_key(ml5::key_event const& event) override {
