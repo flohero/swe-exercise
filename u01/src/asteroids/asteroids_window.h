@@ -15,12 +15,38 @@ public:
 	}
 
 	void on_paint(ml5::paint_event const& event) override {
-		
 		context_t &ctx = event.get_context();
+		auto s = ctx.GetSize();
 		ship.draw(ctx);
+	}
+
+	void on_timer(ml5::timer_event const& event) override {
+		stop_timer();
+		ship.move();
+
+		/* Ugly hack since there is no key up or down event.*/
+		if (not_accelerated_count > 1000) {
+			ship.deaccelerate();
+		} else {
+			not_accelerated_count += 1;
+		}
+		refresh();
+		start_timer(std::chrono::milliseconds{ TICK_INTERVAL });
+	}
+
+	void on_key(ml5::key_event const& event) override {
+		if (event.get_key_code() == 'w') {
+			ship.accelerate();
+			not_accelerated_count = 0;
+		} else if(event.get_key_code() == 'a') {
+			ship.rotate(rotate_direction::left);
+		}else if(event.get_key_code() == 'd') {
+			ship.rotate(rotate_direction::right);
+		}
 	}
 
 private:
 	spaceship ship;
+	int not_accelerated_count = 0;
 };
 
