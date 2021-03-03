@@ -1,9 +1,38 @@
-#include "flying_object.h"
-#include "asteroid_size.h"
 #pragma once
+#include "flying_object.h"
 
-class asteroid : public flying_object {
+namespace asteroids {
 
-private:
-	asteroid_size size;
-};
+	constexpr int asteroid_min_size = 5;
+
+	enum class asteroid_size {
+		tiny = 1,
+		medium = 2,
+		big = 3
+	};
+
+	class asteroid : public flying_object {
+	public:
+		using context_t = ml5::paint_event::context_t;
+
+		explicit asteroid(wxRealPoint pos) :
+			flying_object{ pos } {
+			this->size_ = static_cast<asteroid_size>(rand() % 3 + 1);
+			this->length_ = static_cast<int>(this->size_) * asteroid_min_size;
+		}
+
+		void draw(context_t& ctx) override {
+			this->seemless_move(ctx);
+			ctx.SetBrush(*wxWHITE_BRUSH);
+			ctx.SetPen(*wxWHITE_PEN);
+			ctx.DrawRectangle(wxRect{ this->position_, wxSize{this->length_, this->length_} });
+		}
+
+		friend bool operator==(asteroid const& left, asteroid const& right) {
+			return left.length_ == right.length_ && left.position_ == right.position_;
+		}
+
+	private:
+		asteroid_size size_;
+	};
+}
