@@ -1,12 +1,12 @@
+#pragma once
 #include <ml5/ml5.h>
 #include "spaceship.h"
 #include "asteroid.h"
-#pragma once
 
 namespace asteroids {
 	constexpr int TICK_INTERVAL = 10;
 
-	class asteroids_window : public ml5::window {
+	class asteroids_window final : public ml5::window {
 	public:
 		using context_t = ml5::paint_event::context_t;
 

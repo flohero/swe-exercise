@@ -1,5 +1,5 @@
-#include <ml5/ml5.h>
 #pragma once
+#include <ml5/ml5.h>
 
 namespace asteroids {
 
@@ -16,10 +16,12 @@ namespace asteroids {
 
 		explicit flying_object(wxRealPoint pos) : position_{ pos } {}
 
-		flying_object(wxRealPoint pos, int length) :
+		flying_object(wxRealPoint pos, int const length) :
 			position_{ pos }, length_{ length } {}
 
-		virtual void rotate(rotate_direction dir) {
+		virtual ~flying_object() = default;
+
+		virtual void rotate(rotate_direction const dir) {
 			this->direction_ += dir == rotate_direction::right ? turn_factor : -turn_factor;
 			if (this->direction_ < 0) {
 				this->direction_ = 360 + this->direction_;
@@ -33,7 +35,7 @@ namespace asteroids {
 		virtual void move() {
 			this->position_.x += cos(direction_ * ml5::util::PI / 180) * this->speed_;
 			this->position_.y += sin(direction_ * ml5::util::PI / 180) * this->speed_;
-		};
+		}
 
 	protected:
 		wxRealPoint position_;
@@ -45,8 +47,8 @@ namespace asteroids {
 		* if an object moves out of sight it loops back
 		* at the other side of the window
 		**/
-		virtual void seemless_move(context_t& ctx) {
-			wxSize size = ctx.GetSize();
+		virtual void seamless_move(context_t& ctx) {
+			wxSize const size = ctx.GetSize();
 			if (this->position_.x + this->length_ < 0) {
 				this->position_.x = size.x - 1.0;
 			}

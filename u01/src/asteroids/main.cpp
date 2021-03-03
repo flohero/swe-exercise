@@ -2,6 +2,6 @@
 
 
 int main() {
-	srand(time(NULL));
+	srand(time(nullptr));
 	asteroids::asteroids_app{}.run();
 }
