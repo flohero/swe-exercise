@@ -15,21 +15,21 @@ namespace asteroids {
 			start_timer(std::chrono::milliseconds{ TICK_INTERVAL });
 			this->ship_ = spaceship{ this->get_width() / 2, this->get_height() / 2 };
 			asteroid ast{ wxRealPoint { 0.0, 0.0 } };
-			this->asteroids_.add(ast);
+			this->asteroids_.push_back(ast);
 		}
 
 		void on_paint(ml5::paint_event const& event) override {
 			context_t& ctx = event.get_context();
 			auto s = ctx.GetSize();
 			ship_.draw(ctx);
-			for (auto asteroid : this->asteroids_) {
+			for (auto &asteroid : this->asteroids_) {
 				asteroid.draw(ctx);
 			}
 		}
 
 		void on_timer(ml5::timer_event const& event) override {
 			ship_.move();
-			for (auto asteroid : this->asteroids_) {
+			for (auto &asteroid : this->asteroids_) {
 				asteroid.move();
 			}
 
@@ -59,7 +59,7 @@ namespace asteroids {
 
 	private:
 		spaceship ship_;
-		ml5::vector<asteroid> asteroids_;
+		std::vector<asteroid> asteroids_;
 		int not_accelerated_count_ = 0;
 	};
 }

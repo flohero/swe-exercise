@@ -16,9 +16,6 @@ namespace asteroids {
 
 		explicit flying_object(wxRealPoint pos) : position_{ pos } {}
 
-		flying_object(wxRealPoint pos, int const length) :
-			position_{ pos }, length_{ length } {}
-
 		virtual ~flying_object() = default;
 
 		virtual void rotate(rotate_direction const dir) {
@@ -33,26 +30,46 @@ namespace asteroids {
 		virtual void draw(context_t& ctx) = 0;
 
 		virtual void move() {
-			this->position_.x += cos(direction_ * ml5::util::PI / 180) * this->speed_;
-			this->position_.y += sin(direction_ * ml5::util::PI / 180) * this->speed_;
+			this->position_.x += cos(to_radiant()) * this->speed_;
+			this->position_.y += sin(to_radiant()) * this->speed_;
 		}
+
 
 	protected:
 		wxRealPoint position_;
-		int length_ = 0;
-		int direction_ = 0;
+		int direction_ = 0; // The angle of the object in degree
 		double speed_ = 0; // Default flies with zero percent
+
+		/**
+		 * Convert the direction to a radiant from degree
+		 */
+		double to_radiant() const	{
+			return this->direction_ * ml5::util::PI / 180;
+		}
+
+		/*
+		 * Rotate points according to the transformation matrix
+		 */
+
+		std::vector<wxPoint> transform_points(std::vector<wxPoint> points) const {
+			for (auto &point: points) {
+				auto const old = point;
+				point.x = old.x * cos(to_radiant()) - old.y * sin(to_radiant());
+				point.y = old.x * sin(to_radiant()) + old.y * cos(to_radiant());
+			}
+			return points;
+		}
 
 		/**
 		* if an object moves out of sight it loops back
 		* at the other side of the window
 		**/
-		virtual void seamless_move(context_t& ctx) {
-			wxSize const size = ctx.GetSize();
-			if (this->position_.x + this->length_ < 0) {
+		virtual void stay_in_window(context_t& ctx) {
+			auto const size = ctx.GetSize();
+			if (this->position_.x + this->length() < 0) {
 				this->position_.x = size.x - 1.0;
 			}
-			if (this->position_.y + this->length_ < 0) {
+			if (this->position_.y + this->length() < 0) {
 				this->position_.y = size.y - 1.0;
 			}
 			if (this->position_.x > size.x) {
@@ -62,5 +79,8 @@ namespace asteroids {
 				this->position_.y = this->position_.y - size.y;
 			}
 		}
+		
+		virtual int length() const = 0;
+
 	};
 }
