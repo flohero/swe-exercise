@@ -2,7 +2,8 @@
 #include "flying_object.h"
 
 constexpr int spaceship_size = 30;
-constexpr double acceleration_factor = 0.1;
+constexpr double acceleration_factor = 0.5;
+constexpr double deacceleration_factor = 0.01;
 
 namespace asteroids {
 
@@ -23,12 +24,11 @@ namespace asteroids {
 			this->stay_in_window(ctx);
 			ctx.SetBrush(*wxCYAN_BRUSH);
 			ctx.SetPen(*wxCYAN_PEN);
-			auto points_vec = this->create_shape();
-			ctx.DrawPolygon(3, &points_vec[0], (this->position_.x), (this->position_.y), wxWINDING_RULE);
+			do_draw(ctx);
 		}
 
 		void accelerate() {
-			if (this->speed_ < 1) {
+			if (this->speed_ < 2) {
 				this->speed_ += acceleration_factor;
 			} else {
 				this->speed_ = 1;
@@ -37,10 +37,14 @@ namespace asteroids {
 
 		void deaccelerate() {
 			if (this->speed_ > 0) {
-				this->speed_ -= acceleration_factor;
+				this->speed_ -= deacceleration_factor;
 			} else {
 				this->speed_ = 0;
 			}
+		}
+
+		[[discard]] double speed() const {
+			return this->speed_;
 		}
 
 	protected:
@@ -49,7 +53,7 @@ namespace asteroids {
 			return spaceship_size;
 		}
 
-		[[nodiscard]] std::vector<wxPoint> create_shape() const	{
+		[[nodiscard]] std::vector<wxPoint> create_shape() const override	{
 			const std::vector<wxPoint> vec{
 				wxPoint(this->length(), 0),
 				wxPoint(0, -this->length() / 3),

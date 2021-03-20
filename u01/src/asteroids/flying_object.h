@@ -7,7 +7,9 @@ namespace asteroids {
 		right, left
 	};
 
-	constexpr int turn_factor = 5;
+	constexpr int turn_factor = 10;
+	constexpr int full_degree = 360;
+
 
 	class flying_object {
 	public:
@@ -16,14 +18,14 @@ namespace asteroids {
 
 		explicit flying_object(wxRealPoint pos) : position_{ pos } {}
 
-		virtual ~flying_object() = default;
+		//virtual ~flying_object() = default;
 
 		virtual void rotate(rotate_direction const dir) {
 			this->direction_ += dir == rotate_direction::right ? turn_factor : -turn_factor;
 			if (this->direction_ < 0) {
-				this->direction_ = 360 + this->direction_;
-			} else if (this->direction_ >= 360) {
-				this->direction_ = this->direction_ - 360;
+				this->direction_ = full_degree + this->direction_;
+			} else if (this->direction_ >= full_degree) {
+				this->direction_ = this->direction_ - full_degree;
 			}
 		}
 
@@ -32,6 +34,17 @@ namespace asteroids {
 		virtual void move() {
 			this->position_.x += cos(to_radiant()) * this->speed_;
 			this->position_.y += sin(to_radiant()) * this->speed_;
+		}
+
+		[[nodiscard]] bool has_collision(const flying_object &other) const {
+			auto own_shape = this->create_transformed_shape_with_offset();
+			wxRegion own_region(own_shape.size(), &own_shape[0]);
+			
+			auto other_shape = other.create_transformed_shape_with_offset();
+			wxRegion const other_region(other_shape.size(), &other_shape[0]);
+			
+			own_region.Intersect(other_region);
+			return !own_region.IsEmpty();
 		}
 
 
@@ -44,14 +57,18 @@ namespace asteroids {
 		 * Convert the direction to a radiant from degree
 		 */
 		double to_radiant() const	{
-			return this->direction_ * ml5::util::PI / 180;
+			return to_radiant(this->direction_);
+		}
+
+		static double to_radiant(int const dir) {
+			return dir * ml5::util::PI / (full_degree / 2);
 		}
 
 		/*
 		 * Rotate points according to the transformation matrix
 		 */
 
-		std::vector<wxPoint> transform_points(std::vector<wxPoint> points) const {
+		[[nodiscard]] std::vector<wxPoint> transform_points(std::vector<wxPoint> points) const {
 			for (auto &point: points) {
 				auto const old = point;
 				point.x = old.x * cos(to_radiant()) - old.y * sin(to_radiant());
@@ -79,8 +96,33 @@ namespace asteroids {
 				this->position_.y = this->position_.y - size.y;
 			}
 		}
+
+		virtual void do_draw(context_t &ctx) const {
+			auto points_vec = this->create_shape();
+			ctx.DrawPolygon(points_vec.size(), &points_vec[0], this->position_.x, this->position_.y);
+		}
 		
-		virtual int length() const = 0;
+		[[nodiscard]] virtual int length() const = 0;
+
+		/**
+		 * Create a polygon with its starting point in (0/0)
+		 */
+		[[nodiscard]] virtual std::vector<wxPoint> create_shape() const = 0;
+
+	private:
+
+		/**
+		 * Create a polygon for this object with its offset and transformation already calculated
+		 */
+		[[nodiscard]] std::vector<wxPoint> create_transformed_shape_with_offset() const {
+			auto shape = this->create_shape();
+			shape = this->transform_points(shape);
+			for (auto& point : shape) {
+				point.x += this->position_.x;
+				point.y += this->position_.y;
+			}
+			return shape;
+		}
 
 	};
 }
