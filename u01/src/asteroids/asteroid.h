@@ -5,7 +5,8 @@ namespace asteroids {
 
 	constexpr int asteroid_min_size = 10;
 	constexpr int crack_width = 30;
-	constexpr double standard_speed = 2;
+	constexpr double standard_speed = 1.5;
+	constexpr int points = 1;
 
 	enum class asteroid_size {
 		tiny = 1,
@@ -23,7 +24,7 @@ namespace asteroids {
 			this->direction_ = rand() % full_degree;
 			this->speed_ = standard_speed / static_cast<double>(this->size_);
 			this->crack_start_ = rand() % full_degree;
-			this->crack_end = crack_start_ + crack_width;
+			this->crack_end_ = crack_start_ + crack_width;
 		}
 
 		void draw(context_t& ctx) override {
@@ -33,11 +34,41 @@ namespace asteroids {
 			do_draw(ctx);
 		}
 
+
+		[[nodiscard]] std::vector<asteroid> split() const {
+			std::vector<asteroid> parts;
+			switch (this->size_) {
+			case asteroid_size::big: {
+				if (rand() % 2 == 0) {
+					parts.push_back(asteroid{ asteroid_size::medium, this->position_ });
+					parts.push_back(asteroid{ asteroid_size::tiny, this->position_ });
+				} else {
+					for (auto i = 0; i < 3; i++) {
+						parts.push_back(asteroid{ asteroid_size::tiny, this->position_ });
+					}
+				}
+				break;
+			}
+			case asteroid_size::medium: {
+				parts.push_back(asteroid{ asteroid_size::tiny, this->position_ });
+				parts.push_back(asteroid{ asteroid_size::tiny, this->position_ });
+				break;
+			}
+			case asteroid_size::tiny:
+			default: break;
+			}
+			return parts;
+		}
+
+
+		[[nodiscard]] static int score() {
+			return points;
+		}
+
 		friend bool operator==(asteroid const& left, asteroid const& right) {
 			return left.length() == right.length() && left.position_ == right.position_;
 		}
 
-		
 
 	protected:
 		[[nodiscard]] int length() const override {
@@ -46,10 +77,10 @@ namespace asteroids {
 
 		[[nodiscard]] std::vector<wxPoint> create_shape() const override {
 			std::vector<wxPoint> vec;
-			for (auto i = 0; i < full_degree  / 2; i++) {
+			for (auto i = 0; i < full_degree / 2; i++) {
 				wxPoint p;
 				auto const point = i * 2;
-				if (point > crack_start_ && point < crack_end) {
+				if (point > crack_start_ && point < crack_end_) {
 					p.x = cos(to_radiant(point)) * this->length() / 4;
 					p.y = sin(to_radiant(point)) * this->length() / 4;
 				} else {
@@ -66,6 +97,11 @@ namespace asteroids {
 	private:
 		asteroid_size size_;
 		int crack_start_;
-		int crack_end;;
+		int crack_end_;
+
+		asteroid(const asteroid_size size, wxRealPoint const pos) :
+			asteroid{ pos } {
+			this->size_ = size;
+		}
 	};
 }

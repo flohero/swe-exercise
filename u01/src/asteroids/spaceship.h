@@ -43,8 +43,16 @@ namespace asteroids {
 			}
 		}
 
-		[[discard]] double speed() const {
+		[[nodiscard]] wxRealPoint position() const {
+			return this->position_;
+		}
+
+		[[nodiscard]] double speed() const {
 			return this->speed_;
+		}
+
+		[[nodiscard]] int direction() const {
+			return this->direction_;
 		}
 
 	protected:

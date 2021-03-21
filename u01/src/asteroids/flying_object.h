@@ -47,7 +47,6 @@ namespace asteroids {
 			return !own_region.IsEmpty();
 		}
 
-
 	protected:
 		wxRealPoint position_;
 		int direction_ = 0; // The angle of the object in degree
