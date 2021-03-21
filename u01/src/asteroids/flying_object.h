@@ -55,7 +55,7 @@ namespace asteroids {
 		/**
 		 * Convert the direction to a radiant from degree
 		 */
-		double to_radiant() const	{
+		[[nodiscard]] double to_radiant() const	{
 			return to_radiant(this->direction_);
 		}
 
@@ -96,6 +96,9 @@ namespace asteroids {
 			}
 		}
 
+		/**
+		 * Utility function to draw polygons
+		 */
 		virtual void do_draw(context_t &ctx) const {
 			auto points_vec = this->create_shape();
 			ctx.DrawPolygon(points_vec.size(), &points_vec[0], this->position_.x, this->position_.y);

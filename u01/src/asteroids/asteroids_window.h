@@ -3,14 +3,17 @@
 #include "spaceship.h"
 #include "asteroid.h"
 #include "projectile.h"
+#include "saucer.h"
 
 namespace asteroids {
 	constexpr int tick_interval = 10;
 	constexpr int window_width = 800;
 	constexpr int window_height = 600;
 	constexpr int asteroid_limit = 20;
+	constexpr int saucer_limit = 4;
 	constexpr int ticks_between_shots = 20;
 	constexpr int asteroid_spawn_chance = 200;
+	constexpr int saucer_spawn_chance = 500;
 
 	class asteroids_window final : public ml5::window {
 	public:
@@ -27,8 +30,8 @@ namespace asteroids {
 			this->ship_ = spaceship{this->get_width() / 2, this->get_height() / 2};
 
 			add_menu("Game", {
-				{"Restart", "Restart the game"},
-			});
+				         {"Restart", "Restart the game"},
+			         });
 		}
 
 		void on_paint(ml5::paint_event const& event) override {
@@ -49,6 +52,7 @@ namespace asteroids {
 			}
 
 			spawn_asteroid(ctx);
+			spawn_saucer(ctx);
 
 			auto s = ctx.GetSize();
 			ship_.draw(ctx);
@@ -58,6 +62,9 @@ namespace asteroids {
 
 			for (auto& projectile : this->projectiles_) {
 				projectile.draw(ctx);
+			}
+			for (auto& sauce : this->saucers_) {
+				sauce.draw(ctx);
 			}
 		}
 
@@ -75,27 +82,53 @@ namespace asteroids {
 					}
 				}
 
+				if (had_collision) {
+					auto split_asts = asteroid->split();
+					this->asteroids_.erase(asteroid);
+					this->asteroids_.insert(this->asteroids_.end(), split_asts.begin(), split_asts.end());
+					continue;
+				}
+				//TODO fix
+				auto sauce = this->saucers_.begin();
+				while (!had_collision && sauce < this->saucers_.end()) {
+					if (proj.has_collision(*sauce)) {
+						this->score_ += sauce->score();
+						had_collision = true;
+					} else {
+						++sauce;
+					}
+				}
+
 				if (!had_collision) {
 					if (proj.is_in_window(this->get_width(), this->get_height())) {
 						new_projectiles.push_back(proj);
 					}
 				} else {
-					auto split_asts = asteroid->split();
-					this->asteroids_.erase(asteroid);
-					this->asteroids_.insert(this->asteroids_.end(), split_asts.begin(), split_asts.end());
+					this->saucers_.erase(sauce);
 				}
 			}
 			this->projectiles_ = new_projectiles;
+
 			ship_.move();
+
 			for (auto& asteroid : this->asteroids_) {
 				asteroid.move();
 				if (this->ship_.has_collision(asteroid)) {
 					game_over();
 				}
 			}
+			for (auto& saucer : this->saucers_) {
+				if (this->ship_.has_collision(saucer)) {
+					game_over();
+				}
+			}
 
 			for (auto& projectile : this->projectiles_) {
 				projectile.move();
+			}
+
+			for (auto& sauce : this->saucers_) {
+				sauce.move();
 			}
 
 			count_down_for_projectiles_--;
@@ -137,17 +170,18 @@ namespace asteroids {
 		}
 
 		void on_menu(ml5::menu_event const& event) override {
-			const auto item{ event.get_item() };
+			const auto& item{event.get_item()};
 
 			if (item == "Restart") {
-				this->ship_ = spaceship{ this->get_width() / 2, this->get_height() / 2 };
+				this->ship_ = spaceship{this->get_width() / 2, this->get_height() / 2};
 				this->asteroids_.clear();
 				this->projectiles_.clear();
+				this->saucers_.clear();
 				this->score_ = 0;
 				this->not_accelerated_count_ = 0;
 				this->count_down_for_projectiles_ = 0;
 				this->game_over_ = false;
-				this->refresh();
+				start_timer(std::chrono::milliseconds{tick_interval});
 			}
 		}
 
@@ -155,6 +189,7 @@ namespace asteroids {
 		spaceship ship_;
 		std::vector<asteroid> asteroids_;
 		std::vector<projectile> projectiles_;
+		std::vector<saucer> saucers_;
 		int not_accelerated_count_ = 0;
 		int count_down_for_projectiles_ = 0;
 		int score_ = 0;
@@ -171,13 +206,21 @@ namespace asteroids {
 			auto const y = rand() % size.GetHeight()
 				+ static_cast<double>(rand() % 2 == 0 ? size.GetHeight() : -size.GetHeight());
 			const asteroid ast{wxRealPoint{x, y}};
-			this->asteroids_.emplace_back(ast);
+			this->asteroids_.push_back(ast);
+		}
+
+		void spawn_saucer(const context_t &ctx) {
+			if (rand() % saucer_spawn_chance != 0
+				|| this->saucers_.size() > saucer_limit) {
+				return;
+			}
+			this->saucers_.push_back(saucer{ wxPoint{0, this->get_height() / 2}, this->get_height() / 2, 2 });
 		}
 
 		void game_over() {
-			//TODO
 			this->game_over_ = true;
-			std::cout << "Game Over!" << std::endl;
+			this->refresh();
+			this->stop_timer();
 		}
 	};
 }
