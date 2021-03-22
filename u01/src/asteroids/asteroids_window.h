@@ -14,6 +14,7 @@ namespace asteroids {
 	constexpr int ticks_between_shots = 20;
 	constexpr int asteroid_spawn_chance = 200;
 	constexpr int saucer_spawn_chance = 500;
+	constexpr int enemy_projectile_spawn_chance = 300;
 
 	class asteroids_window final : public ml5::window {
 	public:
@@ -52,7 +53,8 @@ namespace asteroids {
 			}
 
 			spawn_asteroid(ctx);
-			spawn_saucer(ctx);
+			spawn_saucer();
+			spawn_enemy_projectile();
 
 			auto s = ctx.GetSize();
 			ship_.draw(ctx);
@@ -65,6 +67,9 @@ namespace asteroids {
 			}
 			for (auto& sauce : this->saucers_) {
 				sauce.draw(ctx);
+			}
+			for(auto& projectile: this->enemy_projectiles_) {
+				projectile.draw(ctx);
 			}
 		}
 
@@ -88,7 +93,7 @@ namespace asteroids {
 					this->asteroids_.insert(this->asteroids_.end(), split_asts.begin(), split_asts.end());
 					continue;
 				}
-				//TODO fix
+
 				auto sauce = this->saucers_.begin();
 				while (!had_collision && sauce < this->saucers_.end()) {
 					if (proj.has_collision(*sauce)) {
@@ -121,14 +126,18 @@ namespace asteroids {
 				if (this->ship_.has_collision(saucer)) {
 					game_over();
 				}
+				saucer.move();
+			}
+
+			for(auto& projectile: this->enemy_projectiles_) {
+				if (this->ship_.has_collision(projectile)) {
+					game_over();
+				}
+				projectile.move();
 			}
 
 			for (auto& projectile : this->projectiles_) {
 				projectile.move();
-			}
-
-			for (auto& sauce : this->saucers_) {
-				sauce.move();
 			}
 
 			count_down_for_projectiles_--;
@@ -176,6 +185,7 @@ namespace asteroids {
 				this->ship_ = spaceship{this->get_width() / 2, this->get_height() / 2};
 				this->asteroids_.clear();
 				this->projectiles_.clear();
+				this->enemy_projectiles_.clear();
 				this->saucers_.clear();
 				this->score_ = 0;
 				this->not_accelerated_count_ = 0;
@@ -189,6 +199,7 @@ namespace asteroids {
 		spaceship ship_;
 		std::vector<asteroid> asteroids_;
 		std::vector<projectile> projectiles_;
+		std::vector<projectile> enemy_projectiles_;
 		std::vector<saucer> saucers_;
 		int not_accelerated_count_ = 0;
 		int count_down_for_projectiles_ = 0;
@@ -201,20 +212,54 @@ namespace asteroids {
 				return;
 			}
 			auto const size = ctx.GetSize();
-			auto const x = rand() % size.GetWidth()
-				+ static_cast<double>(rand() % 2 == 0 ? size.GetWidth() : -size.GetWidth());
-			auto const y = rand() % size.GetHeight()
-				+ static_cast<double>(rand() % 2 == 0 ? size.GetHeight() : -size.GetHeight());
+			double x = 0;
+			double y = 0;
+			switch (rand() % 4) {
+			case 2: {
+				// Spawn bottom
+				y = size.GetHeight();
+			}
+			case 0: {
+				// Spawn top
+				x = rand() % size.GetWidth();
+				break;
+			}
+			case 1: {
+				// Spawn right
+				x = size.GetWidth();
+			}
+			case 3: {
+				// Spawn left
+				y = rand() % size.GetHeight();
+				break;
+			}
+			default: break;
+			}
 			const asteroid ast{wxRealPoint{x, y}};
 			this->asteroids_.push_back(ast);
 		}
 
-		void spawn_saucer(const context_t &ctx) {
+		void spawn_saucer() {
 			if (rand() % saucer_spawn_chance != 0
 				|| this->saucers_.size() > saucer_limit) {
 				return;
 			}
-			this->saucers_.push_back(saucer{ wxPoint{0, this->get_height() / 2}, this->get_height() / 2, 2 });
+			this->saucers_.push_back(saucer{wxPoint{0, this->get_height() / 2}, this->get_height() / 2, 3});
+		}
+
+		void spawn_enemy_projectile() {
+			if (this->saucers_.empty() || rand() % enemy_projectile_spawn_chance != 0) {
+				return;
+			}
+			auto const start = this->saucers_
+			                 .at(rand() % this->saucers_.size())
+			                 .position();
+			auto const vec = this->ship_.position() - start;
+			int const direction = atan(vec.y / vec.x) * 180 / ml5::util::PI;
+			this->enemy_projectiles_.push_back(projectile{
+				start,
+				direction
+			});
 		}
 
 		void game_over() {

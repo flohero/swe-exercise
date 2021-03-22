@@ -12,7 +12,7 @@ namespace asteroids {
 
 		explicit saucer(const wxPoint& position)
 			: flying_object{position} {
-			this->speed_ = (static_cast<double>(rand() % saucer_speed_limit) + 1);
+			this->speed_ = (static_cast<double>(rand() % saucer_speed_limit) + 1) * ((rand() % 2 == 0) ? -1 : 1) ;
 		}
 
 		saucer(const wxPoint& position,
@@ -40,6 +40,10 @@ namespace asteroids {
 			return 5;
 		}
 
+		[[nodiscard]] wxRealPoint position() const {
+			return this->position_;
+		}
+	
 	protected:
 		[[nodiscard]] int length() const override {
 			return saucer_length;

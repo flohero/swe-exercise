@@ -8,7 +8,7 @@ namespace asteroids {
 
 	class projectile : public flying_object {
 	public:
-		projectile(wxPoint const& position,
+		projectile(wxRealPoint const& position,
 		           int const direction)
 			: flying_object{position} {
 			this->direction_ = direction;
@@ -39,5 +39,7 @@ namespace asteroids {
 				wxPoint{0, this->length()},
 			};
 		}
+
+	private:
 	};
 }
