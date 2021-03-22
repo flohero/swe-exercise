@@ -9,19 +9,28 @@ namespace asteroids {
 	class projectile : public flying_object {
 	public:
 		projectile(wxRealPoint const& position,
-		           int const direction)
+			int const direction, bool is_enemy = false)
 			: flying_object{position} {
 			this->direction_ = direction;
 			this->speed_ = projectile_speed;
+			this->is_enemy_ = is_enemy;
 		}
 
 		void draw(context_t& ctx) override {
-			ctx.SetBrush(*wxGREEN_BRUSH);
-			ctx.SetPen(*wxGREEN_PEN);
+			if(this->is_enemy_) {
+				ctx.SetBrush(*wxRED_BRUSH);
+				ctx.SetPen(*wxRED_PEN);
+			} else {
+				ctx.SetBrush(*wxGREEN_BRUSH);
+				ctx.SetPen(*wxGREEN_PEN);
+			}
 			ctx.DrawRectangle(this->position_,
 			                  wxSize{projectile_size, projectile_size});
 		}
 
+		/**
+		 * Check if projectile is still in window
+		 */
 		[[nodiscard]] bool is_in_window(const int width, const int height) const {
 			return !(this->position_.x < 0 || this->position_.x > width || this->position_.y < 0 || this->position_.y > height);
 		}
@@ -41,5 +50,6 @@ namespace asteroids {
 		}
 
 	private:
+		bool is_enemy_;
 	};
 }

@@ -8,6 +8,7 @@ namespace asteroids {
 	constexpr double standard_speed = 1.5;
 	constexpr int points = 1;
 
+	constexpr int asteroid_size_count = 3;
 	enum class asteroid_size {
 		tiny = 1,
 		medium = 2,
@@ -20,9 +21,13 @@ namespace asteroids {
 
 		explicit asteroid(wxRealPoint const pos) :
 			flying_object{pos} {
-			this->size_ = static_cast<asteroid_size>(rand() % 3 + 1);
+			// Calculate a random asteroid size
+			this->size_ = static_cast<asteroid_size>(rand() % asteroid_size_count + 1);
+			// Random direction
 			this->direction_ = rand() % full_degree;
+			// Different sized asteroids have different speed
 			this->speed_ = standard_speed / static_cast<double>(this->size_);
+			// Where the Crack of the asteroid starts and ends, to give it some kind of pacman shape
 			this->crack_start_ = rand() % full_degree;
 			this->crack_end_ = crack_start_ + crack_width;
 		}
@@ -34,7 +39,9 @@ namespace asteroids {
 			do_draw(ctx);
 		}
 
-
+		/**
+		 * When an asteroid is hit it will split up in smaller asteroids, unless it was already tiny
+		 */
 		[[nodiscard]] std::vector<asteroid> split() const {
 			std::vector<asteroid> parts;
 			switch (this->size_) {
@@ -60,7 +67,9 @@ namespace asteroids {
 			return parts;
 		}
 
-
+		/**
+		 * How much this asteroid is worth to the player
+		 */
 		[[nodiscard]] static int score() {
 			return points;
 		}

@@ -68,13 +68,14 @@ namespace asteroids {
 			for (auto& sauce : this->saucers_) {
 				sauce.draw(ctx);
 			}
-			for(auto& projectile: this->enemy_projectiles_) {
+			for (auto& projectile : this->enemy_projectiles_) {
 				projectile.draw(ctx);
 			}
 		}
 
 		void on_timer(ml5::timer_event const& event) override {
 			std::vector<projectile> new_projectiles;
+			//Check if a projectile had a collision
 			for (const auto& proj : this->projectiles_) {
 				bool had_collision = false;
 				auto asteroid = this->asteroids_.begin();
@@ -112,10 +113,12 @@ namespace asteroids {
 					this->saucers_.erase(sauce);
 				}
 			}
+
 			this->projectiles_ = new_projectiles;
 
 			ship_.move();
 
+			// Check if the ship had a collision
 			for (auto& asteroid : this->asteroids_) {
 				asteroid.move();
 				if (this->ship_.has_collision(asteroid)) {
@@ -129,7 +132,7 @@ namespace asteroids {
 				saucer.move();
 			}
 
-			for(auto& projectile: this->enemy_projectiles_) {
+			for (auto& projectile : this->enemy_projectiles_) {
 				if (this->ship_.has_collision(projectile)) {
 					game_over();
 				}
@@ -244,7 +247,10 @@ namespace asteroids {
 				|| this->saucers_.size() > saucer_limit) {
 				return;
 			}
-			this->saucers_.push_back(saucer{wxPoint{0, this->get_height() / 2}, this->get_height() / 2, 3});
+			this->saucers_.push_back(saucer{
+				wxPoint{0, this->get_height() / 2},
+				this->get_height() / 2, 3
+			});
 		}
 
 		void spawn_enemy_projectile() {
@@ -252,16 +258,20 @@ namespace asteroids {
 				return;
 			}
 			auto const start = this->saucers_
-			                 .at(rand() % this->saucers_.size())
-			                 .position();
+			                       .at(rand() % this->saucers_.size())
+			                       .position();
 			auto const vec = this->ship_.position() - start;
 			int const direction = atan(vec.y / vec.x) * 180 / ml5::util::PI;
-			this->enemy_projectiles_.push_back(projectile{
+			this->enemy_projectiles_.emplace_back(
 				start,
-				direction
-			});
+				direction,
+				true
+			);
 		}
 
+		/**
+		 * Stop the game
+		 */
 		void game_over() {
 			this->game_over_ = true;
 			this->refresh();

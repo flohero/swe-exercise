@@ -36,7 +36,7 @@ namespace asteroids {
 			this->position_.y = this->curve_height_ * sin(to_radiant(static_cast<double>(this->curve_width_) * this->position_.x)) + this->y_offset_;
 		}
 
-		int score() {
+		static int score() {
 			return 5;
 		}
 

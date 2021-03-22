@@ -1,0 +1,100 @@
+= Abgabe 01: Asteroids
+:author: Florian Weingartshofer
+:email: <S1910307103@students.fh-hagenberg.at>
+:reproducible:
+:experimental:
+:listing-caption: Listing
+:source-highlighter: rouge
+:sourcedir: ../src/asteroids
+:imgdir: ./img
+:imagesoutdir: ./out
+:toc:
+:toclevels:
+
+== Lösungsidee
+Alle Objekte sind Polygone, dadurch wird das rotieren erleichtert, sowie die Berechnung der Hitbox.
+
+=== `flying_object`
+Die Basisklasse für alle Objekte im Spiel.
+Es sind schon einige Eigenschaften vorhanden, wie momentane Position, Geschwindigkeit und Bewegungsrichtung.
+Sie implementiert eine einfache `move` Funktion, welche für lineare Bewegung gedacht ist.
+Ausserdem gibt es einige *pure `virtual`* Funktionen: 
+
+* `length`: welche die Länge eines Objektes angibt
+* `create_shape`: welche das Polygon berechnet
+* `draw`: soll das Objekt zeichnen, für allgemeine Fälle gibt es eine `do_draw` Funktion
+
+=== `spaceship`
+Implementiert den Spielercharakter.
+Dieser wird als türkieses Dreieck dargestellt.
+Es werden zusätzliche Funktionen für die Rotation und Beschleunigung implementiert.
+Sollte das spaceship aus dem Fenster fliegen, kommt es auf der anderen Seite wieder rein.
+
+=== `asteroid`
+Der Asteroid nutzt viel Funktionalität von der Basis, das Polygon wird wie ein Kreis aufgebaut.
+Ein Asteroid hat eine von drei Größen: klein, mittel und groß.
+Sollte ein Asteroid abgeschossen werden, teilt er sich in kleinere Asteroiden, zB großer Asteroid -> drei kleine oder ein kleiner und ein mittlerer.
+Falls der Asteroid das Fenster verlässt fliegt er auf der anderen Seite wieder rein.
+Wenn der Spieler einen Asteroiden berührt ist das Spiel vorbei.
+
+=== `projectile`
+Ein Projektil repräsentiert ein Geschoss, wenn der Spieler von einem feindlichen Projektil getroffen wird, ist das Spiel vorbei.
+Wenn der Spieler mit einem Projektil einen Asteroiden oder Saucer abschießt, wird dieser zerstörrt.
+
+=== `saucer`
+Ein Saucer oder auch fliegende Untertasse ist ein Gegner, welcher wie ein gelbes Sechseck aussieht.
+Es bewegt sich in einer Sinus-Funktion fort.
+Ein Saucer kann Projektile abschießen, welche direkt auf den Spieler gezielt sind.
+Falls der Spieler von einem von beiden getroffen wird, ist das Spiel vorbei.
+
+== Code
+
+.flying_object.h
+[source,cpp]
+----
+include::{sourcedir}/flying_object.h[]
+----
+
+.spaceship.h
+[source,cpp]
+----
+include::{sourcedir}/spaceship.h[]
+----
+
+.asteroid.h
+[source,cpp]
+----
+include::{sourcedir}/asteroid.h[]
+----
+
+.projectile.h
+[source,cpp]
+----
+include::{sourcedir}/projectile.h[]
+----
+
+.saucer.h
+[source,cpp]
+----
+include::{sourcedir}/saucer.h[]
+----
+
+.asteroids_window.h
+[source,cpp]
+----
+include::{sourcedir}/asteroids_window.h[]
+----
+
+.asteroids_app.h
+[source,cpp]
+----
+include::{sourcedir}/asteroids_app.h[]
+----
+
+.main.cpp
+[source,cpp]
+----
+include::{sourcedir}/main.cpp[]
+----
+
+== Testfälle

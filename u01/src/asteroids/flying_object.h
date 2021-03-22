@@ -18,8 +18,9 @@ namespace asteroids {
 
 		explicit flying_object(wxRealPoint pos) : position_{ pos } {}
 
-		//virtual ~flying_object() = default;
-
+		/**
+		 * Rotate the object
+		 */
 		virtual void rotate(rotate_direction const dir) {
 			this->direction_ += dir == rotate_direction::right ? turn_factor : -turn_factor;
 			if (this->direction_ < 0) {
@@ -29,13 +30,22 @@ namespace asteroids {
 			}
 		}
 
+		/**
+		 * Custom function for every child object
+		 */
 		virtual void draw(context_t& ctx) = 0;
 
+		/*
+		 * Move the object in a linear way, should be enough for most objects.
+		 */
 		virtual void move() {
 			this->position_.x += cos(to_radiant()) * this->speed_;
 			this->position_.y += sin(to_radiant()) * this->speed_;
 		}
 
+		/**
+		 * Check if this object had an collision with another flying object
+		 */
 		[[nodiscard]] bool has_collision(const flying_object &other) const {
 			auto own_shape = this->create_transformed_shape_with_offset();
 			wxRegion own_region(own_shape.size(), &own_shape[0]);

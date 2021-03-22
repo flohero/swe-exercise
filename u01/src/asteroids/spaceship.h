@@ -4,6 +4,7 @@
 constexpr int spaceship_size = 30;
 constexpr double acceleration_factor = 0.5;
 constexpr double deacceleration_factor = 0.01;
+constexpr int max_speed = 3;
 
 namespace asteroids {
 
@@ -28,7 +29,7 @@ namespace asteroids {
 		}
 
 		void accelerate() {
-			if (this->speed_ < 2) {
+			if (this->speed_ < max_speed) {
 				this->speed_ += acceleration_factor;
 			} else {
 				this->speed_ = 1;
