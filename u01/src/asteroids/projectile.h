@@ -5,7 +5,6 @@ namespace asteroids {
 	constexpr int projectile_speed = 10;
 	constexpr int projectile_size = 5;
 
-
 	class projectile : public flying_object {
 	public:
 		projectile(wxRealPoint const& position,

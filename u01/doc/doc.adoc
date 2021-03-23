@@ -8,8 +8,6 @@
 :sourcedir: ../src/asteroids
 :imgdir: ./img
 :imagesoutdir: ./out
-:toc:
-:toclevels:
 
 == Lösungsidee
 Alle Objekte sind Polygone, dadurch wird das rotieren erleichtert, sowie die Berechnung der Hitbox.
@@ -46,6 +44,9 @@ Ein Saucer oder auch fliegende Untertasse ist ein Gegner, welcher wie ein gelbes
 Es bewegt sich in einer Sinus-Funktion fort.
 Ein Saucer kann Projektile abschießen, welche direkt auf den Spieler gezielt sind.
 Falls der Spieler von einem von beiden getroffen wird, ist das Spiel vorbei.
+
+=== Hitbox und Management der Figuren
+Es wird überprüft ob sich die Figuren überlappen, dadurch wird eine rudimentäre Hitbox implementiert.
 
 == Code
 
@@ -98,3 +99,12 @@ include::{sourcedir}/main.cpp[]
 ----
 
 == Testfälle
+=== Erstellen essentiellen Spielfiguren
+Es wird das Raumschiff, Asteroiden und Saucer erstellt und dargestellt.
+
+
+image::{imgdir}/asteroid_and_saucer.png[]
+
+=== Gameplay
+Ein Video sagt mehr als ein Testfall:
+https://filebox.fhooecloud.at/index.php/s/BXf4exbpF7gAwED[Hier ein Beispiel Video] (Funktioniert eventuell nur in Chromium)
