@@ -7,10 +7,14 @@
 #include <ostream>
 #include <chrono>
 #include <memory>
+#include <vector>
 
 namespace des {
   class event {
   public:
+
+    using event_ptr = std::shared_ptr<event>;
+
     friend std::ostream &operator<<(std::ostream &os, const event &e) {
       return os << e.name();
     }
@@ -24,13 +28,17 @@ namespace des {
     }
 
     struct bigger_than_comparator {
-      bool operator()(const std::shared_ptr<event>& left, const std::shared_ptr<event>& right) {
+      bool operator()(const event_ptr & left, const event_ptr & right) {
         return *left > *right;
       }
     };
 
     explicit event(std::time_t execution_time) :
         execution_time_{execution_time} {}
+
+    virtual std::vector<event_ptr> execute() = 0;
+
+    virtual bool terminates() = 0;
 
   protected:
     std::time_t execution_time_;
