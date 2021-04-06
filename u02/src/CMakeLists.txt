@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 project(u02)
 
-#set_property(GLOBAL PROPERTY USE_FOLDERS ON) # enable virtual folders for projects if supported by the build system/IDE
-
 # set output directories
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/static)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -21,7 +19,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)       # disable compiler specific extensions
 # helper function to simplify definition of projects
 function(target name)
    file(GLOB_RECURSE SRC "${name}/*")   # recursively collect all files in sub-folder for project
-   add_executable(${name} ${SRC})       # define project "name" based on files found in SRC
+   add_executable(${name} ${SRC})       # define project "details" based on files found in SRC
 
    #set required warning flags
    if("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU"   OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR

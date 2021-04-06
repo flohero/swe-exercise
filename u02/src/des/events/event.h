@@ -16,7 +16,7 @@ namespace des {
     using event_ptr = std::shared_ptr<event>;
 
     friend std::ostream &operator<<(std::ostream &os, const event &e) {
-      return os << e.name();
+      return os << e.details();
     }
 
     friend bool operator<(const event &e1, const event &e2) {
@@ -27,7 +27,7 @@ namespace des {
       return e1.execution_time_ > e2.execution_time_;
     }
 
-    struct bigger_than_comparator {
+    struct greater_than_comparator {
       bool operator()(const event_ptr & left, const event_ptr & right) {
         return *left > *right;
       }
@@ -38,14 +38,21 @@ namespace des {
 
     virtual std::vector<event_ptr> execute() = 0;
 
-    virtual bool terminates() = 0;
+    [[nodiscard]] virtual bool terminates() const = 0;
 
   protected:
     std::time_t execution_time_;
 
-    [[nodiscard]] virtual std::string name() const = 0;
+    [[nodiscard]] virtual std::string details() const = 0;
 
-  private:
+    /**
+     * Simple details function
+     * @param name the name of the event
+     * @returns the eventname plus the timestamp
+     */
+    [[nodiscard]] std::string details(const std::string &name) const {
+      return name + "@" + std::to_string(this->execution_time_);
+    }
   };
 }
 
