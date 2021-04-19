@@ -1,0 +1,93 @@
+<project name="List" default="compile" basedir=".">
+
+    <!-- Specify your main class here. Omit the .class extension. -->
+    <property name="main.class" value="swe4.List"/>
+
+    <property environment="env"/>
+    <property name="jar.name" value="${ant.project.name}.jar"/>
+    <property name="src.dir" value="${basedir}/src"/>
+    <property name="target.dir" value="${basedir}/bin"/>
+    <property name="jar.dir" value="${basedir}/jar"/>
+    <property name="local.lib.dir" value="${basedir}/lib"/>
+    <property name="user.lib.dir" value="${env.SWE4_HOME}/lib"/>
+
+    <path id="junit.compile.path" >
+        <fileset dir="${user.lib.dir}/junit/jupiter/" erroronmissingdir="false"/>
+    </path>
+
+    <path id="junit.run.path">
+        <fileset dir="${user.lib.dir}/junit/platform/" erroronmissingdir="false"/>
+    </path>
+
+    <path id="lib.path">
+        <fileset dir="${local.lib.dir}" erroronmissingdir="false">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <path id="classpath">
+        <path refid="lib.path"/>
+        <pathelement path="${target.dir}"/>
+    </path>
+
+    <target name="all" depends="clean,compile"
+            description="Clean build and dist directories, then compile"/>
+
+    <target name="compile" description="Compile Java sources">
+        <mkdir dir="${target.dir}"/>
+        <javac includeantruntime="false" srcdir="${src.dir}" destdir="${target.dir}">
+            <include name="**/*.java"/>
+            <classpath refid="junit.compile.path"/>
+            <classpath refid="classpath"/>
+        </javac>
+    </target>
+
+    <target name="run" depends="compile,copy-resources"
+            description="Run java application">
+        <java classname="${main.class}" fork="true">
+            <classpath refid="classpath"/>
+        </java>
+    </target>
+
+    <target name="copy-resources" description="Copy resource files">
+        <copy todir="${target.dir}">
+            <fileset dir="${src.dir}" excludes="**/*.java"/>
+        </copy>
+    </target>
+
+    <target name="create-jar" depends="compile,copy-resources"
+            description="Package to java archive">
+        <jar destfile="${jar.dir}/${jar.name}" basedir="${target.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="${main.class}"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="run-jar" depends="create-jar"
+            description="Run java application in java archive">
+        <java jar="${jar.dir}/${jar.name}" fork="true">
+            <classpath refid="lib.path"/>
+        </java>
+    </target>
+
+    <target name="clean" description="Delete old build and bin directories">
+        <delete dir="${target.dir}"/>
+        <delete dir="${jar.dir}"/>
+    </target>
+
+    <target name="run-unit-tests" depends="compile,copy-resources"
+            description="Run all unit tests">
+        <junitlauncher haltOnFailure="true" printSummary="true">
+            <classpath refid="junit.compile.path"/>
+            <classpath refid="junit.run.path"/>
+            <classpath refid="classpath"/>
+            <testclasses>
+                <fileset dir="${target.dir}">
+                    <include name="**/*Test.class"/>
+                </fileset>
+            </testclasses>
+        </junitlauncher>
+    </target>
+
+</project>
