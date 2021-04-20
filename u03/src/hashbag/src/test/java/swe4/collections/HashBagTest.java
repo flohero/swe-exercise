@@ -1,5 +1,6 @@
 package swe4.collections;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Iterator;
@@ -12,6 +13,7 @@ public class HashBagTest {
     /* Constructor Tests */
 
     @Test
+    @DisplayName("Create new HashBag with zero capacity, expect Exception")
     void newHashBagCapacitySmallerZero_expectException() {
         //given
         //when
@@ -20,6 +22,7 @@ public class HashBagTest {
     }
 
     @Test
+    @DisplayName("Create new HashBag with zero loadfactor, expect Exception")
     void newHashBagLoadFactorEqualZero_expectException() {
         //given
         //when
@@ -28,6 +31,7 @@ public class HashBagTest {
     }
 
     @Test
+    @DisplayName("Create new HashBag with loadfactor greater than one, expect Exception")
     void newHashBagLoadFactorGreaterOne_expectException() {
         //given
         //when
@@ -38,6 +42,7 @@ public class HashBagTest {
     /* Iterator Tests */
 
     @Test
+    @DisplayName("Iterator returns Objects correctly, even when the underlying array has gaps with null")
     void iteratorReturnsElements_whenHashBagHasGaps() {
         //Given
         HashBag<SetHashObject> bag = new HashBag<>(10, 0.75f);
@@ -57,6 +62,7 @@ public class HashBagTest {
     }
 
     @Test
+    @DisplayName("Create new HashBag with zero loadfactor, expect Exception")
     void iteratorHasNotNext_whenHashBagEmpty() {
         //Given
         HashBag<SetHashObject> bag = new HashBag<>();
@@ -70,6 +76,7 @@ public class HashBagTest {
     }
 
     @Test
+    @DisplayName("Iterator returns items which are multiple times in the HashBag")
     void iteratorReturnsMultipleEntries() {
         //Given
         HashBag<SetHashObject> bag = new HashBag<>();
@@ -90,6 +97,20 @@ public class HashBagTest {
     }
 
     @Test
+    @DisplayName("Iterator does not have a next item when the HashBag is empty")
+    void iteratorDoesNotHaveNext_whenHashBagEmpty() {
+        //given
+        HashBag<String> bag = new HashBag<>();
+
+        //when
+        Iterator<String> it = bag.iterator();
+
+        //then
+        assertFalse(it.hasNext());
+    }
+
+    @Test
+    @DisplayName("Iterator returns null when HashBag empty")
     void iteratorReturnsNull_whenHashBagEmpty() {
         //given
         HashBag<String> bag = new HashBag<>();
@@ -102,6 +123,7 @@ public class HashBagTest {
     }
 
     @Test
+    @DisplayName("Iterator correctly returns the first element")
     void iteratorReturnsFirstElement() {
         //given
         String test = "test";
@@ -118,6 +140,7 @@ public class HashBagTest {
     /* Other Tests */
 
     @Test
+    @DisplayName("A new HashBag is empty")
     void newHashBagIsEmpty() {
         //given
         //when
@@ -127,6 +150,7 @@ public class HashBagTest {
     }
 
     @Test
+    @DisplayName("A new HashBag has no elements")
     void newHashBagContainsNoElement() {
         //given
         String test = "test";
@@ -137,6 +161,7 @@ public class HashBagTest {
     }
 
     @Test
+    @DisplayName("New HashBag does not have a count for an element")
     void newHashBagCountsZeroElements() {
         //given
         String test = "test";
@@ -147,6 +172,7 @@ public class HashBagTest {
     }
 
     @Test
+    @DisplayName("New HashBag has a loadfactor of zero")
     void newHashBagHasZeroLoadFactor() {
         //given
         //when
@@ -156,6 +182,7 @@ public class HashBagTest {
     }
 
     @Test
+    @DisplayName("New HashBag has a size of zero")
     void newHashBagHasZeroSize() {
         //given
         //when
@@ -165,6 +192,7 @@ public class HashBagTest {
     }
 
     @Test
+    @DisplayName("HashBag with multiple elements has correct size")
     void hashBagWithMultipleElementsHasCorrectSize() {
         //given
         HashBag<SetHashObject> bag = new HashBag<>(10, 0.75f);
@@ -180,6 +208,7 @@ public class HashBagTest {
     }
 
     @Test
+    @DisplayName("HashBag with multiple collidingeElements has correct size")
     void hashBagWithCollisionAndMultipleElementsHasCorrectSize() {
         //given
         HashBag<SetHashObject> bag = new HashBag<>(10, 0.75f);
@@ -199,6 +228,7 @@ public class HashBagTest {
     }
 
     @Test
+    @DisplayName("HashBag contains element")
     void hashBagContainsElement() {
         //given
         String test = "test";
@@ -210,6 +240,7 @@ public class HashBagTest {
     }
 
     @Test
+    @DisplayName("HashBag is not empty after element was added")
     void hashBagIsNotEmpty() {
         //given
         String test = "test";
@@ -221,6 +252,7 @@ public class HashBagTest {
     }
 
     @Test
+    @DisplayName("HashBag contains exactly one element")
     void hashBagContainsExactlyOneElement() {
         //given
         String test = "test";
@@ -232,6 +264,7 @@ public class HashBagTest {
     }
 
     @Test
+    @DisplayName("HashBag contains exactly ten elements")
     void hashBagContainsExactlyTenElements() {
         //given
         String test = "test";
@@ -243,6 +276,7 @@ public class HashBagTest {
     }
 
     @Test
+    @DisplayName("HashBag throws exception, when zero elements are added")
     void addZeroElements_expectException() {
         //given
         String test = "test";
@@ -253,6 +287,7 @@ public class HashBagTest {
     }
 
     @Test
+    @DisplayName("HashBag rehashes, when loadfactor reached")
     void hashBagRehashesWhenLoadfactorReached() {
         //given
         HashBag<SetHashObject> bag = new HashBag<>(10, 0.8f);
@@ -283,16 +318,17 @@ public class HashBagTest {
     }
 
     @Test
+    @DisplayName("HashBag does not contain elements which have equal hashcode but are not equal")
     void hashBagWithCollisionCheckIfNonExistingElementIsNotPresent() {
         //given
-        String test = "test";
-        String test1 = "asdfjklö";
-        HashBag<String> bag = new HashBag<>(1, 1.0f);
+        SetHashObject obj1 = new SetHashObject(1, true);
+        SetHashObject obj2 = new SetHashObject(1, false);
+        HashBag<SetHashObject> bag = new HashBag<>(1, 1.0f);
         //when
-        bag.add(test);
+        bag.add(obj1);
         //then
-        assertTrue(bag.contains(test));
-        assertFalse(bag.contains(test1));
+        assertTrue(bag.contains(obj1));
+        assertFalse(bag.contains(obj2));
     }
 
     /**
@@ -301,6 +337,7 @@ public class HashBagTest {
      * This isn't bug, but behaviour which can be unexpected
      */
     @Test
+    @DisplayName("HashBag contains both colliding elements")
     void hashBagWithCollisionCheckIfExistingElementIsPresent() {
         //given
         String test = "test";
@@ -315,6 +352,7 @@ public class HashBagTest {
     }
 
     @Test
+    @DisplayName("HashBag was correctly cleared")
     void clearedHashBagIsCompletelyEmpty() {
         //given
         HashBag<SetHashObject> bag = new HashBag<>(10, 0.75f);
@@ -335,6 +373,7 @@ public class HashBagTest {
     }
 
     @Test
+    @DisplayName("HashBag does not contain removed element")
     void hashBagDoesNotContainElementWhenRemoved() {
         //given
         String test = "test";
@@ -347,7 +386,8 @@ public class HashBagTest {
     }
 
     @Test
-    void hashBagContainsOnlyNumberOfElementsWhichWereAddedMinusTheRemovedOnes() {
+    @DisplayName("HashBag correctly removes number of elements")
+    void hashBagCorrectlyRemovesNumberOfElements() {
         //given
         String test = "test";
         HashBag<String> bag = new HashBag<>();
@@ -359,6 +399,7 @@ public class HashBagTest {
     }
 
     @Test
+    @DisplayName("HashBag does not contain any element when all removed")
     void hashBagContainsNoElementWhenAllRemove() {
         //given
         String test = "test";
@@ -371,6 +412,7 @@ public class HashBagTest {
     }
 
     @Test
+    @DisplayName("HashBag correctly removes non existing element")
     void removeNotExistingElement() {
         //given
         String test = "test";
@@ -381,6 +423,7 @@ public class HashBagTest {
     }
 
     @Test
+    @DisplayName("HashBag throws exception when removing zero elements")
     void removeZeroElements_expectException() {
         //given
         String test = "test";
@@ -392,6 +435,7 @@ public class HashBagTest {
     }
 
     @Test
+    @DisplayName("HashBag correctly removes all elements, when remove count is higher")
     void removeMoreElementsThanInHashBag() {
         //given
         String test = "test";
@@ -405,6 +449,7 @@ public class HashBagTest {
     }
 
     @Test
+    @DisplayName("Elements with same hashcode are not removed, when not equal")
     void elementWhichHasSameHashCodeIsNotRemoved() {
         //given
         HashBag<SetHashObject> bag = new HashBag<>();
@@ -420,6 +465,7 @@ public class HashBagTest {
     }
 
     @Test
+    @DisplayName("laodfactor is correctly calculated")
     void loadFactorIsCorrectIfHalfIsFilled() {
         //given
         int i = 1;
@@ -442,6 +488,7 @@ public class HashBagTest {
     }
 
     @Test
+    @DisplayName("HashBag correctly rehashes")
     void hashBagRehash() {
         //given
         SetHashObject obj1 = new SetHashObject(1);
@@ -460,6 +507,7 @@ public class HashBagTest {
     }
 
     @Test
+    @DisplayName("Elements array of empty HashBag is empty")
     void newHashBagElementsIsEmpty() {
         //given
         HashBag<String> bag = new HashBag<>();
@@ -472,6 +520,7 @@ public class HashBagTest {
     }
 
     @Test
+    @DisplayName("Elements array of HashBag is not empty")
     void hashBagElementsContainsElements() {
         //given
         HashBag<SetHashObject> bag = new HashBag<>(10, 0.75f);
@@ -490,6 +539,7 @@ public class HashBagTest {
     }
 
     @Test
+    @DisplayName("Elements array contains the same element multiple times")
     void checkIfElementsContainsSameElementMultipleTimes() {
         //given
         HashBag<SetHashObject> bag = new HashBag<>(10, 0.75f);
@@ -506,6 +556,7 @@ public class HashBagTest {
 
     /* Null Tests */
     @Test
+    @DisplayName("Add null to HashBag")
     void addNullToHashBag() {
         //given
         HashBag<String> bag = new HashBag<>();
@@ -519,6 +570,7 @@ public class HashBagTest {
     }
 
     @Test
+    @DisplayName("Add null multiple times")
     void addMultipleNullValuesToHashBag() {
         //given
         HashBag<String> bag = new HashBag<>();
@@ -532,6 +584,7 @@ public class HashBagTest {
     }
 
     @Test
+    @DisplayName("Not empty HashBag does not contain null")
     void hashBagDoesNotContainNullWhenNotEmpty() {
         //given
         HashBag<String> bag = new HashBag<>();
@@ -543,6 +596,7 @@ public class HashBagTest {
     }
 
     @Test
+    @DisplayName("Remove null")
     void removeNullValueFromHashBag() {
         //given
         HashBag<String> bag = new HashBag<>();
@@ -557,6 +611,7 @@ public class HashBagTest {
     }
 
     @Test
+    @DisplayName("Remove some null-values")
     void removePartOfTheNullValueFromHashBag() {
         //given
         HashBag<String> bag = new HashBag<>();
@@ -571,6 +626,7 @@ public class HashBagTest {
     }
 
     @Test
+    @DisplayName("Elements array contains null")
     void elementsContainsNullValues() {
         //given
         HashBag<String> bag = new HashBag<>();
@@ -581,6 +637,96 @@ public class HashBagTest {
 
         //then
         assertTrue(arrayContains(elements, null));
+    }
+
+    @Test
+    @DisplayName("Add returns zero when HashBag empty")
+    void addReturnsZero_whenHashbagEmpty() {
+        //given
+        String test = "test";
+        HashBag<String> bag = new HashBag<>();
+
+        //when
+        int count = bag.add(test);
+
+        //then
+        assertEquals(0, count);
+    }
+
+    @Test
+    @DisplayName("Add returns correct number of pre existing equal elements when HashBag not empty")
+    void addReturnsCorrectNumber_whenHashbagNotEmpty() {
+        //given
+        String test = "test";
+        HashBag<String> bag = new HashBag<>();
+
+        //when
+        bag.add(test);
+        int count = bag.add(test);
+
+        //then
+        assertEquals(1, count);
+    }
+
+    @Test
+    @DisplayName("Add returns zero when no equal element in HashBag not empty")
+    void addReturnZero_whenNoEqualElementInHashBag() {
+        //given
+        SetHashObject obj1 = new SetHashObject(1);
+        SetHashObject obj2 = new SetHashObject(2);
+        HashBag<SetHashObject> bag = new HashBag<>();
+
+        //when
+        bag.add(obj1);
+        int count = bag.add(obj2);
+
+        //then
+        assertEquals(0, count);
+    }
+
+    @Test
+    @DisplayName("Add returns zero when elements collide in HashBag not empty")
+    void addReturnZero_whenElementsCollideInHashBag() {
+        //given
+        SetHashObject obj1 = new SetHashObject(1, true);
+        SetHashObject obj2 = new SetHashObject(1, false);
+        HashBag<SetHashObject> bag = new HashBag<>();
+
+        //when
+        bag.add(obj1);
+        int count = bag.add(obj2);
+
+        //then
+        assertEquals(0, count);
+    }
+
+    @Test
+    @DisplayName("Remove returns zero when HashBag empty")
+    void removeReturnsZero_whenHashBagEmpty() {
+        //given
+        SetHashObject obj1 = new SetHashObject(1);
+        HashBag<SetHashObject> bag = new HashBag<>();
+
+        //when
+        int count = bag.remove(obj1);
+
+        //then
+        assertEquals(0, count);
+    }
+
+    @Test
+    @DisplayName("Remove returns number of existing elements, when HashBag not empty")
+    void removeReturnsNumberOfExistingElements_whenHashBagNotEmpty() {
+        //given
+        SetHashObject obj1 = new SetHashObject(1);
+        HashBag<SetHashObject> bag = new HashBag<>();
+        bag.add(obj1, 10);
+
+        //when
+        int count = bag.remove(obj1);
+
+        //then
+        assertEquals(10, count);
     }
 
 
