@@ -13,6 +13,7 @@
 :toc:
 :numbered:
 
+<<<
 == Lösungsidee
 === HashBag
 Wie in der Angabe vorgegeben wird ein HashBag implementiert.
@@ -31,12 +32,13 @@ Zusätzlich zu den vom Interface vorgegebenen Methoden gibt es zwei private.
 
 * `hashToIndex` berechnet aus einem Objekt den Hash und weiter den Index für den HashBag.
 
-=== Testen
+=== Test Cases
 Zum Testen wird das `SetHashObject` genutzt. Mit diesem kann man Hash Kollisionen provozieren,
 obwohl das Objekt nicht ident ist.
 Außerdem kann man relativ einfach und flexibel vorhersagbare Hash-Werte übergeben.
 Somit wird viel Zeit mit Suchen nach Kollisionen usw. gespart.
 
+<<<
 == Source-Code
 
 .Node.java
