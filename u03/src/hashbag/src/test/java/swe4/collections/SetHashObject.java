@@ -1,5 +1,8 @@
 package swe4.collections;
 
+/**
+ * Object which can be used to set flexible hashCodes and provoke collisions
+ */
 public class SetHashObject {
 
     final int hashCode;
