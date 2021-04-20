@@ -3,9 +3,16 @@ package swe4.collections;
 public class SetHashObject {
 
     final int hashCode;
+    final boolean equals;
 
-    public SetHashObject(int haschCode) {
-        this.hashCode = haschCode;
+    public SetHashObject(int hashCode, boolean equals) {
+        this.hashCode = hashCode;
+        this.equals = equals;
+
+    }
+
+    public SetHashObject(int hashCode) {
+        this(hashCode, true);
     }
 
     @Override
@@ -15,6 +22,8 @@ public class SetHashObject {
 
     @Override
     public boolean equals(Object obj) {
-        return this.hashCode() == obj.hashCode() && obj instanceof SetHashObject;
+        return this.hashCode() == obj.hashCode()
+                && obj instanceof SetHashObject
+                && this.equals == ((SetHashObject) obj).equals;
     }
 }
