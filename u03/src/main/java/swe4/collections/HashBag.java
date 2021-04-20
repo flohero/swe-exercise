@@ -249,10 +249,13 @@ public class HashBag<T> implements Bag<T> {
         return element == null ? 0 : Math.abs(element.hashCode()) % this.items.length;
     }
 
-    private Node<T> elementAt(int i) {
-        if (i >= this.items.length) {
-            throw new ArrayIndexOutOfBoundsException();
-        }
-        return (Node<T>) this.items[i];
+    /**
+     * Get the element at the specified index.
+     * Casts the object.
+     * @param index the index of the element in the object array.
+     * @return Node element
+     */
+    private Node<T> elementAt(final int index) {
+        return (Node<T>) this.items[index];
     }
 }
