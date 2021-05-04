@@ -1,7 +1,7 @@
-<project name="hashbag" default="compile" basedir=".">
+<project name="astar" default="compile" basedir=".">
 
     <!-- Specify your main class here. Omit the .class extension. -->
-    <property name="main.class" value="swe4.collections.HashBag"/>
+    <property name="main.class" value="swe4.slidingpuzzle.Main"/>
 
     <property environment="env"/>
     <property name="jar.name" value="${ant.project.name}.jar"/>
