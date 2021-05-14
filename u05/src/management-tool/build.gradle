@@ -8,14 +8,7 @@ group 'swe4'
 version '1.0-SNAPSHOT'
 
 sourceSets {
-    main {
-        java {
-            srcDirs = ["src/main/java"]
-        }
-        resources {
-            srcDirs = ["src/main/resources"]
-        }
-    }
+    main.output.resourcesDir = main.java.outputDir
 }
 
 repositories {
