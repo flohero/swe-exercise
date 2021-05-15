@@ -7,7 +7,9 @@
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="swe4.managementtool.controllers.DashboardController">
     <TabPane AnchorPane.bottomAnchor="5" AnchorPane.leftAnchor="5" AnchorPane.rightAnchor="5" AnchorPane.topAnchor="5">
-        <Tab closable="false" text="Users"/>
+        <Tab closable="false" text="Users">
+            <fx:include source="userview.fxml"/>
+        </Tab>
         <Tab closable="false" text="Teams">
             <fx:include source="teamview.fxml"/>
         </Tab>

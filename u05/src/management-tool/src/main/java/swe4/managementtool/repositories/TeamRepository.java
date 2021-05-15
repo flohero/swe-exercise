@@ -4,7 +4,7 @@ import swe4.managementtool.domain.Team;
 
 import java.util.Collection;
 
-public interface TeamsRepository {
+public interface TeamRepository {
 
     Collection<Team> findAllTeams();
 }

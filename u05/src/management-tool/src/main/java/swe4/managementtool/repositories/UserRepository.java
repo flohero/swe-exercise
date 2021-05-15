@@ -7,5 +7,7 @@ import java.util.Collection;
 public interface UserRepository {
     Collection<User> findAllUsers();
 
-    User insertUser(String username, byte[] hash);
+    User insertUser(User user);
+
+    void updateUser(User user);
 }

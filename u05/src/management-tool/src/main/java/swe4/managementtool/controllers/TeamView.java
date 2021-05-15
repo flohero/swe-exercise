@@ -6,8 +6,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import swe4.managementtool.domain.Team;
-import swe4.managementtool.repositories.TeamsRepository;
-import swe4.managementtool.repositories.FakeTeamRepository;
+import swe4.managementtool.repositories.RepositoryFactory;
+import swe4.managementtool.repositories.TeamRepository;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -17,14 +17,13 @@ public class TeamView implements Initializable {
     private TableView<Team> teamTableView;
 
     @FXML
-    private TableColumn<Team, String> teamName;
+    private TableColumn<Team, String> teamNameCol;
 
-    private final TeamsRepository teamsRepository = new FakeTeamRepository();
-
+    private final TeamRepository teamRepository = RepositoryFactory.teamsRepositoryInstance();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        teamName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        teamTableView.getItems().setAll(teamsRepository.findAllTeams());
+        teamNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        teamTableView.getItems().setAll(teamRepository.findAllTeams());
     }
 }

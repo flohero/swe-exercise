@@ -8,7 +8,7 @@ import java.util.List;
 
 public class FakeUserRepository implements UserRepository {
 
-    private static final List<User> users = new ArrayList<>();
+    private final List<User> users = new ArrayList<>();
 
     @Override
     public Collection<User> findAllUsers() {
@@ -16,9 +16,17 @@ public class FakeUserRepository implements UserRepository {
     }
 
     @Override
-    public User insertUser(String username, byte[] hash) {
-        User user = new User(username, hash);
+    public User insertUser(final User user) {
         users.add(user);
         return user;
+    }
+
+    @Override
+    public void updateUser(final User user) {
+        int index = users.indexOf(user);
+        if(index < 0) {
+            return;
+        }
+        users.set(index, user);
     }
 }

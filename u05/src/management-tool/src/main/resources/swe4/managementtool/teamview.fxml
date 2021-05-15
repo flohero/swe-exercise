@@ -22,7 +22,7 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
         </columnResizePolicy>
         <columns>
-            <TableColumn prefWidth="Infinity" text="Teams" fx:id="teamName"/>
+            <TableColumn prefWidth="Infinity" text="Teams" fx:id="teamNameCol"/>
         </columns>
     </TableView>
 </VBox>
