@@ -6,4 +6,6 @@ module management.tool.main {
     opens swe4.managementtool;
     exports swe4.managementtool.controllers;
     opens swe4.managementtool.controllers;
+    exports swe4.managementtool.domain;
+    opens swe4.managementtool.domain;
 }
