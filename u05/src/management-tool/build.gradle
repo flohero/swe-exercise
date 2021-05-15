@@ -7,9 +7,9 @@ plugins {
 group 'swe4'
 version '1.0-SNAPSHOT'
 
-sourceSets {
+/*sourceSets {
     main.output.resourcesDir = main.java.outputDir
-}
+}*/
 
 repositories {
     mavenCentral()
