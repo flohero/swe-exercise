@@ -8,8 +8,11 @@
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="swe4.managementtool.controllers.AddUserDialogController"
-      spacing="30">
+      spacing="15">
     <HBox alignment="CENTER">
+        <padding>
+            <Insets top="15"/>
+        </padding>
         <Text textAlignment="CENTER" strokeType="OUTSIDE" strokeWidth="0.0" text="Add User">
             <font>
                 <Font name="System Bold" size="24.0"/>

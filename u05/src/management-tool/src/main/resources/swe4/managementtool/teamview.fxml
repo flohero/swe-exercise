@@ -6,16 +6,18 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-<VBox spacing="30" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+<?import javafx.geometry.Insets?>
+<VBox spacing="15" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="swe4.managementtool.controllers.TeamView">
     <HBox alignment="CENTER">
-        <VBox>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Teams" textAlignment="CENTER">
-                <font>
-                    <Font name="System Bold" size="24.0"/>
-                </font>
-            </Text>
-        </VBox>
+        <padding>
+            <Insets top="15"/>
+        </padding>
+        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Teams" textAlignment="CENTER">
+            <font>
+                <Font name="System Bold" size="24.0"/>
+            </font>
+        </Text>
     </HBox>
     <TableView fx:id="teamTableView">
         <columnResizePolicy>

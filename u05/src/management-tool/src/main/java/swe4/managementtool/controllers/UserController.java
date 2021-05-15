@@ -82,7 +82,7 @@ public class UserController implements Initializable {
             refreshUsers();
         });
 
-        users.addAll(userService.findAllUsers());
+        refreshUsers();
         userTableView.setItems(users);
     }
 
@@ -109,8 +109,7 @@ public class UserController implements Initializable {
     }
 
     private void refreshUsers() {
-        users.clear();
-        users.addAll(userService.findAllUsers());
+        users.setAll(userService.findAllUsers());
     }
 
     private static String getEventValue(TableColumn.CellEditEvent<User, String> event) {
