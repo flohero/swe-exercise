@@ -10,6 +10,8 @@ public class FakeUserRepository implements UserRepository {
 
     private final List<User> users = new ArrayList<>();
 
+    FakeUserRepository() {}
+
     @Override
     public Collection<User> findAllUsers() {
         return users;
