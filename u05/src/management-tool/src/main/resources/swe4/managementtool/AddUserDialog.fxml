@@ -33,14 +33,14 @@
         <Label alignment="CENTER_RIGHT" minWidth="100.0" text="Lastname"/>
         <TextField fx:id="lastnameField" HBox.hgrow="ALWAYS"/>
     </HBox>
-    <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="10.0">
+    <HBox alignment="CENTER" spacing="10.0">
         <padding>
             <Insets right="30.0"/>
         </padding>
         <Label alignment="CENTER_RIGHT" minWidth="100.0" text="Username"/>
         <TextField fx:id="usernameField" HBox.hgrow="ALWAYS"/>
     </HBox>
-    <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="10.0">
+    <HBox alignment="CENTER" spacing="10.0">
         <padding>
             <Insets right="30.0"/>
         </padding>

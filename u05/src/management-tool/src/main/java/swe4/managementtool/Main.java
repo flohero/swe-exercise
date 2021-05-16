@@ -20,7 +20,7 @@ public class Main extends Application {
         try {
 
             FXMLLoader loader = new FXMLLoader();
-            final URL resource = Main.class.getResource("dashboard.fxml");
+            final URL resource = Main.class.getResource("Dashboard.fxml");
             loader.setLocation(resource);
             AnchorPane root = loader.load();
 

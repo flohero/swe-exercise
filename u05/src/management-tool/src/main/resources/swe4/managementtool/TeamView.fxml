@@ -8,7 +8,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.geometry.Insets?>
 <VBox spacing="15" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="swe4.managementtool.controllers.TeamView">
+      fx:controller="swe4.managementtool.controllers.TeamViewController">
     <HBox alignment="CENTER">
         <padding>
             <Insets top="15"/>

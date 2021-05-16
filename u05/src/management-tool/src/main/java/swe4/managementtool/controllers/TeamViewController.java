@@ -12,7 +12,7 @@ import swe4.managementtool.repositories.TeamRepository;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class TeamView implements Initializable {
+public class TeamViewController implements Initializable {
     @FXML
     private TableView<Team> teamTableView;
 
