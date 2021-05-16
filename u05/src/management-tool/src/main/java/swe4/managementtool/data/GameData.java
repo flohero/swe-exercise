@@ -1,19 +1,17 @@
 package swe4.managementtool.data;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
+import swe4.managementtool.domain.Team;
 
 public class GameData {
-    private final StringProperty team1 = new SimpleStringProperty();
-    private final StringProperty team2 = new SimpleStringProperty();
+    private final ObjectProperty<Team> team1 = new SimpleObjectProperty<>();
+    private final ObjectProperty<Team> team2 = new SimpleObjectProperty<>();
     private final IntegerProperty scoreTeam1 = new SimpleIntegerProperty();
     private final IntegerProperty scoreTeam2 = new SimpleIntegerProperty();
     private final StringProperty date = new SimpleStringProperty();
     private final StringProperty time = new SimpleStringProperty();
 
-    public GameData(String team1, String team2,
+    public GameData(Team team1, Team team2,
                     int scoreTeam1, int scoreTeam2,
                     String date, String time) {
         setTeam1(team1);
@@ -24,27 +22,27 @@ public class GameData {
         setTime(time);
     }
 
-    public String getTeam1() {
+    public Team getTeam1() {
         return team1.get();
     }
 
-    public StringProperty team1Property() {
+    public ObjectProperty<Team> team1Property() {
         return team1;
     }
 
-    public void setTeam1(String team1) {
+    public void setTeam1(Team team1) {
         this.team1.set(team1);
     }
 
-    public String getTeam2() {
+    public Team getTeam2() {
         return team2.get();
     }
 
-    public StringProperty team2Property() {
+    public ObjectProperty<Team> team2Property() {
         return team2;
     }
 
-    public void setTeam2(String team2) {
+    public void setTeam2(Team team2) {
         this.team2.set(team2);
     }
 
