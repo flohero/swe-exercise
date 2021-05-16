@@ -1,4 +1,4 @@
-package swe4.managementtool.repositories;
+package swe4.repositories;
 
 public class RepositoryFactory {
 

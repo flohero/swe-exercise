@@ -1,6 +1,6 @@
-package swe4.managementtool.repositories;
+package swe4.repositories;
 
-import swe4.managementtool.domain.Team;
+import swe4.domain.Team;
 
 import java.util.Collection;
 import java.util.List;

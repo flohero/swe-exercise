@@ -8,11 +8,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
-import swe4.managementtool.domain.Game;
-import swe4.managementtool.domain.Team;
-import swe4.managementtool.repositories.GameRepository;
-import swe4.managementtool.repositories.RepositoryFactory;
-import swe4.managementtool.repositories.TeamRepository;
+import swe4.domain.Game;
+import swe4.domain.Team;
+import swe4.repositories.GameRepository;
+import swe4.repositories.RepositoryFactory;
+import swe4.repositories.TeamRepository;
 
 import java.net.URL;
 import java.time.LocalDate;

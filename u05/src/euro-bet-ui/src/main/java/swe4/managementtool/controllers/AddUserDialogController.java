@@ -8,7 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import swe4.managementtool.services.UserService;
+import swe4.services.UserService;
 
 import java.net.URL;
 import java.util.ResourceBundle;

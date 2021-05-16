@@ -1,6 +1,6 @@
-package swe4.managementtool.repositories;
+package swe4.repositories;
 
-import swe4.managementtool.domain.User;
+import swe4.domain.User;
 
 import java.util.ArrayList;
 import java.util.Collection;

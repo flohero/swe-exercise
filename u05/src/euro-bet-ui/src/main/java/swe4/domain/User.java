@@ -1,4 +1,4 @@
-package swe4.managementtool.domain;
+package swe4.domain;
 
 import java.util.UUID;
 

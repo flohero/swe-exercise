@@ -5,9 +5,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import swe4.managementtool.domain.Team;
-import swe4.managementtool.repositories.RepositoryFactory;
-import swe4.managementtool.repositories.TeamRepository;
+import swe4.domain.Team;
+import swe4.repositories.RepositoryFactory;
+import swe4.repositories.TeamRepository;
 
 import java.net.URL;
 import java.util.ResourceBundle;

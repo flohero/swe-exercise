@@ -11,12 +11,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.converter.IntegerStringConverter;
-import swe4.managementtool.domain.Game;
-import swe4.managementtool.domain.Team;
-import swe4.managementtool.domain.User;
-import swe4.managementtool.repositories.GameRepository;
-import swe4.managementtool.repositories.RepositoryFactory;
-import swe4.managementtool.repositories.TeamRepository;
+import swe4.domain.Game;
+import swe4.domain.Team;
+import swe4.repositories.GameRepository;
+import swe4.repositories.RepositoryFactory;
+import swe4.repositories.TeamRepository;
 
 import java.net.URL;
 import java.time.LocalDateTime;
