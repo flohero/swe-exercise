@@ -20,7 +20,7 @@ public class RepositoryFactory {
         return userRepository;
     }
 
-    public static TeamRepository teamsRepositoryInstance() {
+    public static TeamRepository teamRepositoryInstance() {
         if(teamRepository == null) {
             teamRepository = new FakeTeamRepository();
         }

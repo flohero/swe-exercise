@@ -19,7 +19,7 @@ public class TeamViewController implements Initializable {
     @FXML
     private TableColumn<Team, String> teamNameCol;
 
-    private final TeamRepository teamRepository = RepositoryFactory.teamsRepositoryInstance();
+    private final TeamRepository teamRepository = RepositoryFactory.teamRepositoryInstance();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

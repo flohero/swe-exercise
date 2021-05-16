@@ -14,6 +14,11 @@ public class FakeGameRepository implements GameRepository {
 
 
     @Override
+    public void insertGame(Game game) {
+        this.games.add(game);
+    }
+
+    @Override
     public Collection<Game> findAllGames() {
         return games;
     }

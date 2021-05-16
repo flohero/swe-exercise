@@ -6,5 +6,7 @@ import java.util.Collection;
 
 public interface GameRepository {
 
+    void insertGame(Game game);
+
     Collection<Game> findAllGames();
 }
