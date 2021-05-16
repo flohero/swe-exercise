@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 
-public class Main extends Application {
+public class ManagementTool extends Application {
 
     public static void main(String[] args) {
         launch(args);
@@ -20,7 +20,7 @@ public class Main extends Application {
         try {
 
             FXMLLoader loader = new FXMLLoader();
-            final URL resource = Main.class.getResource("Dashboard.fxml");
+            final URL resource = ManagementTool.class.getResource("Dashboard.fxml");
             loader.setLocation(resource);
             AnchorPane root = loader.load();
 
