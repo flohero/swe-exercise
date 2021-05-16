@@ -77,7 +77,6 @@ public class AddGameDialogController extends BaseDialogController implements Ini
         if (validTime) {
             LocalDateTime dateTime = LocalDateTime.of(gameDateField.getValue(),
                     LocalTime.parse(gameTimeField.getText(), TIME_PATTERN));
-
             long livegames = Stream.concat(
                     gameRepository
                             .findByTeamAndGameIsDuringTime(team1Field.getValue(), dateTime)
@@ -87,7 +86,7 @@ public class AddGameDialogController extends BaseDialogController implements Ini
                             .stream()
             ).count();
             if (livegames > 0) {
-                errorMessageField.setText("One Team already plays during this time");
+                errorMessageField.setText("One Team already plays\nduring this time!");
                 isTeamOccupied = true;
             }
         }
@@ -102,7 +101,6 @@ public class AddGameDialogController extends BaseDialogController implements Ini
                         || venueField.getText().trim().isEmpty()
                         || isTeamOccupied
         );
-
     }
 
     public void onAdd(ActionEvent actionEvent) {

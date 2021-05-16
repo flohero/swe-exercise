@@ -56,6 +56,14 @@ public class Game {
         return venue;
     }
 
+    public void setScoreTeam1(int scoreTeam1) {
+        this.scoreTeam1 = scoreTeam1;
+    }
+
+    public void setScoreTeam2(int scoreTeam2) {
+        this.scoreTeam2 = scoreTeam2;
+    }
+
     @Override
     public String toString() {
         return team1 + " VS. " + team2;

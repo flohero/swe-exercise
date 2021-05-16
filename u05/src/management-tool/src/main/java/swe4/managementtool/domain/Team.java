@@ -27,6 +27,6 @@ public class Team {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof Team && Objects.equals(((Team) obj).id, this.id);
+        return obj instanceof Team && Objects.equals(((Team) obj).name, this.name);
     }
 }

@@ -10,6 +10,8 @@ public interface GameRepository {
 
     void insertGame(Game game);
 
+    void updateGame(Game game);
+
     Collection<Game> findAllGames();
 
     Collection<Game> findByTeam(final Team team);

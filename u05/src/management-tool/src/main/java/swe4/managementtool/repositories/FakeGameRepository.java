@@ -23,6 +23,15 @@ public class FakeGameRepository implements GameRepository {
     }
 
     @Override
+    public void updateGame(Game game) {
+        int index = games.indexOf(game);
+        if(index < 0) {
+            return;
+        }
+        games.set(index, game);
+    }
+
+    @Override
     public Collection<Game> findAllGames() {
         return games;
     }
