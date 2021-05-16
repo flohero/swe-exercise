@@ -1,8 +1,8 @@
-package swe4.managementtool.services;
+package swe4.services;
 
-import swe4.managementtool.domain.User;
-import swe4.managementtool.repositories.RepositoryFactory;
-import swe4.managementtool.repositories.UserRepository;
+import swe4.domain.User;
+import swe4.repositories.RepositoryFactory;
+import swe4.repositories.UserRepository;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;

@@ -1,4 +1,4 @@
-package swe4.managementtool.domain;
+package swe4.domain;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

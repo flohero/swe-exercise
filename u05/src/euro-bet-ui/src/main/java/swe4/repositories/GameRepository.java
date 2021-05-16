@@ -1,7 +1,7 @@
-package swe4.managementtool.repositories;
+package swe4.repositories;
 
-import swe4.managementtool.domain.Game;
-import swe4.managementtool.domain.Team;
+import swe4.domain.Game;
+import swe4.domain.Team;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
