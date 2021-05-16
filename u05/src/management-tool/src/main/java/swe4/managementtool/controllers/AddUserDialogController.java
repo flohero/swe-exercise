@@ -5,17 +5,16 @@ import javafx.beans.Observable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 import swe4.managementtool.services.UserService;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class AddUserDialogController implements Initializable {
+
+public class AddUserDialogController extends BaseDialogController implements Initializable {
 
     private final UserService userService = new UserService();
 
@@ -47,11 +46,7 @@ public class AddUserDialogController implements Initializable {
                         usernameField.getText(),
                         passwordField.getText()
                 );
-        closeStage(actionEvent);
-    }
-
-    public void onCancel(ActionEvent actionEvent) {
-        closeStage(actionEvent);
+        close(actionEvent);
     }
 
     private void onChange(Observable observable) {
@@ -63,9 +58,5 @@ public class AddUserDialogController implements Initializable {
         );
     }
 
-    private void closeStage(ActionEvent event) {
-        Node source = (Node) event.getSource();
-        Stage stage = (Stage) source.getScene().getWindow();
-        stage.close();
-    }
+
 }

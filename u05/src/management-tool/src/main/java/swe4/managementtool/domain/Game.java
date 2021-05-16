@@ -12,14 +12,16 @@ public class Game {
     private int scoreTeam1;
     private int scoreTeam2;
     private LocalDateTime startTime;
+    private String venue;
 
-    public Game(Team team1, Team team2, int scoreTeam1, int scoreTeam2, LocalDateTime startTime) {
+    public Game(Team team1, Team team2, int scoreTeam1, int scoreTeam2, LocalDateTime startTime, String venue) {
         id = UUID.randomUUID();
         this.team1 = team1;
         this.team2 = team2;
         this.scoreTeam1 = scoreTeam1;
         this.scoreTeam2 = scoreTeam2;
         this.startTime = startTime;
+        this.venue = venue;
     }
 
     public UUID getId() {
@@ -48,6 +50,10 @@ public class Game {
 
     public LocalDateTime getEstimatedEndTime() {
         return startTime.plusMinutes(GAME_LENGTH);
+    }
+
+    public String getVenue() {
+        return venue;
     }
 
     @Override

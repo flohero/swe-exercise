@@ -53,6 +53,6 @@
         </padding>
         <Button mnemonicParsing="false" onAction="#onAddUser" text="Add" fx:id="addBtn"
                 disable="true"/>
-        <Button mnemonicParsing="false" onAction="#onCancel" text="Cancel"/>
+        <Button mnemonicParsing="false" onAction="#onClose" text="Cancel"/>
     </HBox>
 </VBox>

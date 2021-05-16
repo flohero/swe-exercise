@@ -87,19 +87,7 @@ public class UserController implements Initializable {
     }
 
     public void addUser(ActionEvent actionEvent) {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/swe4/managementtool/AddUserDialog.fxml"));
-        Parent parent;
-        try {
-            parent = fxmlLoader.load();
-        } catch (IOException e) {
-            throw new IllegalStateException(e);
-        }
-
-        Scene scene = new Scene(parent);
-        Stage stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setScene(scene);
-        stage.showAndWait();
+        DialogUtils.showDialog("/swe4/managementtool/AddUserDialog.fxml");
         refreshUsers();
     }
 

@@ -1,5 +1,6 @@
 package swe4.managementtool.domain;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class Team {
@@ -22,5 +23,10 @@ public class Team {
     @Override
     public String toString() {
         return name;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Team && Objects.equals(((Team) obj).id, this.id);
     }
 }
