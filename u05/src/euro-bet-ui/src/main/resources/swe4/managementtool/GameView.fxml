@@ -35,7 +35,8 @@
         <padding>
             <Insets bottom="30.0"/>
         </padding>
-        <Button mnemonicParsing="false" text="Add Game" onAction="#onClick"/>
+        <Button mnemonicParsing="false" text="Add Game" onAction="#onAdd"/>
+        <Button mnemonicParsing="false" text="Delete Game" onAction="#onDelete" fx:id="deleteBtn" disable="true"/>
     </HBox>
 
 </VBox>

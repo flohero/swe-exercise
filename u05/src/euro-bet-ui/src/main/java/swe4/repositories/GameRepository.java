@@ -12,6 +12,8 @@ public interface GameRepository {
 
     void updateGame(Game game);
 
+    void deleteGame(Game game);
+
     Collection<Game> findAllGames();
 
     Collection<Game> findByTeam(final Team team);

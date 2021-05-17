@@ -32,6 +32,11 @@ public class FakeGameRepository implements GameRepository {
     }
 
     @Override
+    public void deleteGame(Game game) {
+        games.remove(game);
+    }
+
+    @Override
     public Collection<Game> findAllGames() {
         return games;
     }

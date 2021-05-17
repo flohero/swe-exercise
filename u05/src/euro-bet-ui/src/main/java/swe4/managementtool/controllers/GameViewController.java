@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -38,10 +39,10 @@ public class GameViewController implements Initializable {
     private TableColumn<Game, LocalDateTime> startTimeCol;
     @FXML
     private TableColumn<Game, String> venueCol;
-
+    @FXML
+    private Button deleteBtn;
 
     private final ObservableList<Game> games = FXCollections.observableArrayList();
-
     private final GameRepository gameRepository = RepositoryFactory.gameRepositoryInstance();
     private final TeamRepository teamRepository = RepositoryFactory.teamRepositoryInstance();
 
@@ -90,14 +91,23 @@ public class GameViewController implements Initializable {
 
         refreshGames();
         gameTableView.setItems(games);
+        gameTableView.getSelectionModel()
+                .selectedItemProperty()
+                .addListener((observable, oldValue, newValue) -> deleteBtn.setDisable(newValue == null));
     }
 
     private void refreshGames() {
         games.setAll(gameRepository.findAllGames());
     }
 
-    public void onClick(ActionEvent actionEvent) {
+    public void onAdd(ActionEvent actionEvent) {
         DialogUtils.showDialog("/swe4/managementtool/AddGameDialog.fxml");
+        refreshGames();
+    }
+
+    public void onDelete(ActionEvent actionEvent) {
+        Game game = gameTableView.getSelectionModel().getSelectedItem();
+        gameRepository.deleteGame(game);
         refreshGames();
     }
 }
