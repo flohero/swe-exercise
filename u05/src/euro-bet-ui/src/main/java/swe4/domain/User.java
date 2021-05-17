@@ -7,14 +7,14 @@ public class User {
     private String firstname;
     private String lastname;
     private String username;
-    private byte[] hash;
+    private String password;
 
-    public User(String firstname, String lastname, String username, byte[] password) {
+    public User(String firstname, String lastname, String username, String password) {
         this.id = UUID.randomUUID();
         this.firstname = firstname;
         this.lastname = lastname;
         this.username = username;
-        this.hash = password;
+        this.password = password;
     }
 
     @Override
@@ -50,11 +50,11 @@ public class User {
         this.username = username;
     }
 
-    public String getHash() {
-        return new String(this.hash);
+    public String getPassword() {
+        return password;
     }
 
-    public void setHash(byte[] hash) {
-        this.hash = hash;
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

@@ -47,7 +47,7 @@ public class UserController implements Initializable {
         userNameCol.setCellValueFactory(new PropertyValueFactory<>("username"));
 
         passwordCol.setCellFactory(TextFieldTableCell.forTableColumn());
-        passwordCol.setCellValueFactory(new PropertyValueFactory<>("hash"));
+        passwordCol.setCellValueFactory(new PropertyValueFactory<>("password"));
 
         firstnameCol.setOnEditCommit(event -> {
             final String value = getEventValue(event);

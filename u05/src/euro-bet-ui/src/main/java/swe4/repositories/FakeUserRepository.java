@@ -2,9 +2,7 @@ package swe4.repositories;
 
 import swe4.domain.User;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class FakeUserRepository implements UserRepository {
 
@@ -18,9 +16,16 @@ public class FakeUserRepository implements UserRepository {
     }
 
     @Override
-    public User insertUser(final User user) {
+    public Optional<User> findUserByUsername(String username) {
+        return users
+                .stream()
+                .filter(user -> user.getUsername().equals(username))
+                .findFirst();
+    }
+
+    @Override
+    public void insertUser(final User user) {
         users.add(user);
-        return user;
     }
 
     @Override
@@ -30,5 +35,10 @@ public class FakeUserRepository implements UserRepository {
             return;
         }
         users.set(index, user);
+    }
+
+    @Override
+    public void deleteUser(User user) {
+        users.remove(user);
     }
 }
