@@ -11,6 +11,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import swe4.domain.User;
 import swe4.services.UserService;
+import swe4.utils.DialogUtils;
 
 import java.net.URL;
 import java.util.Optional;

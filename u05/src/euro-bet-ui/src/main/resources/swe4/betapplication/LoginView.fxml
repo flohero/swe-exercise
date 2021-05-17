@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.PasswordField?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="swe4.betapplication.controllers.LoginView"
+      prefHeight="500.0" prefWidth="300.0" spacing="30">
+    <HBox alignment="CENTER">
+        <padding>
+            <Insets top="15"/>
+        </padding>
+        <Text textAlignment="CENTER" strokeType="OUTSIDE" strokeWidth="0.0" text="Login">
+            <font>
+                <Font name="System Bold" size="24.0"/>
+            </font>
+        </Text>
+    </HBox>
+    <VBox alignment="CENTER" spacing="10.0">
+        <padding>
+            <Insets left="30" right="30"/>
+        </padding>
+        <Label alignment="CENTER" text="Username"/>
+        <TextField fx:id="username" HBox.hgrow="ALWAYS"/>
+    </VBox>
+    <VBox alignment="CENTER" spacing="10.0">
+        <padding>
+            <Insets left="30" right="30"/>
+        </padding>
+        <Label alignment="CENTER" text="Password"/>
+        <PasswordField fx:id="password" HBox.hgrow="ALWAYS"/>
+    </VBox>
+</VBox>

@@ -75,14 +75,16 @@ public class AddGameDialogController extends BaseDialogController implements Ini
         final boolean validTime = isValidTime(gameTimeField.getText().trim());
         boolean isTeamOccupied = false;
         if (validTime) {
-            LocalDateTime dateTime = LocalDateTime.of(gameDateField.getValue(),
+            final LocalDateTime startTime = LocalDateTime.of(gameDateField.getValue(),
                     LocalTime.parse(gameTimeField.getText(), TIME_PATTERN));
+            final LocalDateTime endTime = Game.calculateEstimatedEndTime(startTime);
+
             long livegames = Stream.concat(
                     gameRepository
-                            .findByTeamAndGameIsDuringTime(team1Field.getValue(), dateTime)
+                            .findByTeamAndGameOverlapsTimeFrame(team1Field.getValue(), startTime, endTime)
                             .stream(),
                     gameRepository
-                            .findByTeamAndGameIsDuringTime(team2Field.getValue(), dateTime)
+                            .findByTeamAndGameOverlapsTimeFrame(team2Field.getValue(), startTime, endTime)
                             .stream()
             ).count();
             if (livegames > 0) {

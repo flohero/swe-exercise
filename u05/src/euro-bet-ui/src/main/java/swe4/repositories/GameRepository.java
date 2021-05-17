@@ -19,4 +19,6 @@ public interface GameRepository {
     Collection<Game> findByTeam(final Team team);
 
     Collection<Game> findByTeamAndGameIsDuringTime(final Team team, final LocalDateTime dateTime);
+
+    Collection<Game> findByTeamAndGameOverlapsTimeFrame(final Team team, final LocalDateTime startTime, final LocalDateTime endTime);
 }

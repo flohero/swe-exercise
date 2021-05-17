@@ -18,7 +18,6 @@ public class ManagementTool extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-
             FXMLLoader loader = new FXMLLoader();
             final URL resource = ManagementTool.class.getResource("Dashboard.fxml");
             loader.setLocation(resource);

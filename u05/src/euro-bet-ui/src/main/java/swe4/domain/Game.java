@@ -5,7 +5,7 @@ import java.util.UUID;
 
 public class Game {
 
-    private static final int GAME_LENGTH = 90;
+    private static final int GAME_LENGTH = 90 + 15;
     private final UUID id;
     private Team team1;
     private Team team2;
@@ -49,6 +49,10 @@ public class Game {
     }
 
     public LocalDateTime getEstimatedEndTime() {
+        return calculateEstimatedEndTime(this.startTime);
+    }
+
+    public static LocalDateTime calculateEstimatedEndTime(final LocalDateTime startTime) {
         return startTime.plusMinutes(GAME_LENGTH);
     }
 
