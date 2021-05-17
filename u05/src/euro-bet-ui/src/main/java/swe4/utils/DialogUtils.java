@@ -1,4 +1,4 @@
-package swe4.managementtool.controllers;
+package swe4.utils;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,7 +14,7 @@ public class DialogUtils {
         throw new AssertionError("No DialogUtils instances for you!");
     }
 
-    static void showDialog(String path) {
+    public static void showDialog(String path) {
         FXMLLoader fxmlLoader = new FXMLLoader(DialogUtils.class.getResource(path));
         Parent parent;
         try {
