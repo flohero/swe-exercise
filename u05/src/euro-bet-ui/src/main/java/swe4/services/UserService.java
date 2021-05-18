@@ -11,6 +11,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Collection;
+import java.util.Optional;
 
 public class UserService {
 
@@ -52,6 +53,10 @@ public class UserService {
 
     public Collection<User> findAllUsers() {
         return userRepository.findAllUsers();
+    }
+
+    public Optional<User> findUserByUsername(final String username) {
+        return userRepository.findUserByUsername(username);
     }
 
     public boolean userExists(final String username, final String password) {
