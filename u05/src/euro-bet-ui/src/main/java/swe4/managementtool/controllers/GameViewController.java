@@ -18,6 +18,7 @@ import swe4.repositories.GameRepository;
 import swe4.repositories.RepositoryFactory;
 import swe4.repositories.TeamRepository;
 import swe4.utils.DialogUtils;
+import swe4.utils.TableDateCell;
 
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -77,18 +78,7 @@ public class GameViewController implements Initializable {
         startTimeCol.setCellValueFactory(new PropertyValueFactory<>("startTime"));
         venueCol.setCellValueFactory(new PropertyValueFactory<>("venue"));
 
-        startTimeCol.setCellFactory(column ->
-                new TableCell<>() {
-                    @Override
-                    protected void updateItem(LocalDateTime item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty) {
-                            setText(null);
-                        } else {
-                            setText(item.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
-                        }
-                    }
-                });
+        startTimeCol.setCellFactory(column -> new TableDateCell<>());
 
         refreshGames();
         gameTableView.setItems(games);
