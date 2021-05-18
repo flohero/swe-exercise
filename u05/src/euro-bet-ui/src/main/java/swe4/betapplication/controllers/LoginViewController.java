@@ -7,6 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import swe4.services.UserService;
@@ -48,9 +49,9 @@ public class LoginViewController implements Initializable {
         if(userExists) {
             System.out.println("User LoggedIn");
             Stage root = WindowUtils.getWindowRoot(actionEvent);
-            final Parent betView = (Parent) WindowUtils.loadFXML("/swe4/betapplication/BetView.fxml");
-            root.setWidth(800);
-            root.setHeight(600);
+            final VBox betView = (VBox) WindowUtils.loadFXML("/swe4/betapplication/BetView.fxml");
+            root.setWidth(betView.getPrefWidth());
+            root.setHeight(betView.getPrefHeight());
             root.getScene()
                     .setRoot(betView);
         } else {
