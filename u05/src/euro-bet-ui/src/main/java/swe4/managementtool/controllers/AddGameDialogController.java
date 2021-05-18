@@ -24,7 +24,7 @@ import java.util.ResourceBundle;
 import java.util.stream.Stream;
 
 public class AddGameDialogController extends BaseDialogController implements Initializable {
-    public static final DateTimeFormatter TIME_PATTERN = DateTimeFormatter.ofPattern("HH:mm");
+    private static final DateTimeFormatter TIME_PATTERN = DateTimeFormatter.ofPattern("HH:mm");
 
     @FXML
     private ComboBox<Team> team1Field;

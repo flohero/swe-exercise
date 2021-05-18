@@ -4,9 +4,13 @@ import javafx.beans.Observable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import swe4.services.UserService;
+import swe4.utils.WindowUtils;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -19,6 +23,8 @@ public class LoginViewController implements Initializable {
     private TextField password;
     @FXML
     private Button loginBtn;
+    @FXML
+    private Text errorMessageField;
 
     private final UserService userService = new UserService();
 
@@ -37,11 +43,18 @@ public class LoginViewController implements Initializable {
     }
 
     public void onLogin(ActionEvent actionEvent) {
+        errorMessageField.setText("");
         boolean userExists = userService.userExists(username.getText(), password.getText());
         if(userExists) {
             System.out.println("User LoggedIn");
+            Stage root = WindowUtils.getWindowRoot(actionEvent);
+            final Parent betView = (Parent) WindowUtils.loadFXML("/swe4/betapplication/BetView.fxml");
+            root.setWidth(800);
+            root.setHeight(600);
+            root.getScene()
+                    .setRoot(betView);
         } else {
-            System.out.println("User does not exist");
+            errorMessageField.setText("Username/Password incorrect");
         }
     }
 }

@@ -1,8 +1,8 @@
 package swe4.managementtool.controllers;
 
 import javafx.event.ActionEvent;
-import javafx.scene.Node;
 import javafx.stage.Stage;
+import swe4.utils.WindowUtils;
 
 public abstract class BaseDialogController {
     public void onClose(ActionEvent actionEvent) {
@@ -10,8 +10,7 @@ public abstract class BaseDialogController {
     }
 
     protected void close(ActionEvent actionEvent) {
-        Node source = (Node) actionEvent.getSource();
-        Stage stage = (Stage) source.getScene().getWindow();
-        stage.close();
+        Stage root = WindowUtils.getWindowRoot(actionEvent);
+        root.close();
     }
 }
