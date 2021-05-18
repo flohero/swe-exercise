@@ -55,6 +55,7 @@ public class AddUserDialogController extends BaseDialogController implements Ini
     }
 
     private void onChange(Observable observable) {
+        errorMessageField.setText("");
         final boolean usernameEmpty = usernameField.getText().trim().isEmpty();
         boolean usernameUnique = true;
         if (!usernameEmpty) {
