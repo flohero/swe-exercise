@@ -12,6 +12,7 @@
 :stem:
 :toc:
 :numbered:
+:toclevels: 5
 
 <<<
 == Lösungsidee
@@ -19,8 +20,17 @@ Es wird wie laut Angabe ein Tool zur Verwaltung und eine Wettanwendung geschrieb
 Diese sind eigenständig und werden getrennt voneinander ausgeführt.
 Zum Speichern wird das Repository Pattern genutzt, gemeinsam mit dem Factory Pattern.
 
-=== User
-Der
+=== UserService
+Der UserSevice übernimmt einige wichtige Aufgaben, wie z. B. das Einfügen in ein Repository.
+Er hasht das Password des Users mit dem PBKDF2 Algorithmus.
+Somit wird das Passwort nicht in Klartext gespeichert.
+Es wurde dieser Algorithmus gewählt, da dies sicherer als MD5 oder SHA ist und Java noch keinen eingebauten BCRYPT hat.
+
+=== UML Diagram
+Hier noch ein UML Diagram, ob es viel hilft weiß ich nicht …
+
+.UML
+image::{img}/uml.png[]
 
 <<<
 == Mock-Ups
@@ -50,31 +60,34 @@ image::{img}/dialogs.png[]
 <<<
 == Source Code
 === domain
-
 .User
 [source,java]
 ----
 include::{src}/domain/User.java[]
 ----
 
+<<<
 .Team
 [source,java]
 ----
 include::{src}/domain/Team.java[]
 ----
 
+<<<
 .Game
 [source,java]
 ----
 include::{src}/domain/Game.java[]
 ----
 
+<<<
 .PlacementTime
 [source,java]
 ----
 include::{src}/domain/PlacementTime.java[]
 ----
 
+<<<
 .Bet
 [source,java]
 ----
@@ -89,48 +102,56 @@ include::{src}/domain/Bet.java[]
 include::{src}/repositories/UserRepository.java[]
 ----
 
+<<<
 .FakeUserRepository
 [source,java]
 ----
 include::{src}/repositories/FakeUserRepository.java[]
 ----
 
+<<<
 .TeamRepository
 [source,java]
 ----
 include::{src}/repositories/TeamRepository.java[]
 ----
 
+<<<
 .FakeTeamRepository
 [source,java]
 ----
 include::{src}/repositories/FakeTeamRepository.java[]
 ----
 
+<<<
 .GameRepository
 [source,java]
 ----
 include::{src}/repositories/GameRepository.java[]
 ----
 
+<<<
 .FakeGameRepository
 [source,java]
 ----
 include::{src}/repositories/FakeGameRepository.java[]
 ----
 
+<<<
 .BetRepository
 [source,java]
 ----
 include::{src}/repositories/BetRepository.java[]
 ----
 
+<<<
 .FakeBetRepository
 [source,java]
 ----
 include::{src}/repositories/FakeBetRepository.java[]
 ----
 
+<<<
 .RepositoryFactory
 [source,java]
 ----
@@ -145,12 +166,14 @@ include::{src}/repositories/RepositoryFactory.java[]
 include::{src}/services/UserService.java[]
 ----
 
+<<<
 .StateService
 [source,java]
 ----
 include::{src}/services/StateService.java[]
 ----
 
+<<<
 .LoadFakeDataService
 [source,java]
 ----
@@ -165,18 +188,21 @@ include::{src}/services/LoadFakeDataService.java[]
 include::{src}/utils/DialogUtils.java[]
 ----
 
+<<<
 .TimeUtils
 [source,java]
 ----
 include::{src}/utils/TimeUtils.java[]
 ----
 
+<<<
 .WindowUtils
 [source,java]
 ----
 include::{src}/utils/WindowUtils.java[]
 ----
 
+<<<
 .TableCellData
 [source,java]
 ----
@@ -185,85 +211,97 @@ include::{src}/utils/TableDateCell.java[]
 
 <<<
 === managementtool
-
 .ManagementTool
 [source,java]
 ----
 include::{src}/managementtool/ManagementTool.java[]
 ----
 
+<<<
 .BaseDialog
 [source,java]
 ----
 include::{src}/managementtool/controllers/BaseDialogController.java[]
 ----
 
+<<<
 .Dashboard
 [source,xml]
 ----
 include::{fxml}/managementtool/Dashboard.fxml[]
 ----
 
+<<<
 .DashboardController
 [source,java]
 ----
 include::{src}/managementtool/controllers/DashboardController.java[]
 ----
 
+<<<
 .AddGameDialog
 [source,xml]
 ----
 include::{fxml}/managementtool/AddGameDialog.fxml[]
 ----
 
+<<<
 .AddGameDialogController
 [source,java]
 ----
 include::{src}/managementtool/controllers/AddGameDialogController.java[]
 ----
 
+<<<
 .AddUserDialog
 [source,xml]
 ----
 include::{fxml}/managementtool/AddGameDialog.fxml[]
 ----
 
+<<<
 .AddUserDialogController
 [source,java]
 ----
 include::{src}/managementtool/controllers/AddUserDialogController.java[]
 ----
 
+<<<
 .GameView
 [source,xml]
 ----
 include::{fxml}/managementtool/GameView.fxml[]
 ----
 
+<<<
 .GameViewController
 [source,java]
 ----
 include::{src}/managementtool/controllers/GameViewController.java[]
 ----
 
+<<<
 .TeamView
 [source,xml]
 ----
 include::{fxml}/managementtool/TeamView.fxml[]
 ----
 
+<<<
 .TeamViewController
 [source,java]
 ----
 include::{src}/managementtool/controllers/TeamViewController.java[]
 ----
 
+<<<
 .UserView
 [source,xml]
 ----
 include::{fxml}/managementtool/UserView.fxml[]
 ----
 
+<<<
 .UserViewController
 [source,java]
 ----
@@ -272,55 +310,62 @@ include::{src}/managementtool/controllers/UserViewController.java[]
 
 <<<
 === betapplication
-
 .BetApplication
 [source,java]
 ----
 include::{src}/betapplication/BetApplication.java[]
 ----
 
+<<<
 .BetDashboard
 [source,xml]
 ----
 include::{fxml}/betapplication/BetDashboard.fxml[]
 ----
 
+<<<
 .BetDashboard
 [source,java]
 ----
 include::{src}/betapplication/controllers/BetDashboardController.java[]
 ----
 
+<<<
 .BetView
 [source,xml]
 ----
 include::{fxml}/betapplication/BetView.fxml[]
 ----
 
+<<<
 .BetViewController
 [source,java]
 ----
 include::{src}/betapplication/controllers/BetViewController.java[]
 ----
 
+<<<
 .HighscoreView
 [source,xml]
 ----
 include::{fxml}/betapplication/HighscoreView.fxml[]
 ----
 
+<<<
 .HighscoreViewController
 [source,java]
 ----
 include::{src}/betapplication/controllers/HighscoreViewController.java[]
 ----
 
+<<<
 .LoginView
 [source,xml]
 ----
 include::{fxml}/betapplication/LoginView.fxml[]
 ----
 
+<<<
 .LoginViewController
 [source,java]
 ----
@@ -341,18 +386,23 @@ image::screenshots/tryAddEmpty.png[]
 .Add User
 image::screenshots/addUser.png[]
 
+<<<
 .Added User
 image::screenshots/addedUser.png[]
 
+<<<
 .Edit User
 image::screenshots/editUser.png[]
 
+<<<
 .Edited User
 image::screenshots/editedUser.png[]
 
+<<<
 .Edit Password
 image::screenshots/editPassword.png[]
 
+<<<
 .Edited Password
 image::screenshots/editedPassword.png[]
 
@@ -365,6 +415,74 @@ image::screenshots/teamView.png[]
 ==== Games View
 .Games View
 image::screenshots/gamesView.png[]
+
+<<<
+
+Es ist nicht möglich gleichzeitig das gleiche Team spielen zu lassen.
+
+.Team is already playing
+image::screenshots/teamAlreadyPlaying.png[]
+
+<<<
+.Invalid Time Format
+image::screenshots/invalidTimeFormat.png[]
+
+<<<
+.Added Game
+image::screenshots/addedGame.png[]
+
+<<<
+.Change Game Score
+image::screenshots/changeGameScore.png[]
+
+<<<
+.Changed Game Score
+image::screenshots/changedGameScore.png[]
+
+<<<
+.Delete Game
+image::screenshots/deleteGame.png[]
+
+<<<
+=== Bet Application
+==== Login
+.Empty Login Input
+image::screenshots/emptyLoginInput.png[]
+
+<<<
+.Invalid Login
+image::screenshots/invalidLogin.png[]
+
+<<<
+==== Bet View
+.Bet View
+image::screenshots/betView.png[]
+
+<<<
+.Selected Game Shows Bet
+image::screenshots/selectedGameShowsBet.png[]
+
+<<<
+.Place new Bet
+image::screenshots/placeNewBet.png[]
+
+<<<
+.Placed new Bet
+image::screenshots/placedNewBet.png[]
+
+<<<
+.Update Bet
+image::screenshots/updateBet.png[]
+
+<<<
+.Updated Bet
+image::screenshots/updatedBet.png[]
+
+<<<
+==== Highscore View
+.Highscore
+image::screenshots/highscore.png[]
+
 
 
 
