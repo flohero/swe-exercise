@@ -103,6 +103,4 @@
             <arg value="--disable-ansi-colors"/>
         </java>
     </target>
-
-    <script/>
 </project>
