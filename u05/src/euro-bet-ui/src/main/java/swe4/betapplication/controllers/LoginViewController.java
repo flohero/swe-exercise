@@ -38,7 +38,6 @@ public class LoginViewController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         username.textProperty().addListener(this::onChange);
         password.textProperty().addListener(this::onChange);
-        userService.insertUser("Florian", "Weingartshofer", "flo", "cool");
     }
 
     private void onChange(Observable observable) {

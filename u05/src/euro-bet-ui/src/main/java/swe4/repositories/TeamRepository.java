@@ -7,4 +7,6 @@ import java.util.Collection;
 public interface TeamRepository {
 
     Collection<Team> findAllTeams();
+
+    void insertTeam(Team team);
 }

@@ -47,7 +47,6 @@ public class BetViewController implements Initializable {
     private Button placeBetBtn;
 
     private final GameRepository gameRepository = RepositoryFactory.gameRepositoryInstance();
-    private final TeamRepository teamRepository = RepositoryFactory.teamRepositoryInstance();
     private final BetRepository betRepository = RepositoryFactory.betRepositoryInstance();
     private final StateService stateService = StateService.getInstance();
     private final ObservableList<Game> games = FXCollections.observableArrayList();
@@ -55,11 +54,6 @@ public class BetViewController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        var teams = teamRepository.findAllTeams().toArray();
-        gameRepository.insertGame(new Game((Team) teams[0], (Team) teams[1], 0, 0, LocalDateTime.now(), "Linz"));
-        gameRepository.insertGame(new Game((Team) teams[2], (Team) teams[3], 0, 0, LocalDateTime.now().minusMinutes(120), "Linz"));
-        gameRepository.insertGame(new Game((Team) teams[2], (Team) teams[3], 0, 0, LocalDateTime.now().plusMinutes(120), "Linz"));
-
         statusCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getStatus(LocalDateTime.now())));
         startCol.setCellFactory(cell -> new TableDateCell<>());
         endCol.setCellFactory(cell -> new TableDateCell<>());
@@ -76,6 +70,7 @@ public class BetViewController implements Initializable {
         winnerTeamField.getSelectionModel()
                 .selectedItemProperty()
                 .addListener(this::winnerTeamSelectionChanged);
+        gameTable.getSortOrder().add(startCol);
     }
 
     private void refreshGames() {

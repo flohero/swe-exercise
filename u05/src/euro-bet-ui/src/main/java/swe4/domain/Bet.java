@@ -51,6 +51,14 @@ public class Bet {
         return POINTS * (placed == PlacementTime.BEFORE ? 1 : POINT_MULTIPLICATION);
     }
 
+    public boolean wasSuccessful() {
+        if (game.getTeam1().equals(winner)) {
+            return game.getScoreTeam1() > game.getScoreTeam2();
+        } else {
+            return game.getScoreTeam2() > game.getScoreTeam1();
+        }
+    }
+
     @Override
     public boolean equals(Object obj) {
         return obj instanceof Bet

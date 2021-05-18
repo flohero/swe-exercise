@@ -46,14 +46,9 @@ public class GameViewController implements Initializable {
 
     private final ObservableList<Game> games = FXCollections.observableArrayList();
     private final GameRepository gameRepository = RepositoryFactory.gameRepositoryInstance();
-    private final TeamRepository teamRepository = RepositoryFactory.teamRepositoryInstance();
-
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        var teams = teamRepository.findAllTeams().toArray();
-        gameRepository.insertGame(new Game((Team) teams[0], (Team) teams[1], 0, 0, LocalDateTime.now(), "Linz"));
-
         team1Col.setCellValueFactory(new PropertyValueFactory<>("team1"));
         team2Col.setCellValueFactory(new PropertyValueFactory<>("team2"));
 
@@ -85,6 +80,7 @@ public class GameViewController implements Initializable {
         gameTableView.getSelectionModel()
                 .selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> deleteBtn.setDisable(newValue == null));
+        gameTableView.getSortOrder().add(startTimeCol);
     }
 
     private void refreshGames() {

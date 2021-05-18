@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import swe4.services.LoadFakeDataService;
 
 import java.io.IOException;
 import java.net.URL;
@@ -17,6 +18,7 @@ public class BetApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        new LoadFakeDataService().load();
         try {
             FXMLLoader loader = new FXMLLoader();
             final URL resource = BetApplication.class.getResource("/swe4/betapplication/LoginView.fxml");

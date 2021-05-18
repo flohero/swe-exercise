@@ -8,7 +8,7 @@
 <?import javafx.geometry.Insets?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="swe4.managementtool.controllers.UserController"
+      fx:controller="swe4.managementtool.controllers.UserViewController"
       spacing="15">
     <HBox alignment="CENTER">
         <padding>

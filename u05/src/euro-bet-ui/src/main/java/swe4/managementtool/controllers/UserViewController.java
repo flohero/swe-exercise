@@ -18,7 +18,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
-public class UserController implements Initializable {
+public class UserViewController implements Initializable {
 
     private final UserService userService = new UserService();
     private final ObservableList<User> users = FXCollections.observableArrayList();
