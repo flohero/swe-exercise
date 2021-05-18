@@ -15,7 +15,7 @@ public class WindowUtils {
 
 
     public static Object loadFXML(String path) {
-        FXMLLoader fxmlLoader = new FXMLLoader(DialogUtils.class.getResource(path));
+        FXMLLoader fxmlLoader = new FXMLLoader(WindowUtils.class.getResource(path));
         try {
             return fxmlLoader.load();
         } catch (IOException e) {

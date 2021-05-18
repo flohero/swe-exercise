@@ -8,10 +8,12 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Button?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="swe4.betapplication.controllers.BetViewController"
-      prefHeight="800" prefWidth="1000.0">
+      prefHeight="800" prefWidth="1000.0" spacing="30">
     <HBox alignment="CENTER">
         <padding>
             <Insets top="15"/>
@@ -55,4 +57,8 @@
             </TableColumn>
         </columns>
     </TableView>
+    <HBox spacing="30">
+        <ComboBox fx:id="winnerTeamField"/>
+        <Button fx:id="placeBetBtn" text="Place Bet" disable="true"/>
+    </HBox>
 </VBox>
