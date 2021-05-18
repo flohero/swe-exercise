@@ -7,13 +7,18 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import swe4.domain.User;
+import swe4.services.StateService;
 import swe4.services.UserService;
 import swe4.utils.WindowUtils;
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class LoginViewController implements Initializable {
@@ -45,11 +50,12 @@ public class LoginViewController implements Initializable {
 
     public void onLogin(ActionEvent actionEvent) {
         errorMessageField.setText("");
-        boolean userExists = userService.userExists(username.getText(), password.getText());
-        if(userExists) {
-            System.out.println("User LoggedIn");
+        Optional<User> optUser = userService.getUser(username.getText(), password.getText());
+        if(optUser.isPresent()) {
+            StateService stateService = StateService.getInstance();
+            stateService.setCurrentUser(optUser.get());
             Stage root = WindowUtils.getWindowRoot(actionEvent);
-            final VBox betView = (VBox) WindowUtils.loadFXML("/swe4/betapplication/BetView.fxml");
+            final Pane betView = (Pane) WindowUtils.loadFXML("/swe4/betapplication/BetDashboard.fxml");
             root.setWidth(betView.getPrefWidth());
             root.setHeight(betView.getPrefHeight());
             root.getScene()

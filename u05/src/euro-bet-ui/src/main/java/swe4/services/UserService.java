@@ -53,6 +53,13 @@ public class UserService {
         return userRepository.findUserByUsername(username);
     }
 
+    public Optional<User> getUser(final String username, final String password) {
+        return userRepository.findUserByUsername(username)
+                .stream()
+                .filter(user -> validatePassword(password, user.getPassword()))
+                .findAny();
+    }
+
     public boolean userExists(final String username, final String password) {
         return userRepository.findUserByUsername(username)
                 .stream()

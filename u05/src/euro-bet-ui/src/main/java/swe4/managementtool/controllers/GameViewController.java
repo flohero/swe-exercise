@@ -78,7 +78,7 @@ public class GameViewController implements Initializable {
         startTimeCol.setCellValueFactory(new PropertyValueFactory<>("startTime"));
         venueCol.setCellValueFactory(new PropertyValueFactory<>("venue"));
 
-        startTimeCol.setCellFactory(column -> new TableDateCell<>());
+        startTimeCol.setCellFactory(cell -> new TableDateCell<>());
 
         refreshGames();
         gameTableView.setItems(games);

@@ -5,6 +5,7 @@ public class RepositoryFactory {
     private static UserRepository userRepository = null;
     private static TeamRepository teamRepository = null;
     private static GameRepository gameRepository = null;
+    private static BetRepository betRepository = null;
 
     /**
      * It should not be possible to create an instance of RepositoryFactory
@@ -32,5 +33,12 @@ public class RepositoryFactory {
             gameRepository = new FakeGameRepository();
         }
         return gameRepository;
+    }
+
+    public static BetRepository betRepositoryInstance() {
+        if(betRepository == null) {
+            betRepository = new FakeBetRepository();
+        }
+        return betRepository;
     }
 }

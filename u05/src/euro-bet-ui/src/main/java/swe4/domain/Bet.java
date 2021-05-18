@@ -3,6 +3,8 @@ package swe4.domain;
 import java.util.UUID;
 
 public class Bet {
+    private static final float POINTS = 10;
+    private static final float POINT_MULTIPLICATION = 0.5f;
     private final UUID id;
     private final User user;
     private final Game game;
@@ -33,8 +35,20 @@ public class Bet {
         return winner;
     }
 
+    public void setWinner(Team winner) {
+        this.winner = winner;
+    }
+
+    public void setPlaced(PlacementTime placed) {
+        this.placed = placed;
+    }
+
     public PlacementTime getPlaced() {
         return placed;
+    }
+
+    public float getPoints() {
+        return POINTS * (placed == PlacementTime.BEFORE ? 1 : POINT_MULTIPLICATION);
     }
 
     @Override
@@ -42,5 +56,10 @@ public class Bet {
         return obj instanceof Bet
                 && ((Bet) obj).getUser().equals(this.user)
                 && ((Bet) obj).getGame().equals(this.game);
+    }
+
+    @Override
+    public String toString() {
+        return game.toString() + ": " + winner + " " + placed.toString();
     }
 }
