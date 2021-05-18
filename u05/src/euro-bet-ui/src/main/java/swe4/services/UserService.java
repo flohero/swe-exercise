@@ -20,17 +20,11 @@ public class UserService {
     private static final int KEY_LENGTH = 128;
     public static final String SEPARATOR = ":";
     public static final int RADIX = 16;
+    public static final String HASH_ALGORITHM = "PBKDF2WithHmacSHA1";
 
     private final UserRepository userRepository = RepositoryFactory.userRepositoryInstance();
-    private final SecureRandom random = new SecureRandom();
-    private final SecretKeyFactory factory;
 
     public UserService() {
-        try {
-            factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-        } catch (NoSuchAlgorithmException e) {
-            throw new IllegalStateException(e);
-        }
     }
 
     public void insertUser(String firstname, String lastname, String username, String password) {
@@ -70,7 +64,7 @@ public class UserService {
         try {
             byte[] salt = getSalt();
             PBEKeySpec spec = new PBEKeySpec(chars, salt, ITERATION_COUNT, KEY_LENGTH);
-            SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            SecretKeyFactory skf = SecretKeyFactory.getInstance(HASH_ALGORITHM);
             byte[] hash = skf.generateSecret(spec).getEncoded();
             return ITERATION_COUNT + SEPARATOR + toHex(salt) + SEPARATOR + toHex(hash);
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
@@ -94,7 +88,7 @@ public class UserService {
         PBEKeySpec spec = new PBEKeySpec(input.toCharArray(), salt, iterations, hash.length * 8);
         SecretKeyFactory skf;
         try {
-            skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            skf = SecretKeyFactory.getInstance(HASH_ALGORITHM);
             byte[] testHash = skf.generateSecret(spec).getEncoded();
 
             int diff = hash.length ^ testHash.length;
