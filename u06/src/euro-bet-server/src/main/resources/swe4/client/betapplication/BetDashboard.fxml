@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.*?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="swe4.client.betapplication.controllers.BetDashboardController"
+            prefHeight="600" prefWidth="1000.0">
+    <TabPane AnchorPane.bottomAnchor="5" AnchorPane.leftAnchor="5" AnchorPane.rightAnchor="5" AnchorPane.topAnchor="5">
+        <Tab closable="false" text="Bets">
+            <fx:include source="BetView.fxml"/>
+        </Tab>
+        <Tab closable="false" text="Highscore">
+            <fx:include source="HighscoreView.fxml"/>
+        </Tab>
+    </TabPane>
+</AnchorPane>

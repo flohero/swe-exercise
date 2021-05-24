@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="swe4.client.betapplication.controllers.BetViewController"
+      prefHeight="600" prefWidth="1000.0" spacing="30">
+    <HBox alignment="CENTER">
+        <padding>
+            <Insets top="15"/>
+        </padding>
+        <Text textAlignment="CENTER" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome Gambler!">
+            <font>
+                <Font name="System Bold" size="24.0"/>
+            </font>
+        </Text>
+    </HBox>
+    <TableView fx:id="gameTable">
+        <columnResizePolicy>
+            <TableView fx:constant="UNCONSTRAINED_RESIZE_POLICY"/>
+        </columnResizePolicy>
+        <columns>
+            <TableColumn fx:id="statusCol" text="Status"/>
+            <TableColumn text="Game">
+                <cellValueFactory>
+                    <PropertyValueFactory property="gameName"/>
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn text="Score">
+                <cellValueFactory>
+                    <PropertyValueFactory property="score"/>
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="startCol" text="Start Time">
+                <cellValueFactory>
+                    <PropertyValueFactory property="startTime"/>
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="endCol" text="End Time">
+                <cellValueFactory>
+                    <PropertyValueFactory property="estimatedEndTime"/>
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn text="Venue">
+                <cellValueFactory>
+                    <PropertyValueFactory property="venue"/>
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="tippedWinnerCol" text="Tipped Winner"/>
+            <TableColumn fx:id="placedCol" text="Placed Before/During"/>
+        </columns>
+    </TableView>
+    <VBox spacing="20" alignment="CENTER">
+        <padding>
+            <Insets top="20" bottom="20"/>
+        </padding>
+        <Text textAlignment="CENTER" strokeType="OUTSIDE" strokeWidth="0.0" text="Place a Bet!">
+            <font>
+                <Font name="System Bold" size="20.0"/>
+            </font>
+        </Text>
+        <HBox alignment="CENTER" spacing="30">
+            <Label alignment="CENTER" minWidth="100.0" text="Winner Team"/>
+            <ComboBox fx:id="winnerTeamField"/>
+        </HBox>
+        <Button fx:id="placeBetBtn" text="Place Bet" disable="true" onAction="#placeBet"/>
+    </VBox>
+
+</VBox>
