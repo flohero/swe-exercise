@@ -50,19 +50,19 @@ public class LoadFakeDataService {
         gameRepository.insertGame(game4);
 
         // Bets
-        Bet bet1 = new Bet(userService.findUserByUsername("flo").get(), game1, rapid, PlacementTime.BEFORE);
-        Bet bet2 = new Bet(userService.findUserByUsername("max").get(), game1, rapid, PlacementTime.DURING);
-        Bet bet3 = new Bet(userService.findUserByUsername("dracula").get(), game1, austria_wien, PlacementTime.DURING);
+        Bet bet1 = new Bet(userService.findUserByUsername("flo"), game1, rapid, PlacementTime.BEFORE);
+        Bet bet2 = new Bet(userService.findUserByUsername("max"), game1, rapid, PlacementTime.DURING);
+        Bet bet3 = new Bet(userService.findUserByUsername("dracula"), game1, austria_wien, PlacementTime.DURING);
 
-        Bet bet4 = new Bet(userService.findUserByUsername("flo").get(), game4, real_madrid, PlacementTime.BEFORE);
-        Bet bet5 = new Bet(userService.findUserByUsername("max").get(), game4, real_madrid, PlacementTime.DURING);
-        Bet bet6 = new Bet(userService.findUserByUsername("dracula").get(), game4, real_madrid, PlacementTime.BEFORE);
+        Bet bet4 = new Bet(userService.findUserByUsername("flo"), game4, real_madrid, PlacementTime.BEFORE);
+        Bet bet5 = new Bet(userService.findUserByUsername("max"), game4, real_madrid, PlacementTime.DURING);
+        Bet bet6 = new Bet(userService.findUserByUsername("dracula"), game4, real_madrid, PlacementTime.BEFORE);
 
-        /*betRepository.insertBet(bet1);
+        betRepository.insertBet(bet1);
         betRepository.insertBet(bet2);
         betRepository.insertBet(bet3);
         betRepository.insertBet(bet4);
         betRepository.insertBet(bet5);
-        betRepository.insertBet(bet6);*/
+        betRepository.insertBet(bet6);
     }
 }

@@ -6,17 +6,17 @@ import java.util.*;
 
 public class FakeUserRepository implements UserRepository {
 
-    private final List<User> users = Collections.synchronizedList(new ArrayList<>());
+    private final List<User> users = new ArrayList<>();
 
     FakeUserRepository() {}
 
     @Override
-    public synchronized Collection<User> findAllUsers() {
+    public Collection<User> findAllUsers() {
         return users;
     }
 
     @Override
-    public synchronized Optional<User> findUserByUsername(String username) {
+    public Optional<User> findUserByUsername(String username) {
         return users
                 .stream()
                 .filter(user -> user.getUsername().equals(username))
@@ -24,12 +24,12 @@ public class FakeUserRepository implements UserRepository {
     }
 
     @Override
-    public synchronized void insertUser(final User user) {
+    public void insertUser(final User user) {
         users.add(user);
     }
 
     @Override
-    public synchronized void updateUser(final User user) {
+    public void updateUser(final User user) {
         int index = users.indexOf(user);
         if(index < 0) {
             return;
@@ -38,7 +38,7 @@ public class FakeUserRepository implements UserRepository {
     }
 
     @Override
-    public synchronized void deleteUser(User user) {
+    public void deleteUser(User user) {
         users.remove(user);
     }
 }

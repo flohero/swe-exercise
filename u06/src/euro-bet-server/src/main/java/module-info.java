@@ -9,10 +9,10 @@ module euro.bet.server {
     exports swe4.client.managementtool.controllers;
     opens swe4.client.managementtool.controllers;
 
-    /*exports swe4.client.betapplication;
+    exports swe4.client.betapplication;
     opens swe4.client.betapplication;
     exports swe4.client.betapplication.controllers;
-    opens swe4.client.betapplication.controllers;*/
+    opens swe4.client.betapplication.controllers;
 
     exports swe4.domain;
     opens swe4.domain;

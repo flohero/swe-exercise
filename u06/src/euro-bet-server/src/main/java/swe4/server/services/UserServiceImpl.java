@@ -13,7 +13,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Collection;
-import java.util.Optional;
 
 public class UserServiceImpl implements UserService {
 
@@ -51,20 +50,21 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAllUsers();
     }
 
-    public Optional<User> findUserByUsername(final String username) {
-        return userRepository.findUserByUsername(username);
+    public User findUserByUsername(final String username) {
+        return userRepository.findUserByUsername(username).orElse(null);
     }
 
     @Override
     public boolean userByUsernameIsPresent(String username) throws RemoteException {
-        return findUserByUsername(username).isPresent();
+        return findUserByUsername(username) != null;
     }
 
-    public Optional<User> findUserByUsernameAndPassword(final String username, final String password) {
+    public User findUserByUsernameAndPassword(final String username, final String password) {
         return userRepository.findUserByUsername(username)
                 .stream()
                 .filter(user -> validatePassword(password, user.getPassword()))
-                .findAny();
+                .findAny()
+                .orElse(null);
     }
 
     private static String createPasswordHash(String password) {

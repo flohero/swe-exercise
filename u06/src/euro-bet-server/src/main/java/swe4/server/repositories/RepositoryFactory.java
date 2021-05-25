@@ -37,6 +37,7 @@ public class RepositoryFactory {
 
     public static BetRepository betRepositoryInstance() {
         if(betRepository == null) {
+            betRepository = new FakeBetRepository();
         }
         return betRepository;
     }

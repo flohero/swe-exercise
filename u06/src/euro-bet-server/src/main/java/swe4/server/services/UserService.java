@@ -19,10 +19,10 @@ public interface UserService extends Remote {
 
     Collection<User> findAllUsers() throws RemoteException;
 
-    Optional<User> findUserByUsername(final String username) throws RemoteException;
+    User findUserByUsername(final String username) throws RemoteException;
 
     boolean userByUsernameIsPresent(final String username) throws RemoteException;
 
-    Optional<User> findUserByUsernameAndPassword(final String username, final String password) throws RemoteException;
+    User findUserByUsernameAndPassword(final String username, final String password) throws RemoteException;
 
 }

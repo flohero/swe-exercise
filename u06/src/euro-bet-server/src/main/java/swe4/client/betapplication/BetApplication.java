@@ -19,7 +19,7 @@ public class BetApplication extends Application {
     public void start(Stage primaryStage) {
         try {
             FXMLLoader loader = new FXMLLoader();
-            final URL resource = BetApplication.class.getResource("/swe4/betapplication/LoginView.fxml");
+            final URL resource = BetApplication.class.getResource("/swe4/client/betapplication/LoginView.fxml");
             loader.setLocation(resource);
             VBox root = loader.load();
 

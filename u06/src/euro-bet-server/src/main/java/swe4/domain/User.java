@@ -20,7 +20,7 @@ public class User implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof User &&  ((User) obj).id.equals(this.id);
+        return obj instanceof User &&  (((User) obj).id.equals(this.id) || ((User) obj).username.equals(this.username));
     }
 
     public UUID getId() {

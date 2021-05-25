@@ -87,9 +87,13 @@ public class Game implements Serializable {
         return scoreTeam1 + " : " +scoreTeam2;
     }
 
-
     @Override
     public String toString() {
         return team1 + " VS. " + team2;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Game && this.id.equals(((Game)obj).id);
     }
 }

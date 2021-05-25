@@ -1,5 +1,6 @@
 package swe4.client.services;
 
+import swe4.server.services.BetService;
 import swe4.server.services.GameService;
 import swe4.server.services.TeamService;
 import swe4.server.services.UserService;
@@ -15,6 +16,7 @@ public class ServiceFactory {
     private static TeamService teamService = null;
     private static GameService gameService = null;
     private static DataService dataService = null;
+    private static BetService betService = null;
     private static Registry registry = null;
 
     private ServiceFactory() {
@@ -55,6 +57,18 @@ public class ServiceFactory {
             }
         }
         return gameService;
+    }
+
+    public static BetService betServiceInstance() {
+        if (betService == null) {
+            Registry registry = initializeOrGetRegistry();
+            try {
+                betService = (BetService) registry.lookup("BetService");
+            } catch (RemoteException | NotBoundException e) {
+                handleRemoteException(e);
+            }
+        }
+        return betService;
     }
 
     public static DataService dataServiceInstance() {

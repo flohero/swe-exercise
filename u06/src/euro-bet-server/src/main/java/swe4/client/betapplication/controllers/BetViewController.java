@@ -11,14 +11,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import swe4.client.services.DataService;
+import swe4.client.services.ServiceFactory;
+import swe4.client.services.StateService;
+import swe4.client.utils.TableDateCell;
 import swe4.domain.*;
-import swe4.repositories.BetRepository;
-import swe4.repositories.GameRepository;
-import swe4.repositories.RepositoryFactory;
-import swe4.services.StateService;
-import swe4.utils.TableDateCell;
+import swe4.server.services.BetService;
 
 import java.net.URL;
+import java.rmi.RemoteException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -30,7 +31,6 @@ public class BetViewController implements Initializable {
     private TableView<Game> gameTable;
     @FXML
     private TableColumn<Game, String> statusCol;
-
     @FXML
     private TableColumn<Game, LocalDateTime> startCol;
     @FXML
@@ -39,15 +39,15 @@ public class BetViewController implements Initializable {
     private TableColumn<Game, String> tippedWinnerCol;
     @FXML
     private TableColumn<Game, String> placedCol;
+
     @FXML
     private ComboBox<Team> winnerTeamField;
     @FXML
     private Button placeBetBtn;
 
-    private final GameRepository gameRepository = RepositoryFactory.gameRepositoryInstance();
-    private final BetRepository betRepository = RepositoryFactory.betRepositoryInstance();
+    private final BetService betService = ServiceFactory.betServiceInstance();
     private final StateService stateService = StateService.getInstance();
-    private final ObservableList<Game> games = FXCollections.observableArrayList();
+    private final DataService dataService = ServiceFactory.dataServiceInstance();
     private final ObservableList<Team> opposingTeams = FXCollections.observableArrayList();
 
     @Override
@@ -58,8 +58,7 @@ public class BetViewController implements Initializable {
         tippedWinnerCol.setCellValueFactory(this::getBetWinner);
         placedCol.setCellValueFactory(this::getPlacementTime);
 
-        refreshGames();
-        gameTable.setItems(games);
+        gameTable.setItems(dataService.games());
         gameTable.getSelectionModel()
                 .selectedItemProperty()
                 .addListener(this::selectionChanged);
@@ -71,39 +70,42 @@ public class BetViewController implements Initializable {
         gameTable.getSortOrder().add(startCol);
     }
 
-    private void refreshGames() {
-        games.setAll(gameRepository.findAllGames());
-    }
-
     public void placeBet(ActionEvent actionEvent) {
         final Game selectedGame = gameTable.getSelectionModel().getSelectedItem();
         final Team selectedTeam = winnerTeamField.getValue();
         final User user = stateService.getCurrentUser();
-        final Optional<Bet> betByUser = betRepository.findBetByUserAndGame(user, selectedGame);
+        final Bet betByUser = getBetByUserAndGame(selectedGame, user);
         PlacementTime placementTime = PlacementTime.BEFORE;
         if (selectedGame.getStartTime().isBefore(LocalDateTime.now())) {
             placementTime = PlacementTime.DURING;
         }
-        if (betByUser.isEmpty()) {
+        if (betByUser == null) {
             final Bet newBet = new Bet(user, selectedGame, selectedTeam, placementTime);
-            betRepository.insertBet(newBet);
+            try {
+                betService.insertBet(newBet);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         } else {
-            final Bet updatedBet = betByUser.get();
-            updatedBet.setWinner(selectedTeam);
-            updatedBet.setPlaced(placementTime);
-            betRepository.updateBet(updatedBet);
+            betByUser.setWinner(selectedTeam);
+            betByUser.setPlaced(placementTime);
+            try {
+                betService.updateBet(betByUser);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         }
-        refreshGames();
+        dataService.refreshGames();
     }
 
     private void selectionChanged(Observable observable) {
         final Game selectedGame = gameTable.getSelectionModel().getSelectedItem();
         if (selectedGame != null) {
             User user = stateService.getCurrentUser();
-            final Optional<Bet> betByUser = betRepository.findBetByUserAndGame(user, selectedGame);
+            final Bet betByUser = getBetByUserAndGame(selectedGame, user);
             opposingTeams.setAll(selectedGame.getTeam1(), selectedGame.getTeam2());
-            if (betByUser.isPresent()) {
-                winnerTeamField.getSelectionModel().select(betByUser.get().getWinner());
+            if (betByUser != null) {
+                winnerTeamField.getSelectionModel().select(betByUser.getWinner());
                 placeBetBtn.setText("Update Bet");
             } else {
                 winnerTeamField.getSelectionModel().selectFirst();
@@ -124,23 +126,27 @@ public class BetViewController implements Initializable {
 
     private SimpleStringProperty getBetWinner(TableColumn.CellDataFeatures<Game, String> cell) {
         String name = "";
-        Optional<Bet> optBet = betRepository.findBetByUserAndGame(
-                stateService.getCurrentUser(),
-                cell.getValue());
-        if (optBet.isPresent()) {
-            name = optBet.get().getWinner().toString();
+        Bet optBet = getBetByUserAndGame(cell.getValue(), stateService.getCurrentUser());
+        if (optBet != null) {
+            name = optBet.getWinner().toString();
         }
         return new SimpleStringProperty(name);
     }
 
     private SimpleStringProperty getPlacementTime(TableColumn.CellDataFeatures<Game, String> cell) {
         String name = "";
-        Optional<Bet> optBet = betRepository.findBetByUserAndGame(
-                stateService.getCurrentUser(),
-                cell.getValue());
-        if (optBet.isPresent()) {
-            name = optBet.get().getPlaced().name();
+        Bet optBet = getBetByUserAndGame(cell.getValue(), stateService.getCurrentUser());
+        if (optBet != null) {
+            name = optBet.getPlaced().name();
         }
         return new SimpleStringProperty(name);
+    }
+
+    private Bet getBetByUserAndGame(Game selectedGame, User user) {
+        try {
+            return betService.findBetByUserAndGame(user, selectedGame);
+        } catch (RemoteException e) {
+            return null;
+        }
     }
 }
