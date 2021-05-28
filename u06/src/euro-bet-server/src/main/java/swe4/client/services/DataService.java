@@ -1,5 +1,6 @@
 package swe4.client.services;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import swe4.domain.Game;
@@ -10,6 +11,7 @@ import swe4.server.services.TeamService;
 import swe4.server.services.UserService;
 
 import java.rmi.RemoteException;
+import java.util.Collection;
 
 public class DataService {
 
@@ -24,7 +26,7 @@ public class DataService {
         refresh();
     }
 
-    private void refresh() {
+    public synchronized void refresh() {
         refreshTeams();
         refreshUsers();
         refreshGames();
@@ -42,25 +44,28 @@ public class DataService {
         return games;
     }
 
-    public void refreshTeams() {
+    public synchronized void refreshTeams() {
         try {
-            teams.setAll(teamService.findAllTeams());
+            final Collection<Team> newTeams = teamService.findAllTeams();
+            Platform.runLater(() -> teams.setAll(newTeams));
         } catch (RemoteException e) {
             e.printStackTrace();
         }
     }
 
-    public void refreshUsers() {
+    public synchronized void refreshUsers() {
         try {
-            users.setAll(userService.findAllUsers());
+            final Collection<User> newUsers = userService.findAllUsers();
+            Platform.runLater(() -> users.setAll(newUsers));
         } catch (RemoteException e) {
             e.printStackTrace();
         }
     }
 
-    public void refreshGames() {
+    public synchronized void refreshGames() {
         try {
-            games.setAll(gameService.findAllGames());
+            final Collection<Game> newGames = gameService.findAllGames();
+            Platform.runLater(() -> games.setAll(newGames));
         } catch (RemoteException e) {
             e.printStackTrace();
         }

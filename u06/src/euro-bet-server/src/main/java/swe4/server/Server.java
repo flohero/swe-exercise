@@ -8,12 +8,17 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
 public class Server {
+    private static UserService userService;
+    private static TeamService teamService;
+    private static GameService gameService;
+    private static BetService betService;
+
     public static void main(String... args) {
         new LoadFakeDataService().load();
-        UserService userService = new UserServiceImpl();
-        TeamService teamService = new TeamServiceImpl();
-        GameService gameService = new GameServiceImpl();
-        BetService betService = new BetServiceImpl();
+        userService = new UserServiceImpl();
+        teamService = new TeamServiceImpl();
+        gameService = new GameServiceImpl();
+        betService = new BetServiceImpl();
 
         try {
             UserService userServiceStub = (UserService) UnicastRemoteObject

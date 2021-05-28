@@ -51,7 +51,6 @@ public class GameServiceImpl implements GameService{
 
     @Override
     public Collection<Game> findByTeamAndGameOverlapsTimeFrame(Team team, LocalDateTime startTime, LocalDateTime endTime) {
-        Objects.requireNonNull(team);
         Objects.requireNonNull(startTime);
         Objects.requireNonNull(endTime);
         return gameRepository.findByTeamAndGameOverlapsTimeFrame(team, startTime, endTime);
