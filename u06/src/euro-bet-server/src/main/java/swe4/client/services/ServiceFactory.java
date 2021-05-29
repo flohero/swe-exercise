@@ -59,14 +59,14 @@ public class ServiceFactory {
     }
 
     public static UserClientService userClientServiceInstance() {
-        if(userClientService == null) {
+        if (userClientService == null) {
             userClientService = new UserClientService();
         }
         return userClientService;
     }
 
     public static GameClientService gameClientServiceInstance() {
-        if(gameClientService == null) {
+        if (gameClientService == null) {
             gameClientService = new GameClientService();
         }
         return gameClientService;
@@ -85,6 +85,12 @@ public class ServiceFactory {
         }
         if (!refreshService.isAlive()) {
             refreshService.start();
+        }
+    }
+
+    public static void stopRefreshService() {
+        if (refreshService != null) {
+            refreshService.stopRefreshing();
         }
     }
 

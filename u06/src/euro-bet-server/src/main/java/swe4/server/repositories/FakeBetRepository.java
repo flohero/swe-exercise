@@ -1,8 +1,8 @@
 package swe4.server.repositories;
 
-import swe4.domain.Bet;
-import swe4.domain.Game;
-import swe4.domain.User;
+import swe4.domain.entities.Bet;
+import swe4.domain.entities.Game;
+import swe4.domain.entities.User;
 
 import java.util.ArrayList;
 import java.util.Collection;

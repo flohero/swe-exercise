@@ -33,4 +33,9 @@ public class BetApplication extends Application {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void stop() {
+        ServiceFactory.stopRefreshService();
+    }
 }

@@ -1,17 +1,22 @@
 package swe4.server.services;
 
-import swe4.domain.Bet;
-import swe4.domain.Game;
-import swe4.domain.User;
+import swe4.domain.dto.UserScoreDto;
+import swe4.domain.entities.Bet;
+import swe4.domain.entities.Game;
+import swe4.domain.entities.User;
 import swe4.server.repositories.BetRepository;
 import swe4.server.repositories.RepositoryFactory;
+import swe4.server.repositories.UserRepository;
 
+import java.rmi.RemoteException;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class BetServiceImpl implements BetService {
 
     private final BetRepository betRepository = RepositoryFactory.betRepositoryInstance();
+    private final UserRepository userRepository = RepositoryFactory.userRepositoryInstance();
 
     @Override
     public Collection<Bet> findAllBets() {
@@ -51,5 +56,13 @@ public class BetServiceImpl implements BetService {
                 .filter(Bet::wasSuccessful)
                 .mapToDouble(Bet::getPoints)
                 .sum();
+    }
+
+    @Override
+    public Collection<UserScoreDto> findAllUsersWithScore() throws RemoteException {
+        return userRepository.findAllUsers()
+                .stream()
+                .map(user -> new UserScoreDto(user.getUsername(), (float) this.totalScorePerUser(user)))
+                .collect(Collectors.toList());
     }
 }

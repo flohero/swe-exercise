@@ -7,7 +7,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import swe4.client.services.DataService;
 import swe4.client.services.ServiceFactory;
-import swe4.domain.Team;
+import swe4.domain.entities.Team;
 
 import java.net.URL;
 import java.util.ResourceBundle;

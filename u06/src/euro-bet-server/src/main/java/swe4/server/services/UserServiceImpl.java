@@ -1,6 +1,6 @@
 package swe4.server.services;
 
-import swe4.domain.User;
+import swe4.domain.entities.User;
 import swe4.server.repositories.RepositoryFactory;
 import swe4.server.repositories.UserRepository;
 
@@ -13,6 +13,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 public class UserServiceImpl implements UserService {
 
@@ -24,6 +25,7 @@ public class UserServiceImpl implements UserService {
     public static final String HASH_ALGORITHM = "PBKDF2WithHmacSHA1";
 
     private final UserRepository userRepository = RepositoryFactory.userRepositoryInstance();
+    private final BetServiceImpl betService = new BetServiceImpl();
 
     public UserServiceImpl() {
     }

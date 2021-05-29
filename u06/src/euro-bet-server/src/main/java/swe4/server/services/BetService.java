@@ -1,8 +1,9 @@
 package swe4.server.services;
 
-import swe4.domain.Bet;
-import swe4.domain.Game;
-import swe4.domain.User;
+import swe4.domain.dto.UserScoreDto;
+import swe4.domain.entities.Bet;
+import swe4.domain.entities.Game;
+import swe4.domain.entities.User;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -21,4 +22,6 @@ public interface BetService extends Remote {
     void updateBet(Bet bet) throws RemoteException;
 
     double totalScorePerUser(User user) throws RemoteException;
+
+    Collection<UserScoreDto> findAllUsersWithScore() throws RemoteException;
 }

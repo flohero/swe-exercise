@@ -1,4 +1,4 @@
-package swe4.domain;
+package swe4.domain.entities;
 
 import java.io.Serializable;
 import java.util.Objects;

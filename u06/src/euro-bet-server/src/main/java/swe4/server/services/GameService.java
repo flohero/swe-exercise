@@ -1,7 +1,7 @@
 package swe4.server.services;
 
-import swe4.domain.Game;
-import swe4.domain.Team;
+import swe4.domain.entities.Game;
+import swe4.domain.entities.Team;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

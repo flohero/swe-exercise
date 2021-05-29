@@ -32,7 +32,11 @@
                     <PropertyValueFactory property="username"/>
                 </cellValueFactory>
             </TableColumn>
-            <TableColumn text="Total Score" fx:id="totalScoreCol"/>
+            <TableColumn text="Total Score" fx:id="totalScoreCol">
+                <cellValueFactory>
+                    <PropertyValueFactory property="highscore"/>
+                </cellValueFactory>
+            </TableColumn>
         </columns>
     </TableView>
 </VBox>

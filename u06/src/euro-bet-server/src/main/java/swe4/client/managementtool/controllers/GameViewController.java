@@ -14,7 +14,7 @@ import swe4.client.services.ServiceFactory;
 import swe4.client.services.clients.GameClientService;
 import swe4.client.utils.DialogUtils;
 import swe4.client.utils.TableDateCell;
-import swe4.domain.Game;
+import swe4.domain.entities.Game;
 
 import java.net.URL;
 import java.time.LocalDateTime;

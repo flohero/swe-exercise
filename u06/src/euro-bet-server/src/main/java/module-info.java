@@ -14,10 +14,14 @@ module euro.bet.server {
     exports swe4.client.betapplication.controllers;
     opens swe4.client.betapplication.controllers;
 
-    exports swe4.domain;
-    opens swe4.domain;
+    exports swe4.domain.entities;
+    opens swe4.domain.entities;
+    exports swe4.domain.dto;
+    opens swe4.domain.dto;
+
     exports swe4.client.utils;
     opens swe4.client.utils;
 
     exports swe4.server.services;
+
 }

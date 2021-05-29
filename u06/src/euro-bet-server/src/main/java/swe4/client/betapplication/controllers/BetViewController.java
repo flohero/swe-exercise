@@ -15,13 +15,12 @@ import swe4.client.services.DataService;
 import swe4.client.services.ServiceFactory;
 import swe4.client.services.StateService;
 import swe4.client.utils.TableDateCell;
-import swe4.domain.*;
+import swe4.domain.entities.*;
 import swe4.server.services.BetService;
 
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class BetViewController implements Initializable {

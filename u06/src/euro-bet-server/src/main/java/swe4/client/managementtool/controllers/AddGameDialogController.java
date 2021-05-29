@@ -8,8 +8,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import swe4.client.services.ServiceFactory;
-import swe4.domain.Game;
-import swe4.domain.Team;
+import swe4.domain.entities.Game;
+import swe4.domain.entities.Team;
 import swe4.server.services.GameService;
 
 import java.net.URL;

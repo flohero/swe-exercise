@@ -1,6 +1,9 @@
 package swe4.server.services;
 
-import swe4.domain.*;
+import swe4.domain.entities.Bet;
+import swe4.domain.entities.Game;
+import swe4.domain.entities.PlacementTime;
+import swe4.domain.entities.Team;
 import swe4.server.repositories.BetRepository;
 import swe4.server.repositories.GameRepository;
 import swe4.server.repositories.RepositoryFactory;

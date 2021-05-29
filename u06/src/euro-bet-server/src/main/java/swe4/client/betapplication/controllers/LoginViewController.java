@@ -16,11 +16,9 @@ import swe4.client.services.ServiceFactory;
 import swe4.client.services.StateService;
 import swe4.client.services.clients.UserClientService;
 import swe4.client.utils.WindowUtils;
-import swe4.domain.User;
-import swe4.server.services.UserService;
+import swe4.domain.entities.User;
 
 import java.net.URL;
-import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 
 public class LoginViewController implements Initializable {
