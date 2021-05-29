@@ -1,6 +1,5 @@
 package swe4.client.services.clients;
 
-import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.concurrent.Task;
 import swe4.client.services.ServiceFactory;
 import swe4.domain.User;
@@ -54,6 +53,20 @@ public class UserClientService extends ClientService {
                     e.printStackTrace();
                 }
                 return false;
+            }
+        };
+    }
+
+    public Task<User> findUserByUsernameAndPassword(final String username, final String password) {
+        return new Task<>() {
+            @Override
+            protected User call() {
+                try {
+                    return userService.findUserByUsernameAndPassword(username, password);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+                return null;
             }
         };
     }

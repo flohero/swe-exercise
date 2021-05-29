@@ -1,6 +1,9 @@
 package swe4.client.betapplication.controllers;
 
+import javafx.application.Platform;
 import javafx.beans.Observable;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -11,6 +14,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import swe4.client.services.ServiceFactory;
 import swe4.client.services.StateService;
+import swe4.client.services.clients.UserClientService;
 import swe4.client.utils.WindowUtils;
 import swe4.domain.User;
 import swe4.server.services.UserService;
@@ -30,7 +34,7 @@ public class LoginViewController implements Initializable {
     @FXML
     private Text errorMessageField;
 
-    private final UserService userService = ServiceFactory.userServiceInstance();
+    private final UserClientService userClientService = ServiceFactory.userClientServiceInstance();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -47,23 +51,22 @@ public class LoginViewController implements Initializable {
 
     public void onLogin(ActionEvent actionEvent) {
         errorMessageField.setText("");
-        User user = null;
-        try {
-            user = userService.findUserByUsernameAndPassword(username.getText(), password.getText());
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-        if(user != null) {
-            StateService stateService = StateService.getInstance();
-            stateService.setCurrentUser(user);
-            Stage root = WindowUtils.getWindowRoot(actionEvent);
-            final Pane betView = (Pane) WindowUtils.loadFXML("/swe4/client/betapplication/BetDashboard.fxml");
-            root.setWidth(betView.getPrefWidth());
-            root.setHeight(betView.getPrefHeight());
-            root.getScene()
-                    .setRoot(betView);
-        } else {
-            errorMessageField.setText("Username/Password incorrect");
-        }
+        Task<User> userIsPresent = userClientService.findUserByUsernameAndPassword(username.getText(), password.getText());
+        userIsPresent.run();
+        userIsPresent.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED, event -> Platform.runLater(() -> {
+            User user = userIsPresent.getValue();
+            if(user != null) {
+                StateService stateService = StateService.getInstance();
+                stateService.setCurrentUser(user);
+                Stage root = WindowUtils.getWindowRoot(actionEvent);
+                final Pane betView = (Pane) WindowUtils.loadFXML("/swe4/client/betapplication/BetDashboard.fxml");
+                root.setWidth(betView.getPrefWidth());
+                root.setHeight(betView.getPrefHeight());
+                root.getScene()
+                        .setRoot(betView);
+            } else {
+                errorMessageField.setText("Username/Password incorrect");
+            }
+        }));
     }
 }

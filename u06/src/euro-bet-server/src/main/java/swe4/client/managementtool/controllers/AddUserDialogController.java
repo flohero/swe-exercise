@@ -82,6 +82,4 @@ public class AddUserDialogController extends BaseDialogController implements Ini
                     });
                 });
     }
-
-
 }

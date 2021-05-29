@@ -26,10 +26,9 @@ public class HighscoreViewController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         highscoreTable.getSortOrder().add(totalScoreCol);
-        totalScoreCol.setCellValueFactory(cell ->
-        {
+        totalScoreCol.setCellValueFactory(cell -> {
             try {
-                return new SimpleObjectProperty<>((float)betService.totalScorePerUser(cell.getValue()));
+                return new SimpleObjectProperty<>((float) betService.totalScorePerUser(cell.getValue()));
             } catch (RemoteException e) {
                 e.printStackTrace();
             }

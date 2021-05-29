@@ -5,7 +5,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import swe4.client.services.RefreshService;
 import swe4.client.services.ServiceFactory;
 
 import java.io.IOException;
