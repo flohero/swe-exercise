@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import swe4.client.services.RefreshService;
+import swe4.client.services.ServiceFactory;
 
 import java.io.IOException;
 import java.net.URL;
@@ -28,7 +29,7 @@ public class BetApplication extends Application {
             primaryStage.setScene(scene);
 
             primaryStage.show();
-            new RefreshService().start();
+            ServiceFactory.startRefreshService();
         } catch (IOException e) {
             e.printStackTrace();
         }

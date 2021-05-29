@@ -1,5 +1,6 @@
 package swe4.client.services;
 
+import swe4.server.config.ServiceConfig;
 import swe4.server.services.BetService;
 import swe4.server.services.GameService;
 import swe4.server.services.TeamService;
@@ -18,6 +19,7 @@ public class ServiceFactory {
     private static DataService dataService = null;
     private static BetService betService = null;
     private static Registry registry = null;
+    private static RefreshService refreshService = null;
 
     private ServiceFactory() {
         throw new AssertionError("No ServiceFactory Instances for you!");
@@ -27,7 +29,7 @@ public class ServiceFactory {
         if (userService == null) {
             Registry registry = initializeOrGetRegistry();
             try {
-                userService = (UserService) registry.lookup("UserService");
+                userService = (UserService) registry.lookup(ServiceConfig.userServiceName());
             } catch (RemoteException | NotBoundException e) {
                 handleRemoteException(e);
             }
@@ -39,7 +41,7 @@ public class ServiceFactory {
         if (teamService == null) {
             Registry registry = initializeOrGetRegistry();
             try {
-                teamService = (TeamService) registry.lookup("TeamService");
+                teamService = (TeamService) registry.lookup(ServiceConfig.teamServiceName());
             } catch (RemoteException | NotBoundException e) {
                 handleRemoteException(e);
             }
@@ -51,7 +53,7 @@ public class ServiceFactory {
         if (gameService == null) {
             Registry registry = initializeOrGetRegistry();
             try {
-                gameService = (GameService) registry.lookup("GameService");
+                gameService = (GameService) registry.lookup(ServiceConfig.gameServiceName());
             } catch (RemoteException | NotBoundException e) {
                 handleRemoteException(e);
             }
@@ -63,7 +65,7 @@ public class ServiceFactory {
         if (betService == null) {
             Registry registry = initializeOrGetRegistry();
             try {
-                betService = (BetService) registry.lookup("BetService");
+                betService = (BetService) registry.lookup(ServiceConfig.betServiceName());
             } catch (RemoteException | NotBoundException e) {
                 handleRemoteException(e);
             }
@@ -78,10 +80,19 @@ public class ServiceFactory {
         return dataService;
     }
 
+    public static void startRefreshService() {
+        if(refreshService == null) {
+            refreshService = new RefreshService();
+        }
+        if(!refreshService.isAlive()) {
+            refreshService.start();
+        }
+    }
+
     private static Registry initializeOrGetRegistry() {
         if (registry == null) {
             try {
-                registry = LocateRegistry.getRegistry();
+                registry = LocateRegistry.getRegistry(ServiceConfig.port());
             } catch (RemoteException e) {
                 handleRemoteException(e);
             }

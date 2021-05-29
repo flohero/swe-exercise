@@ -5,7 +5,6 @@ import swe4.domain.User;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Collection;
-import java.util.Optional;
 
 public interface UserService extends Remote {
 
