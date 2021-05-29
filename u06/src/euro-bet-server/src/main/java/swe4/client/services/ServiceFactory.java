@@ -1,5 +1,7 @@
 package swe4.client.services;
 
+import swe4.client.services.clients.GameClientService;
+import swe4.client.services.clients.UserClientService;
 import swe4.server.config.ServiceConfig;
 import swe4.server.services.BetService;
 import swe4.server.services.GameService;
@@ -21,6 +23,8 @@ public class ServiceFactory {
     private static BetService betService = null;
     private static Registry registry = null;
     private static RefreshService refreshService = null;
+    private static UserClientService userClientService = null;
+    private static GameClientService gameClientService = null;
 
     private ServiceFactory() {
         throw new AssertionError("No ServiceFactory Instances for you!");
@@ -52,6 +56,20 @@ public class ServiceFactory {
             betService = (BetService) findRmiObject(ServiceConfig.betServiceName());
         }
         return betService;
+    }
+
+    public static UserClientService userClientServiceInstance() {
+        if(userClientService == null) {
+            userClientService = new UserClientService();
+        }
+        return userClientService;
+    }
+
+    public static GameClientService gameClientServiceInstance() {
+        if(gameClientService == null) {
+            gameClientService = new GameClientService();
+        }
+        return gameClientService;
     }
 
     public static DataService dataServiceInstance() {

@@ -2,14 +2,15 @@ package swe4.client.services;
 
 public class RefreshService extends Thread {
 
-    DataService dataService = ServiceFactory.dataServiceInstance();
+    private static final int WAIT_TIME = 10000;
+    private final DataService dataService = ServiceFactory.dataServiceInstance();
 
     @Override
     public synchronized void run() {
         boolean stop = false;
         while(!stop) {
             try {
-                wait(10000);
+                wait(WAIT_TIME);
             } catch (InterruptedException e) {
                 stop = true;
             }

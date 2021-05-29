@@ -9,20 +9,19 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import swe4.client.services.DataService;
 import swe4.client.services.ServiceFactory;
+import swe4.client.services.clients.UserClientService;
 import swe4.client.utils.DialogUtils;
 import swe4.domain.User;
-import swe4.server.services.UserService;
 
 import java.net.URL;
-import java.rmi.RemoteException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
 public class UserViewController implements Initializable {
 
-    private final UserService userService = ServiceFactory.userServiceInstance();
     private final DataService dataService = ServiceFactory.dataServiceInstance();
+    private final UserClientService userClientService = ServiceFactory.userClientServiceInstance();
 
     @FXML
     private TableView<User> userTableView;
@@ -54,32 +53,27 @@ public class UserViewController implements Initializable {
             final String value = getEventValue(event);
             final User user = getUserOfEvent(event);
             user.setFirstname(value);
-            updateAndRefresh(user);
+            userClientService.updateUser(user);
         });
 
         lastnameCol.setOnEditCommit(event -> {
             final String value = getEventValue(event);
             final User user = getUserOfEvent(event);
             user.setLastname(value);
-            updateAndRefresh(user);
+            userClientService.updateUser(user);
         });
 
         userNameCol.setOnEditCommit(event -> {
             final String value = getEventValue(event);
             final User user = getUserOfEvent(event);
             user.setUsername(value);
-            updateAndRefresh(user);
+            userClientService.updateUser(user);
         });
 
         passwordCol.setOnEditCommit(event -> {
             final String value = getEventValue(event);
             final User user = getUserOfEvent(event);
-            try {
-                userService.updateUserPassword(user, value);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-            dataService.refreshUsers();
+            userClientService.updateUserPassword(user, value);
         });
 
         userTableView.setItems(dataService.users());
@@ -87,15 +81,6 @@ public class UserViewController implements Initializable {
 
     public void addUser(ActionEvent actionEvent) {
         DialogUtils.showDialog("/swe4/client/managementtool/AddUserDialog.fxml");
-        dataService.refreshUsers();
-    }
-
-    private void updateAndRefresh(User user) {
-        try {
-            this.userService.updateUser(user);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
         dataService.refreshUsers();
     }
 

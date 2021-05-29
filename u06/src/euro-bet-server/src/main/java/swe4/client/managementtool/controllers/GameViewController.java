@@ -11,19 +11,20 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.converter.IntegerStringConverter;
 import swe4.client.services.DataService;
 import swe4.client.services.ServiceFactory;
+import swe4.client.services.clients.GameClientService;
 import swe4.client.utils.DialogUtils;
 import swe4.client.utils.TableDateCell;
 import swe4.domain.Game;
-import swe4.server.services.GameService;
 
 import java.net.URL;
-import java.rmi.RemoteException;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
 public class GameViewController implements Initializable {
 
     private final DataService dataService = ServiceFactory.dataServiceInstance();
+    private final GameClientService gameClientService = ServiceFactory.gameClientServiceInstance();
+
     @FXML
     private TableView<Game> gameTableView;
     @FXML
@@ -41,8 +42,6 @@ public class GameViewController implements Initializable {
     @FXML
     private Button deleteBtn;
 
-    private final GameService gameService = ServiceFactory.gameServiceInstance();
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         team1Col.setCellValueFactory(new PropertyValueFactory<>("team1"));
@@ -53,7 +52,7 @@ public class GameViewController implements Initializable {
         team1ScoreCol.setOnEditCommit(event -> {
             final Game game = event.getTableView().getItems().get(event.getTablePosition().getRow());
             game.setScoreTeam1(event.getNewValue() >= 0 ? event.getNewValue() : event.getOldValue());
-            updateGame(game);
+            gameClientService.updateGame(game);
         });
 
         team2ScoreCol.setCellValueFactory(new PropertyValueFactory<>("scoreTeam2"));
@@ -61,7 +60,7 @@ public class GameViewController implements Initializable {
         team2ScoreCol.setOnEditCommit(event -> {
             final Game game = event.getTableView().getItems().get(event.getTablePosition().getRow());
             game.setScoreTeam2(event.getNewValue() >= 0 ? event.getNewValue() : event.getOldValue());
-            updateGame(game);
+            gameClientService.updateGame(game);
         });
 
         startTimeCol.setCellValueFactory(new PropertyValueFactory<>("startTime"));
@@ -76,27 +75,13 @@ public class GameViewController implements Initializable {
         gameTableView.getSortOrder().add(startTimeCol);
     }
 
-    private void updateGame(Game game) {
-        try {
-            gameService.updateGame(game);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-        dataService.refreshGames();
-    }
-
     public void onAdd(ActionEvent actionEvent) {
         DialogUtils.showDialog("/swe4/client/managementtool/AddGameDialog.fxml");
         dataService.refreshGames();
     }
 
     public void onDelete(ActionEvent actionEvent) {
-        Game game = gameTableView.getSelectionModel().getSelectedItem();
-        try {
-            gameService.deleteGame(game);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-        dataService.refreshGames();
+        gameClientService.deleteGame(
+                gameTableView.getSelectionModel().getSelectedItem());
     }
 }
