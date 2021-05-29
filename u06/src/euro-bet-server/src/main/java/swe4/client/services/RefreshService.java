@@ -16,11 +16,12 @@ public class RefreshService extends Thread {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            ticker++;
             if(ticker == WAIT_TIME_MULT) {
                 dataService.refresh();
                 System.out.println("Refreshing!");
             }
-            ticker = (++ticker) % WAIT_TIME_MULT;
+            ticker = ticker % WAIT_TIME_MULT;
         }
     }
 
