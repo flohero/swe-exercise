@@ -1,6 +1,6 @@
 package swe4.server.repositories;
 
-import swe4.domain.entities.User;
+import swe4.domain.User;
 
 import java.util.Collection;
 import java.util.Optional;

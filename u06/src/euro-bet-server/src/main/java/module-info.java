@@ -25,5 +25,7 @@ module euro.bet.server {
     exports swe4.server.services;
     exports swe4.client.dialogs;
     opens swe4.client.dialogs;
+    exports swe4.domain;
+    opens swe4.domain;
 
 }

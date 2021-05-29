@@ -20,7 +20,7 @@ import swe4.client.services.ServiceFactory;
 import swe4.client.services.StateService;
 import swe4.client.services.clients.BetClientService;
 import swe4.client.utils.TableDateCell;
-import swe4.domain.entities.*;
+import swe4.domain.*;
 import swe4.server.services.BetService;
 
 import java.net.URL;

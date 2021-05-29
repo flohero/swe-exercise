@@ -13,21 +13,17 @@ import javafx.scene.text.Text;
 import swe4.client.dialogs.BaseDialogController;
 import swe4.client.services.ServiceFactory;
 import swe4.client.services.clients.GameClientService;
-import swe4.client.utils.DialogUtils;
-import swe4.domain.entities.Game;
-import swe4.domain.entities.Team;
+import swe4.domain.Game;
+import swe4.domain.Team;
 import swe4.server.services.GameService;
 
 import java.net.URL;
-import java.rmi.RemoteException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Objects;
 import java.util.ResourceBundle;
-import java.util.stream.Stream;
 
 public class AddGameDialogController extends BaseDialogController implements Initializable {
     private static final DateTimeFormatter TIME_PATTERN = DateTimeFormatter.ofPattern("HH:mm");

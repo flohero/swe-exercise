@@ -1,6 +1,6 @@
 package swe4.server.services;
 
-import swe4.domain.entities.User;
+import swe4.domain.User;
 import swe4.server.repositories.RepositoryFactory;
 import swe4.server.repositories.UserRepository;
 

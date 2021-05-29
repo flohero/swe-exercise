@@ -1,6 +1,6 @@
 package swe4.client.services;
 
-import swe4.domain.entities.User;
+import swe4.domain.User;
 
 public class StateService {
     private static StateService instance = null;

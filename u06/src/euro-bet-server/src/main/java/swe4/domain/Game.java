@@ -1,4 +1,4 @@
-package swe4.domain.entities;
+package swe4.domain;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

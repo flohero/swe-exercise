@@ -16,7 +16,7 @@ import swe4.client.services.ServiceFactory;
 import swe4.client.services.StateService;
 import swe4.client.services.clients.UserClientService;
 import swe4.client.utils.WindowUtils;
-import swe4.domain.entities.User;
+import swe4.domain.User;
 
 import java.net.URL;
 import java.util.ResourceBundle;

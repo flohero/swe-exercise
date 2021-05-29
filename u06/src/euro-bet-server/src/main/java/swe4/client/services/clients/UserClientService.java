@@ -3,7 +3,7 @@ package swe4.client.services.clients;
 import javafx.concurrent.Task;
 import swe4.client.services.ServiceFactory;
 import swe4.client.utils.DialogUtils;
-import swe4.domain.entities.User;
+import swe4.domain.User;
 import swe4.server.services.UserService;
 
 import java.rmi.RemoteException;

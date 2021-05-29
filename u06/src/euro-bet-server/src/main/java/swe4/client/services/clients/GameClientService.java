@@ -3,8 +3,8 @@ package swe4.client.services.clients;
 import javafx.concurrent.Task;
 import swe4.client.services.ServiceFactory;
 import swe4.client.utils.DialogUtils;
-import swe4.domain.entities.Game;
-import swe4.domain.entities.Team;
+import swe4.domain.Game;
+import swe4.domain.Team;
 import swe4.server.services.BetService;
 import swe4.server.services.GameService;
 

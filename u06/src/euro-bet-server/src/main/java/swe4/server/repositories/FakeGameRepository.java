@@ -1,8 +1,8 @@
 package swe4.server.repositories;
 
 import swe4.client.utils.TimeUtils;
-import swe4.domain.entities.Game;
-import swe4.domain.entities.Team;
+import swe4.domain.Game;
+import swe4.domain.Team;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

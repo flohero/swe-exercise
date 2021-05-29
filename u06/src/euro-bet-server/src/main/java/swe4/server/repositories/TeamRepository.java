@@ -1,6 +1,6 @@
 package swe4.server.repositories;
 
-import swe4.domain.entities.Team;
+import swe4.domain.Team;
 
 import java.util.Collection;
 
