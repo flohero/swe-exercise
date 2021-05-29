@@ -1,5 +1,6 @@
 package swe4.client.services;
 
+import swe4.client.services.clients.BetClientService;
 import swe4.client.services.clients.GameClientService;
 import swe4.client.services.clients.UserClientService;
 import swe4.server.config.ServiceConfig;
@@ -25,6 +26,7 @@ public class ServiceFactory {
     private static RefreshService refreshService = null;
     private static UserClientService userClientService = null;
     private static GameClientService gameClientService = null;
+    private static BetClientService betClientService;
 
     private ServiceFactory() {
         throw new AssertionError("No ServiceFactory Instances for you!");
@@ -70,6 +72,13 @@ public class ServiceFactory {
             gameClientService = new GameClientService();
         }
         return gameClientService;
+    }
+
+    public static BetClientService betClientServiceInstance() {
+        if (betClientService == null) {
+            betClientService = new BetClientService();
+        }
+        return betClientService;
     }
 
     public static DataService dataServiceInstance() {

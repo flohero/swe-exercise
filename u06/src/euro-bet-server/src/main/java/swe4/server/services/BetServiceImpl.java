@@ -1,10 +1,11 @@
 package swe4.server.services;
 
-import swe4.domain.dto.UserScoreDto;
+import swe4.dto.UserScore;
 import swe4.domain.entities.Bet;
 import swe4.domain.entities.Game;
 import swe4.domain.entities.User;
 import swe4.server.repositories.BetRepository;
+import swe4.server.repositories.GameRepository;
 import swe4.server.repositories.RepositoryFactory;
 import swe4.server.repositories.UserRepository;
 
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 public class BetServiceImpl implements BetService {
 
     private final BetRepository betRepository = RepositoryFactory.betRepositoryInstance();
+    private final GameRepository gameRepository = RepositoryFactory.gameRepositoryInstance();
     private final UserRepository userRepository = RepositoryFactory.userRepositoryInstance();
 
     @Override
@@ -27,6 +29,22 @@ public class BetServiceImpl implements BetService {
     public Collection<Bet> findBetsByUser(User user) {
         Objects.requireNonNull(user);
         return betRepository.findBetsByUser(user);
+    }
+
+    @Override
+    public Collection<Bet> findAllExistingAndPossibleBets(User user) {
+        return gameRepository.findAllGames()
+                .stream()
+                .map(game -> {
+                    Bet bet = findBetByUserAndGame(user, game);
+                    return Objects.requireNonNullElseGet(bet, () -> new Bet(
+                            user,
+                            game,
+                            null,
+                            null
+                    ));
+                })
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -59,10 +77,10 @@ public class BetServiceImpl implements BetService {
     }
 
     @Override
-    public Collection<UserScoreDto> findAllUsersWithScore() throws RemoteException {
+    public Collection<UserScore> findAllUsersWithScore() throws RemoteException {
         return userRepository.findAllUsers()
                 .stream()
-                .map(user -> new UserScoreDto(user.getUsername(), (float) this.totalScorePerUser(user)))
+                .map(user -> new UserScore(user.getUsername(), (float) this.totalScorePerUser(user)))
                 .collect(Collectors.toList());
     }
 }

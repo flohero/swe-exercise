@@ -28,7 +28,6 @@ public class BetApplication extends Application {
             primaryStage.setScene(scene);
 
             primaryStage.show();
-            ServiceFactory.startRefreshService();
         } catch (IOException e) {
             e.printStackTrace();
         }

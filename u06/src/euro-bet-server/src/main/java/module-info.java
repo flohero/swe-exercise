@@ -16,8 +16,8 @@ module euro.bet.server {
 
     exports swe4.domain.entities;
     opens swe4.domain.entities;
-    exports swe4.domain.dto;
-    opens swe4.domain.dto;
+    exports swe4.dto;
+    opens swe4.dto;
 
     exports swe4.client.utils;
     opens swe4.client.utils;

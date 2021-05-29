@@ -1,12 +1,12 @@
-package swe4.domain.dto;
+package swe4.dto;
 
 import java.io.Serializable;
 
-public class UserScoreDto implements Serializable {
+public class UserScore implements Serializable {
     private final String username;
     private final float highscore;
 
-    public UserScoreDto(String username, float highscore) {
+    public UserScore(String username, float highscore) {
         this.username = username;
         this.highscore = highscore;
     }

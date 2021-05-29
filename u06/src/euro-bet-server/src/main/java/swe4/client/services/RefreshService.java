@@ -2,9 +2,11 @@ package swe4.client.services;
 
 public class RefreshService extends Thread {
 
-    private static final int WAIT_TIME = 10000;
+    private static final int WAIT_TIME = 1000;
+    public static final int WAIT_TIME_MULT = 10;
     private final DataService dataService = ServiceFactory.dataServiceInstance();
     private boolean stop = false;
+    private int ticker = 0;
 
     @Override
     public synchronized void run() {
@@ -14,8 +16,11 @@ public class RefreshService extends Thread {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            dataService.refresh();
-            System.out.println("Refreshing!");
+            if(ticker == WAIT_TIME_MULT) {
+                dataService.refresh();
+                System.out.println("Refreshing!");
+            }
+            ticker = (++ticker) % WAIT_TIME_MULT;
         }
     }
 

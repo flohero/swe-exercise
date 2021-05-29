@@ -2,7 +2,10 @@ package swe4.server.repositories;
 
 import swe4.domain.entities.User;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
 public class FakeUserRepository implements UserRepository {
 

@@ -1,9 +1,13 @@
 package swe4.client.betapplication.controllers;
 
+import javafx.application.Platform;
 import javafx.beans.Observable;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -14,30 +18,35 @@ import javafx.scene.control.TableView;
 import swe4.client.services.DataService;
 import swe4.client.services.ServiceFactory;
 import swe4.client.services.StateService;
+import swe4.client.services.clients.BetClientService;
 import swe4.client.utils.TableDateCell;
 import swe4.domain.entities.*;
 import swe4.server.services.BetService;
 
 import java.net.URL;
-import java.rmi.RemoteException;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
 public class BetViewController implements Initializable {
 
-
     @FXML
-    private TableView<Game> gameTable;
+    private TableView<Bet> gameTable;
     @FXML
-    private TableColumn<Game, String> statusCol;
+    private TableColumn<Bet, String> statusCol;
     @FXML
-    private TableColumn<Game, LocalDateTime> startCol;
+    private TableColumn<Bet, Game> gameCol;
     @FXML
-    private TableColumn<Game, LocalDateTime> endCol;
+    private TableColumn<Bet, String> scoreCol;
     @FXML
-    private TableColumn<Game, String> tippedWinnerCol;
+    private TableColumn<Bet, LocalDateTime> startCol;
     @FXML
-    private TableColumn<Game, String> placedCol;
+    private TableColumn<Bet, LocalDateTime> endCol;
+    @FXML
+    private TableColumn<Bet, String> venueCol;
+    @FXML
+    private TableColumn<Bet, Team> tippedWinnerCol;
+    @FXML
+    private TableColumn<Bet, PlacementTime> placedCol;
 
     @FXML
     private ComboBox<Team> winnerTeamField;
@@ -45,22 +54,31 @@ public class BetViewController implements Initializable {
     private Button placeBetBtn;
 
     private final BetService betService = ServiceFactory.betServiceInstance();
+    private final BetClientService betClientService = ServiceFactory.betClientServiceInstance();
     private final StateService stateService = StateService.getInstance();
     private final DataService dataService = ServiceFactory.dataServiceInstance();
     private final ObservableList<Team> opposingTeams = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        statusCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getStatus(LocalDateTime.now())));
+        new Thread(dataService::refreshBets).start();
+        statusCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getGame().getStatus(LocalDateTime.now())));
+        gameCol.setCellValueFactory(cell -> new SimpleObjectProperty<>(cell.getValue().getGame()));
+        scoreCol.setCellValueFactory(cell -> new SimpleObjectProperty<>(cell.getValue().getGame().getScore()));
+        startCol.setCellValueFactory(cell -> new SimpleObjectProperty<>(cell.getValue().getGame().getStartTime()));
         startCol.setCellFactory(cell -> new TableDateCell<>());
+        endCol.setCellValueFactory(cell -> new SimpleObjectProperty<>(cell.getValue().getGame().getEstimatedEndTime()));
         endCol.setCellFactory(cell -> new TableDateCell<>());
-        tippedWinnerCol.setCellValueFactory(this::getBetWinner);
-        placedCol.setCellValueFactory(this::getPlacementTime);
+        venueCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getGame().getVenue()));
+        tippedWinnerCol.setCellValueFactory(cell -> new SimpleObjectProperty<>(cell.getValue().getWinner()));
+        placedCol.setCellValueFactory(cell -> new SimpleObjectProperty<>(cell.getValue().getPlaced()));
 
-        gameTable.setItems(dataService.games());
+        gameTable.setItems(dataService.bets());
+
         gameTable.getSelectionModel()
                 .selectedItemProperty()
                 .addListener(this::selectionChanged);
+
         winnerTeamField.setItems(opposingTeams);
 
         winnerTeamField.getSelectionModel()
@@ -70,46 +88,54 @@ public class BetViewController implements Initializable {
     }
 
     public void placeBet(ActionEvent actionEvent) {
-        final Game selectedGame = gameTable.getSelectionModel().getSelectedItem();
+        final Game selectedGame = gameTable.getSelectionModel().getSelectedItem().getGame();
+        final User user = stateService.getCurrentUser();
+        final Task<Bet> betByUserAndGameTask = betClientService.findBetByUserAndGame(user, selectedGame);
+        betByUserAndGameTask
+                .addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED,
+                        event -> Platform.runLater(
+                                () -> upsertBet(betByUserAndGameTask.getValue())
+                        )
+                );
+    }
+
+    private void upsertBet(Bet bet) {
+        final Game selectedGame = gameTable.getSelectionModel().getSelectedItem().getGame();
         final Team selectedTeam = winnerTeamField.getValue();
         final User user = stateService.getCurrentUser();
-        final Bet betByUser = getBetByUserAndGame(selectedGame, user);
         PlacementTime placementTime = PlacementTime.BEFORE;
         if (selectedGame.getStartTime().isBefore(LocalDateTime.now())) {
             placementTime = PlacementTime.DURING;
         }
-        if (betByUser == null) {
+        if (bet == null) {
             final Bet newBet = new Bet(user, selectedGame, selectedTeam, placementTime);
-            try {
-                betService.insertBet(newBet);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
+            betClientService.insertBet(newBet);
         } else {
-            betByUser.setWinner(selectedTeam);
-            betByUser.setPlaced(placementTime);
-            try {
-                betService.updateBet(betByUser);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
+            bet.setWinner(selectedTeam);
+            bet.setPlaced(placementTime);
+            betClientService.updateBet(bet);
         }
-        dataService.refreshGames();
     }
 
     private void selectionChanged(Observable observable) {
-        final Game selectedGame = gameTable.getSelectionModel().getSelectedItem();
-        if (selectedGame != null) {
-            User user = stateService.getCurrentUser();
-            final Bet betByUser = getBetByUserAndGame(selectedGame, user);
+        final Bet selectedBet = gameTable.getSelectionModel().getSelectedItem();
+        if (selectedBet != null) {
+            final User user = stateService.getCurrentUser();
+            final Game selectedGame = selectedBet.getGame();
             opposingTeams.setAll(selectedGame.getTeam1(), selectedGame.getTeam2());
-            if (betByUser != null) {
-                winnerTeamField.getSelectionModel().select(betByUser.getWinner());
-                placeBetBtn.setText("Update Bet");
-            } else {
-                winnerTeamField.getSelectionModel().selectFirst();
-                placeBetBtn.setText("Place Bet");
-            }
+            final Task<Bet> betByUser = betClientService.findBetByUserAndGame(user, selectedGame);
+            betByUser.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED, event -> {
+                final Bet bet = betByUser.getValue();
+                Platform.runLater(() -> {
+                    if (bet != null) {
+                        winnerTeamField.getSelectionModel().select(bet.getWinner());
+                        placeBetBtn.setText("Update Bet");
+                    } else {
+                        winnerTeamField.getSelectionModel().selectFirst();
+                        placeBetBtn.setText("Place Bet");
+                    }
+                });
+            });
         }
     }
 
@@ -118,34 +144,9 @@ public class BetViewController implements Initializable {
                 winnerTeamField.getSelectionModel().getSelectedItem() == null
                         || gameTable.getSelectionModel()
                         .getSelectedItem()
+                        .getGame()
                         .getEstimatedEndTime()
                         .isBefore(LocalDateTime.now())
         );
-    }
-
-    private SimpleStringProperty getBetWinner(TableColumn.CellDataFeatures<Game, String> cell) {
-        String name = "";
-        Bet optBet = getBetByUserAndGame(cell.getValue(), stateService.getCurrentUser());
-        if (optBet != null) {
-            name = optBet.getWinner().toString();
-        }
-        return new SimpleStringProperty(name);
-    }
-
-    private SimpleStringProperty getPlacementTime(TableColumn.CellDataFeatures<Game, String> cell) {
-        String name = "";
-        Bet optBet = getBetByUserAndGame(cell.getValue(), stateService.getCurrentUser());
-        if (optBet != null) {
-            name = optBet.getPlaced().name();
-        }
-        return new SimpleStringProperty(name);
-    }
-
-    private Bet getBetByUserAndGame(Game selectedGame, User user) {
-        try {
-            return betService.findBetByUserAndGame(user, selectedGame);
-        } catch (RemoteException e) {
-            return null;
-        }
     }
 }

@@ -3,7 +3,8 @@ package swe4.client.services;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import swe4.domain.dto.UserScoreDto;
+import swe4.dto.UserScore;
+import swe4.domain.entities.Bet;
 import swe4.domain.entities.Game;
 import swe4.domain.entities.Team;
 import swe4.domain.entities.User;
@@ -21,10 +22,12 @@ public class DataService {
     private final UserService userService = ServiceFactory.userServiceInstance();
     private final GameService gameService = ServiceFactory.gameServiceInstance();
     private final BetService betService = ServiceFactory.betServiceInstance();
+    private final StateService stateService = StateService.getInstance();
     private final ObservableList<Team> teams = FXCollections.observableArrayList();
     private final ObservableList<User> users = FXCollections.observableArrayList();
     private final ObservableList<Game> games = FXCollections.observableArrayList();
-    private final ObservableList<UserScoreDto> userScoreDtos = FXCollections.observableArrayList();
+    private final ObservableList<Bet> bets = FXCollections.observableArrayList();
+    private final ObservableList<UserScore> userScores = FXCollections.observableArrayList();
 
     DataService() {
         refresh();
@@ -34,7 +37,8 @@ public class DataService {
         refreshTeams();
         refreshUsers();
         refreshGames();
-        refreshUserScoreDtos();
+        refreshBets();
+        refreshUserScores();
     }
 
     public ObservableList<Team> teams() {
@@ -49,8 +53,12 @@ public class DataService {
         return games;
     }
 
-    public ObservableList<UserScoreDto> userScoreDtos() {
-        return userScoreDtos;
+    public ObservableList<Bet> bets() {
+        return bets;
+    }
+
+    public ObservableList<UserScore> userScores() {
+        return userScores;
     }
 
     public synchronized void refreshTeams() {
@@ -80,10 +88,21 @@ public class DataService {
         }
     }
 
-    public synchronized void refreshUserScoreDtos() {
+    public synchronized void refreshBets() {
         try {
-            final Collection<UserScoreDto> newUserScoreDtos = betService.findAllUsersWithScore();
-            Platform.runLater(() -> userScoreDtos.setAll(newUserScoreDtos));
+            if (stateService.getCurrentUser() != null) {
+                final Collection<Bet> newBets = betService.findAllExistingAndPossibleBets(stateService.getCurrentUser());
+                Platform.runLater(() -> bets.setAll(newBets));
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public synchronized void refreshUserScores() {
+        try {
+            final Collection<UserScore> newUserScores = betService.findAllUsersWithScore();
+            Platform.runLater(() -> userScores.setAll(newUserScores));
         } catch (RemoteException e) {
             e.printStackTrace();
         }

@@ -4,7 +4,6 @@ import swe4.domain.entities.User;
 import swe4.server.repositories.RepositoryFactory;
 import swe4.server.repositories.UserRepository;
 
-
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.math.BigInteger;
@@ -13,7 +12,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 public class UserServiceImpl implements UserService {
 
