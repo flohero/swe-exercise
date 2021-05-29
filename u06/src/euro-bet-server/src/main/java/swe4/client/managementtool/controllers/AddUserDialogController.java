@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
+import swe4.client.dialogs.BaseDialogController;
 import swe4.client.services.ServiceFactory;
 import swe4.client.services.clients.UserClientService;
 

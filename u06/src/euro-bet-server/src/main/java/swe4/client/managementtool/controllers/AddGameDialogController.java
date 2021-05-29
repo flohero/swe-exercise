@@ -1,13 +1,19 @@
 package swe4.client.managementtool.controllers;
 
+import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
+import swe4.client.dialogs.BaseDialogController;
 import swe4.client.services.ServiceFactory;
+import swe4.client.services.clients.GameClientService;
+import swe4.client.utils.DialogUtils;
 import swe4.domain.entities.Game;
 import swe4.domain.entities.Team;
 import swe4.server.services.GameService;
@@ -47,6 +53,7 @@ public class AddGameDialogController extends BaseDialogController implements Ini
 
 
     private final GameService gameService = ServiceFactory.gameServiceInstance();
+    private final GameClientService gameClientService = ServiceFactory.gameClientServiceInstance();
 
 
     @Override
@@ -72,20 +79,31 @@ public class AddGameDialogController extends BaseDialogController implements Ini
         errorMessageField.setText("");
 
         final boolean validTime = isValidTime(gameTimeField.getText().trim());
-        boolean isTeamOccupied = false;
         if (validTime) {
             final LocalDateTime startTime = LocalDateTime.of(gameDateField.getValue(),
                     LocalTime.parse(gameTimeField.getText(), TIME_PATTERN));
             final LocalDateTime endTime = Game.calculateEstimatedEndTime(startTime);
 
-            long livegames = Stream.concat(
-                    Objects.requireNonNull(findOverlappingGames(team1Field.getValue(), startTime, endTime)),
-                    Objects.requireNonNull(findOverlappingGames(team2Field.getValue(), startTime, endTime))
-            ).count();
-            if (livegames > 0) {
-                errorMessageField.setText("One Team already plays\nduring this time!");
-                isTeamOccupied = true;
-            }
+            Task<Long> overlappingGamesTask =
+                    gameClientService.findOverlappingGames(team1Field.getValue(), team2Field.getValue(),
+                            startTime, endTime);
+
+            overlappingGamesTask.addEventHandler(WorkerStateEvent.WORKER_STATE_RUNNING,
+                    event -> Platform.runLater(() -> addBtn.setDisable(true)));
+
+            overlappingGamesTask.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED,
+                    event -> Platform.runLater(() -> validateInput(overlappingGamesTask.getValue())));
+        } else {
+            addBtn.setDisable(true);
+        }
+
+    }
+
+    private void validateInput(long livegames) {
+        boolean isTeamOccupied = false;
+        if (livegames > 0) {
+            errorMessageField.setText("One Team already plays\nduring this time!");
+            isTeamOccupied = true;
         }
         addBtn.setDisable(
                 team1Field.getValue() == null
@@ -94,21 +112,9 @@ public class AddGameDialogController extends BaseDialogController implements Ini
                         || scoreTeam1Field.getValue() < 0
                         || scoreTeam2Field.getValue() < 0
                         || gameTimeField.getText().trim().isEmpty()
-                        || !validTime
                         || venueField.getText().trim().isEmpty()
                         || isTeamOccupied
         );
-    }
-
-    private Stream<Game> findOverlappingGames(Team team, LocalDateTime startTime, LocalDateTime endTime) {
-        try {
-            return gameService
-                    .findByTeamAndGameOverlapsTimeFrame(team, startTime, endTime)
-                    .stream();
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     public void onAdd(ActionEvent actionEvent) {
@@ -116,11 +122,7 @@ public class AddGameDialogController extends BaseDialogController implements Ini
         Game game = new Game(team1Field.getValue(), team2Field.getValue(),
                 scoreTeam1Field.getValue(), scoreTeam2Field.getValue(),
                 LocalDateTime.of(gameDateField.getValue(), time), venueField.getText());
-        try {
-            gameService.insertGame(game);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
+        gameClientService.insertGame(game);
         close(actionEvent);
     }
 

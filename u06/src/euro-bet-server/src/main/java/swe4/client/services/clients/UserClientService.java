@@ -2,6 +2,7 @@ package swe4.client.services.clients;
 
 import javafx.concurrent.Task;
 import swe4.client.services.ServiceFactory;
+import swe4.client.utils.DialogUtils;
 import swe4.domain.entities.User;
 import swe4.server.services.UserService;
 
@@ -15,7 +16,7 @@ public class UserClientService extends ClientService {
             try {
                 userService.updateUser(user);
             } catch (RemoteException e) {
-                e.printStackTrace();
+                DialogUtils.showErrorDialog(e);
             }
             dataService.refreshUsers();
         }).start();
@@ -26,7 +27,7 @@ public class UserClientService extends ClientService {
             try {
                 userService.updateUserPassword(user, password);
             } catch (RemoteException e) {
-                e.printStackTrace();
+                DialogUtils.showErrorDialog(e);
             }
             dataService.refreshUsers();
         }).start();
@@ -37,7 +38,7 @@ public class UserClientService extends ClientService {
             try {
                 userService.insertUser(firstname, lastname, username, password);
             } catch (RemoteException e) {
-                e.printStackTrace();
+                DialogUtils.showErrorDialog(e);
             }
             dataService.refreshUsers();
         }).start();
@@ -50,7 +51,7 @@ public class UserClientService extends ClientService {
                 try {
                     return userService.userByUsernameIsPresent(username);
                 } catch (RemoteException e) {
-                    e.printStackTrace();
+                    DialogUtils.showErrorDialog(e);
                 }
                 return false;
             }
@@ -64,7 +65,7 @@ public class UserClientService extends ClientService {
                 try {
                     return userService.findUserByUsernameAndPassword(username, password);
                 } catch (RemoteException e) {
-                    e.printStackTrace();
+                    DialogUtils.showErrorDialog(e);
                 }
                 return null;
             }

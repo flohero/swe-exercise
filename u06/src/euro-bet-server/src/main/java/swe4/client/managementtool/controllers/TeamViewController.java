@@ -1,10 +1,10 @@
 package swe4.client.managementtool.controllers;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import swe4.client.services.DataService;
 import swe4.client.services.ServiceFactory;
 import swe4.domain.entities.Team;
@@ -23,7 +23,7 @@ public class TeamViewController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        teamNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-        teamTableView.getItems().setAll(dataService.teams());
+        teamNameCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getName()));
+        teamTableView.setItems(dataService.teams());
     }
 }

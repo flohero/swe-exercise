@@ -1,4 +1,4 @@
-package swe4.client.managementtool.controllers;
+package swe4.client.dialogs;
 
 import javafx.event.ActionEvent;
 import javafx.stage.Stage;

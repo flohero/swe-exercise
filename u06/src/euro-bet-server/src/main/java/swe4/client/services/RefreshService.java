@@ -1,5 +1,7 @@
 package swe4.client.services;
 
+import swe4.client.utils.DialogUtils;
+
 public class RefreshService extends Thread {
 
     private static final int WAIT_TIME = 1000;
@@ -14,7 +16,7 @@ public class RefreshService extends Thread {
             try {
                 wait(WAIT_TIME);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                DialogUtils.showErrorDialog(e);
             }
             ticker++;
             if(ticker == WAIT_TIME_MULT) {

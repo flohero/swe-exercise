@@ -2,6 +2,7 @@ package swe4.client.services.clients;
 
 import javafx.concurrent.Task;
 import swe4.client.services.ServiceFactory;
+import swe4.client.utils.DialogUtils;
 import swe4.domain.entities.Bet;
 import swe4.domain.entities.Game;
 import swe4.domain.entities.User;
@@ -20,6 +21,7 @@ public class BetClientService extends ClientService {
                 try {
                     return betService.findBetByUserAndGame(user, selectedGame);
                 } catch (RemoteException e) {
+                    DialogUtils.showErrorDialog(e);
                     return null;
                 }
             }
@@ -34,7 +36,7 @@ public class BetClientService extends ClientService {
             try {
                 betService.insertBet(bet);
             } catch (RemoteException e) {
-                e.printStackTrace();
+                DialogUtils.showErrorDialog(e);
             }
             dataService.refreshBets();
         }).start();
@@ -45,7 +47,7 @@ public class BetClientService extends ClientService {
             try {
                 betService.updateBet(bet);
             } catch (RemoteException e) {
-                e.printStackTrace();
+                DialogUtils.showErrorDialog(e);
             }
             dataService.refreshBets();
         }).start();

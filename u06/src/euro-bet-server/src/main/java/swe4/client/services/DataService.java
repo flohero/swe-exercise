@@ -3,6 +3,7 @@ package swe4.client.services;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import swe4.client.utils.DialogUtils;
 import swe4.dto.UserScore;
 import swe4.domain.entities.Bet;
 import swe4.domain.entities.Game;
@@ -23,6 +24,7 @@ public class DataService {
     private final GameService gameService = ServiceFactory.gameServiceInstance();
     private final BetService betService = ServiceFactory.betServiceInstance();
     private final StateService stateService = StateService.getInstance();
+
     private final ObservableList<Team> teams = FXCollections.observableArrayList();
     private final ObservableList<User> users = FXCollections.observableArrayList();
     private final ObservableList<Game> games = FXCollections.observableArrayList();
@@ -66,7 +68,7 @@ public class DataService {
             final Collection<Team> newTeams = teamService.findAllTeams();
             Platform.runLater(() -> teams.setAll(newTeams));
         } catch (RemoteException e) {
-            e.printStackTrace();
+            DialogUtils.showErrorDialog(e);
         }
     }
 
@@ -75,7 +77,7 @@ public class DataService {
             final Collection<User> newUsers = userService.findAllUsers();
             Platform.runLater(() -> users.setAll(newUsers));
         } catch (RemoteException e) {
-            e.printStackTrace();
+            DialogUtils.showErrorDialog(e);
         }
     }
 
@@ -84,7 +86,7 @@ public class DataService {
             final Collection<Game> newGames = gameService.findAllGames();
             Platform.runLater(() -> games.setAll(newGames));
         } catch (RemoteException e) {
-            e.printStackTrace();
+            DialogUtils.showErrorDialog(e);
         }
     }
 
@@ -95,7 +97,7 @@ public class DataService {
                 Platform.runLater(() -> bets.setAll(newBets));
             }
         } catch (RemoteException e) {
-            e.printStackTrace();
+            DialogUtils.showErrorDialog(e);
         }
     }
 
@@ -104,7 +106,7 @@ public class DataService {
             final Collection<UserScore> newUserScores = betService.findAllUsersWithScore();
             Platform.runLater(() -> userScores.setAll(newUserScores));
         } catch (RemoteException e) {
-            e.printStackTrace();
+            DialogUtils.showErrorDialog(e);
         }
     }
 }
