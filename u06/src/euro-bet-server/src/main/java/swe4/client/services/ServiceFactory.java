@@ -7,6 +7,7 @@ import swe4.server.services.TeamService;
 import swe4.server.services.UserService;
 
 import java.rmi.NotBoundException;
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -27,66 +28,56 @@ public class ServiceFactory {
 
     public static UserService userServiceInstance() {
         if (userService == null) {
-            Registry registry = initializeOrGetRegistry();
-            try {
-                userService = (UserService) registry.lookup(ServiceConfig.userServiceName());
-            } catch (RemoteException | NotBoundException e) {
-                handleRemoteException(e);
-            }
+            userService = (UserService) findRmiObject(ServiceConfig.userServiceName());
         }
         return userService;
     }
 
     public static TeamService teamServiceInstance() {
         if (teamService == null) {
-            Registry registry = initializeOrGetRegistry();
-            try {
-                teamService = (TeamService) registry.lookup(ServiceConfig.teamServiceName());
-            } catch (RemoteException | NotBoundException e) {
-                handleRemoteException(e);
-            }
+            teamService = (TeamService) findRmiObject(ServiceConfig.teamServiceName());
         }
         return teamService;
     }
 
     public static GameService gameServiceInstance() {
         if (gameService == null) {
-            Registry registry = initializeOrGetRegistry();
-            try {
-                gameService = (GameService) registry.lookup(ServiceConfig.gameServiceName());
-            } catch (RemoteException | NotBoundException e) {
-                handleRemoteException(e);
-            }
+            gameService = (GameService) findRmiObject(ServiceConfig.gameServiceName());
         }
         return gameService;
     }
 
     public static BetService betServiceInstance() {
         if (betService == null) {
-            Registry registry = initializeOrGetRegistry();
-            try {
-                betService = (BetService) registry.lookup(ServiceConfig.betServiceName());
-            } catch (RemoteException | NotBoundException e) {
-                handleRemoteException(e);
-            }
+            betService = (BetService) findRmiObject(ServiceConfig.betServiceName());
         }
         return betService;
     }
 
     public static DataService dataServiceInstance() {
-        if(dataService == null) {
+        if (dataService == null) {
             dataService = new DataService();
         }
         return dataService;
     }
 
     public static void startRefreshService() {
-        if(refreshService == null) {
+        if (refreshService == null) {
             refreshService = new RefreshService();
         }
-        if(!refreshService.isAlive()) {
+        if (!refreshService.isAlive()) {
             refreshService.start();
         }
+    }
+
+    private static Remote findRmiObject(String name) {
+        Registry registry = initializeOrGetRegistry();
+        try {
+            return registry.lookup(name);
+        } catch (RemoteException | NotBoundException e) {
+            handleRemoteException(e);
+        }
+        return null;
     }
 
     private static Registry initializeOrGetRegistry() {
