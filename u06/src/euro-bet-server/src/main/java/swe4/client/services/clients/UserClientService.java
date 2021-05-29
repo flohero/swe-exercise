@@ -1,5 +1,7 @@
 package swe4.client.services.clients;
 
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.concurrent.Task;
 import swe4.client.services.ServiceFactory;
 import swe4.domain.User;
 import swe4.server.services.UserService;
@@ -29,6 +31,31 @@ public class UserClientService extends ClientService {
             }
             dataService.refreshUsers();
         }).start();
+    }
+
+    public void insertUser(String firstname, String lastname, String username, String password) {
+        new Thread(() -> {
+            try {
+                userService.insertUser(firstname, lastname, username, password);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            dataService.refreshUsers();
+        }).start();
+    }
+
+    public Task<Boolean> userByUsernameIsPresent(final String username) {
+        return new Task<>() {
+            @Override
+            protected Boolean call() {
+                try {
+                    return userService.userByUsernameIsPresent(username);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+                return false;
+            }
+        };
     }
 
 }

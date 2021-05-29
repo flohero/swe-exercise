@@ -2,6 +2,8 @@ package swe4.client.managementtool.controllers;
 
 import javafx.application.Platform;
 import javafx.beans.Observable;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -10,16 +12,15 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import swe4.client.services.ServiceFactory;
-import swe4.server.services.UserService;
+import swe4.client.services.clients.UserClientService;
 
 import java.net.URL;
-import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 
 
 public class AddUserDialogController extends BaseDialogController implements Initializable {
 
-    private final UserService userService = ServiceFactory.userServiceInstance();
+    private final UserClientService userClientService = ServiceFactory.userClientServiceInstance();
 
     @FXML
     private TextField firstnameField;
@@ -44,41 +45,42 @@ public class AddUserDialogController extends BaseDialogController implements Ini
     }
 
     public void onAddUser(ActionEvent actionEvent) {
-        try {
-            userService
-                    .insertUser(
-                            firstnameField.getText(),
-                            lastnameField.getText(),
-                            usernameField.getText(),
-                            passwordField.getText()
-                    );
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
+        userClientService.insertUser(
+                firstnameField.getText(),
+                lastnameField.getText(),
+                usernameField.getText(),
+                passwordField.getText()
+        );
         close(actionEvent);
     }
 
     private void onChange(Observable observable) {
         errorMessageField.setText("");
         final boolean usernameEmpty = usernameField.getText().trim().isEmpty();
-        boolean usernameUnique = true;
-        if (!usernameEmpty) {
-            try {
-                if (userService.userByUsernameIsPresent(usernameField.getText())) {
-                    errorMessageField.setText("Username is already in use");
-                    usernameUnique = false;
-                }
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        }
-        addBtn.setDisable(
-                firstnameField.getText().trim().isEmpty()
-                        || lastnameField.getText().trim().isEmpty()
-                        || usernameEmpty
-                        || passwordField.getText().trim().isEmpty()
-                        || !usernameUnique
-        );
+        Task<Boolean> userNamePresent = userClientService.userByUsernameIsPresent(usernameField.getText());
+        userNamePresent.run();
+
+        final boolean inputInvalid = firstnameField.getText().trim().isEmpty()
+                || lastnameField.getText().trim().isEmpty()
+                || usernameEmpty
+                || passwordField.getText().trim().isEmpty();
+
+        // Disable the add button if the task is still running or the username is already in use
+        userNamePresent.addEventHandler(WorkerStateEvent.WORKER_STATE_RUNNING,
+                event -> Platform.runLater(() -> addBtn.setDisable(true)));
+
+        userNamePresent.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED,
+                event -> {
+                    final Boolean isPresent = userNamePresent.getValue();
+                    Platform.runLater(() -> {
+                        addBtn.setDisable(inputInvalid || isPresent);
+                        if (isPresent) {
+                            errorMessageField.setText("Username is already in use");
+                        } else {
+                            errorMessageField.setText("");
+                        }
+                    });
+                });
     }
 
 
