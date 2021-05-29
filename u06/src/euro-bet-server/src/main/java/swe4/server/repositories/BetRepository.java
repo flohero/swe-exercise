@@ -18,4 +18,6 @@ public interface BetRepository {
     void insertBet(Bet bet);
 
     void updateBet(Bet bet);
+
+    void deleteBetByGame(Game game);
 }

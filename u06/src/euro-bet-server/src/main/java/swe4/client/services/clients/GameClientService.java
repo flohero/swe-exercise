@@ -5,6 +5,7 @@ import swe4.client.services.ServiceFactory;
 import swe4.client.utils.DialogUtils;
 import swe4.domain.entities.Game;
 import swe4.domain.entities.Team;
+import swe4.server.services.BetService;
 import swe4.server.services.GameService;
 
 import java.rmi.RemoteException;
@@ -14,6 +15,7 @@ import java.util.stream.Stream;
 public class GameClientService extends ClientService {
 
     private final GameService gameService = ServiceFactory.gameServiceInstance();
+    private final BetService betService = ServiceFactory.betServiceInstance();
 
     public void updateGame(Game game) {
         new Thread(() -> {
@@ -29,12 +31,13 @@ public class GameClientService extends ClientService {
     public void deleteGame(Game game) {
         new Thread(() -> {
             try {
+                betService.deleteBetByGame(game);
                 gameService.deleteGame(game);
             } catch (RemoteException e) {
                 DialogUtils.showErrorDialog(e);
             }
             dataService.refreshGames();
-        });
+        }).start();
     }
 
     public Task<Long> findOverlappingGames(Team team1, Team team2, LocalDateTime startTime, LocalDateTime endTime) {

@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class FakeBetRepository implements BetRepository{
+public class FakeBetRepository implements BetRepository {
 
     private final List<Bet> bets = new ArrayList<>();
 
@@ -38,7 +38,7 @@ public class FakeBetRepository implements BetRepository{
     @Override
     public void insertBet(Bet bet) {
         Optional<Bet> findBet = findBetByUserAndGame(bet.getUser(), bet.getGame());
-        if(findBet.isEmpty()) {
+        if (findBet.isEmpty()) {
             bets.add(bet);
         }
     }
@@ -46,9 +46,20 @@ public class FakeBetRepository implements BetRepository{
     @Override
     public void updateBet(Bet bet) {
         Optional<Bet> findBet = findBetByUserAndGame(bet.getUser(), bet.getGame());
-        if(findBet.isPresent()) {
+        if (findBet.isPresent()) {
             int index = bets.indexOf(findBet.get());
             bets.set(index, bet);
+        }
+    }
+
+    @Override
+    public void deleteBetByGame(Game game) {
+        List<Bet> betsToDelete = findAllBets()
+                .stream()
+                .filter(bet -> bet.getGame().equals(game))
+                .collect(Collectors.toList());
+        for (Bet bet : betsToDelete) {
+            bets.remove(bet);
         }
     }
 }

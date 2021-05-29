@@ -26,4 +26,6 @@ public interface BetService extends Remote {
     double totalScorePerUser(User user) throws RemoteException;
 
     Collection<UserScore> findAllUsersWithScore() throws RemoteException;
+
+    void deleteBetByGame(Game game) throws RemoteException;
 }

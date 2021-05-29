@@ -83,4 +83,9 @@ public class BetServiceImpl implements BetService {
                 .map(user -> new UserScore(user.getUsername(), (float) this.totalScorePerUser(user)))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public void deleteBetByGame(Game game) {
+        betRepository.deleteBetByGame(game);
+    }
 }

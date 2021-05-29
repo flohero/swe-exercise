@@ -28,6 +28,7 @@ public class GameServiceImpl implements GameService{
     @Override
     public void deleteGame(Game game) {
         Objects.requireNonNull(game);
+        System.out.println("Deleting Game");
         gameRepository.deleteGame(game);
     }
 
