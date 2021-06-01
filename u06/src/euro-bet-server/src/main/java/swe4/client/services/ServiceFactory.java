@@ -89,12 +89,10 @@ public class ServiceFactory {
     }
 
     public static void startRefreshService() {
-        if (refreshService == null) {
+        if (refreshService == null || !refreshService.isAlive()) {
             refreshService = new RefreshService();
         }
-        if (!refreshService.isAlive()) {
-            refreshService.start();
-        }
+        refreshService.start();
     }
 
     public static void stopRefreshService() {

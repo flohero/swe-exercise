@@ -1,6 +1,7 @@
 package swe4.domain;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class Bet implements Serializable {
@@ -53,6 +54,9 @@ public class Bet implements Serializable {
     }
 
     public boolean wasSuccessful() {
+        if(game.getEstimatedEndTime().isAfter(LocalDateTime.now())) {
+            return false;
+        }
         if (game.getTeam1().equals(winner)) {
             return game.getScoreTeam1() > game.getScoreTeam2();
         } else {

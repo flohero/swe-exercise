@@ -76,8 +76,10 @@ public class GameViewController implements Initializable {
     }
 
     public void onAdd(ActionEvent actionEvent) {
+        ServiceFactory.stopRefreshService();
         DialogUtils.showDialog("/swe4/client/managementtool/AddGameDialog.fxml");
         dataService.refreshGames();
+        ServiceFactory.startRefreshService();
     }
 
     public void onDelete(ActionEvent actionEvent) {

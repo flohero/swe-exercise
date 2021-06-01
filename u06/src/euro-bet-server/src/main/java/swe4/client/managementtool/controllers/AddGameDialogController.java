@@ -15,7 +15,6 @@ import swe4.client.services.ServiceFactory;
 import swe4.client.services.clients.GameClientService;
 import swe4.domain.Game;
 import swe4.domain.Team;
-import swe4.server.services.GameService;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -48,7 +47,6 @@ public class AddGameDialogController extends BaseDialogController implements Ini
     private Button addBtn;
 
 
-    private final GameService gameService = ServiceFactory.gameServiceInstance();
     private final GameClientService gameClientService = ServiceFactory.gameClientServiceInstance();
 
 

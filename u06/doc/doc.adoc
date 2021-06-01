@@ -5,6 +5,7 @@
 :experimental:
 :listing-caption: Listing
 :source-highlighter: rouge
+:rouge-style: github
 :toc:
 :sectnums:
 :sectnumlevels: 6
@@ -443,7 +444,8 @@ include::{src}/client/betapplication/controllers/HighscoreViewController.java[]
 
 <<<
 == Test-Szenarien
-=== Add User
+=== Management-Tool
+==== Add User
 .Start Add User
 image::img/addUserStart.png[]
 
@@ -488,3 +490,54 @@ image::img/deleteGameStart.png[]
 
 .Delete Game
 image::img/deleteGame.png[]
+
+<<<
+=== Bet-Application
+==== Login
+.Start Login
+image::img/startLogin.png[]
+
+.Wrong Login
+image::img/wrongLogin.png[]
+
+.Correct Login
+image::img/correctLogin.png[]
+
+<<<
+==== Place Bet
+.Start Placing Bet
+image::img/startPlaceBet.png[]
+
+.Place Bet
+image::img/placeBet.png[]
+
+<<<
+==== Update Bet
+.Start Updating Bet
+image::img/startUpdatingBet.png[]
+
+.Updated Bet
+image::img/updatedBet.png[]
+
+<<<
+==== Winning Bet Changes Highscore
+.Highscore Before
+image::img/highscoreBefore.png[]
+
+.Placed Bet
+image::img/placedBetOfLiveGame.png[]
+
+.New Highscore
+image::img/newHighscore.png[]
+
+<<<
+=== Complex Scenarios
+==== Delete Game With Bet
+.Start Deleting Game With Bet
+image::img/startDeletingGameWithBet.png[]
+
+.Deleted Game
+image::img/deletedGameWithBet.png[]
+
+.Bet Was Deleted
+image::img/betWasDeleted.png[]
