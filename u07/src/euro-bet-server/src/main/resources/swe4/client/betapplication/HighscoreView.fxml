@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="swe4.client.betapplication.controllers.HighscoreViewController"
+      spacing="30">
+    <HBox alignment="CENTER">
+        <padding>
+            <Insets top="15"/>
+        </padding>
+        <Text textAlignment="CENTER" strokeType="OUTSIDE" strokeWidth="0.0" text="Highscore List">
+            <font>
+                <Font name="System Bold" size="24.0"/>
+            </font>
+        </Text>
+    </HBox>
+    <TableView fx:id="highscoreTable">
+        <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+        </columnResizePolicy>
+        <columns>
+            <TableColumn text="Name">
+                <cellValueFactory>
+                    <PropertyValueFactory property="username"/>
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn text="Total Score" fx:id="totalScoreCol">
+                <cellValueFactory>
+                    <PropertyValueFactory property="highscore"/>
+                </cellValueFactory>
+            </TableColumn>
+        </columns>
+    </TableView>
+</VBox>
