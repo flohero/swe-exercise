@@ -7,11 +7,12 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
+
 import com.mysql.cj.jdbc.MysqlDataSource;
 
 
 public class ConnectionFactory {
-    public static final String DB_PROPERTIES = "./db.properties";
+    public static final String DB_PROPERTIES = "db.properties";
     private static DataSource dataSource = null;
 
     public static Connection getConnection() {
@@ -27,16 +28,17 @@ public class ConnectionFactory {
 
     private static void loadMySqlDatasource() {
         Properties props = new Properties();
-        try(InputStream inputStream = new FileInputStream(DB_PROPERTIES)) {
-            props.load(inputStream);
-            MysqlDataSource mysqlDataSource = new MysqlDataSource();
-            mysqlDataSource.setUrl(props.getProperty("mysql.url"));
-            mysqlDataSource.setUser(props.getProperty("mysql.user"));
-            mysqlDataSource.setPassword(props.getProperty("mysql.password"));
-            dataSource = mysqlDataSource;
+        try {
+            props.load(ConnectionFactory.class.getClassLoader().getResourceAsStream(DB_PROPERTIES));
         } catch (IOException e) {
             e.printStackTrace();
         }
+        MysqlDataSource mysqlDataSource = new MysqlDataSource();
+        mysqlDataSource.setUrl(props.getProperty("mysql.url"));
+        mysqlDataSource.setUser(props.getProperty("mysql.user"));
+        mysqlDataSource.setPassword(props.getProperty("mysql.password"));
+        dataSource = mysqlDataSource;
+
     }
 
 }

@@ -16,7 +16,7 @@ public class RepositoryFactory {
 
     public static UserRepository userRepositoryInstance() {
         if(userRepository == null) {
-            userRepository = new FakeUserRepository();
+            userRepository = new SqlUserRepository();
         }
         return userRepository;
     }

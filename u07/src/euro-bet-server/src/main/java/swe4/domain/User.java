@@ -4,14 +4,21 @@ import java.io.Serializable;
 import java.util.UUID;
 
 public class User implements Serializable {
-    private final UUID id;
+    private int id;
     private String firstname;
     private String lastname;
     private String username;
     private String password;
 
+    public User(int id, String firstname, String lastname, String username, String password) {
+        this.id = id;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.username = username;
+        this.password = password;
+    }
+
     public User(String firstname, String lastname, String username, String password) {
-        this.id = UUID.randomUUID();
         this.firstname = firstname;
         this.lastname = lastname;
         this.username = username;
@@ -20,11 +27,15 @@ public class User implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof User &&  (((User) obj).id.equals(this.id) || ((User) obj).username.equals(this.username));
+        return obj instanceof User &&  (((User) obj).id == (this.id) || ((User) obj).username.equals(this.username));
     }
 
-    public UUID getId() {
+    public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getFirstname() {
