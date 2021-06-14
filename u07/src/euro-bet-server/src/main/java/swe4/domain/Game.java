@@ -7,7 +7,7 @@ import java.util.UUID;
 public class Game implements Serializable {
 
     private static final int GAME_LENGTH = 90 + 15;
-    private final UUID id;
+    private int id;
     private Team team1;
     private Team team2;
     private int scoreTeam1;
@@ -15,8 +15,15 @@ public class Game implements Serializable {
     private LocalDateTime startTime;
     private String venue;
 
-    public Game(Team team1, Team team2, int scoreTeam1, int scoreTeam2, LocalDateTime startTime, String venue) {
-        id = UUID.randomUUID();
+    public Game(int id,
+                Team team1,
+                Team team2,
+                int scoreTeam1,
+                int scoreTeam2,
+                LocalDateTime startTime,
+                String venue
+    ) {
+        this.id = id;
         this.team1 = team1;
         this.team2 = team2;
         this.scoreTeam1 = scoreTeam1;
@@ -25,7 +32,16 @@ public class Game implements Serializable {
         this.venue = venue;
     }
 
-    public UUID getId() {
+    public Game(Team team1, Team team2, int scoreTeam1, int scoreTeam2, LocalDateTime startTime, String venue) {
+        this.team1 = team1;
+        this.team2 = team2;
+        this.scoreTeam1 = scoreTeam1;
+        this.scoreTeam2 = scoreTeam2;
+        this.startTime = startTime;
+        this.venue = venue;
+    }
+
+    public int getId() {
         return id;
     }
 
@@ -70,10 +86,10 @@ public class Game implements Serializable {
     }
 
     public String getStatus(LocalDateTime time) {
-        if(this.startTime.isAfter(time)) {
+        if (this.startTime.isAfter(time)) {
             return "Upcoming";
         }
-        if(this.getEstimatedEndTime().isBefore(time)) {
+        if (this.getEstimatedEndTime().isBefore(time)) {
             return "Finished";
         }
         return "LIVE";
@@ -84,7 +100,7 @@ public class Game implements Serializable {
     }
 
     public String getScore() {
-        return scoreTeam1 + " : " +scoreTeam2;
+        return scoreTeam1 + " : " + scoreTeam2;
     }
 
     @Override
@@ -94,6 +110,6 @@ public class Game implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof Game && this.id.equals(((Game)obj).id);
+        return obj instanceof Game && this.id == (((Game) obj).id);
     }
 }

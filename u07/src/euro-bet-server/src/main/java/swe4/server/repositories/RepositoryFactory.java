@@ -17,8 +17,8 @@ public class RepositoryFactory {
     }
 
     public static UserRepository userRepositoryInstance() {
-        if(userRepository == null) {
-            if(DataAccessLayerConfig.isInMemory()) {
+        if (userRepository == null) {
+            if (DataAccessLayerConfig.isInMemory()) {
                 userRepository = new FakeUserRepository();
             } else {
                 userRepository = new SqlUserRepository();
@@ -28,8 +28,8 @@ public class RepositoryFactory {
     }
 
     public static TeamRepository teamRepositoryInstance() {
-        if(teamRepository == null) {
-            if(DataAccessLayerConfig.isInMemory()) {
+        if (teamRepository == null) {
+            if (DataAccessLayerConfig.isInMemory()) {
                 teamRepository = new FakeTeamRepository();
             } else {
                 teamRepository = new SqlTeamRepository();
@@ -39,14 +39,18 @@ public class RepositoryFactory {
     }
 
     public static GameRepository gameRepositoryInstance() {
-        if(gameRepository == null) {
-            gameRepository = new FakeGameRepository();
+        if (gameRepository == null) {
+            if (DataAccessLayerConfig.isInMemory()) {
+                gameRepository = new FakeGameRepository();
+            } else {
+                gameRepository = new SqlGameRepository();
+            }
         }
         return gameRepository;
     }
 
     public static BetRepository betRepositoryInstance() {
-        if(betRepository == null) {
+        if (betRepository == null) {
             betRepository = new FakeBetRepository();
         }
         return betRepository;

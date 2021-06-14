@@ -10,6 +10,7 @@ import swe4.server.repositories.RepositoryFactory;
 import swe4.server.repositories.TeamRepository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class LoadFakeDataService {
     private final UserServiceImpl userService = new UserServiceImpl();

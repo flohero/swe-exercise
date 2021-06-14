@@ -3,6 +3,7 @@ package swe4.server.repositories;
 import swe4.domain.Team;
 import swe4.server.ConnectionFactory;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -40,10 +41,14 @@ public class SqlTeamRepository implements TeamRepository {
     public void insertTeam(Team team) {
         try (var stmt =
                      ConnectionFactory.getConnection().prepareStatement(
-                             "INSERT INTO teams (name) VALUE (?)"
+                             "INSERT INTO teams (name) VALUE (?)",
+                             PreparedStatement.RETURN_GENERATED_KEYS
                      )) {
             stmt.setString(1, team.getName());
             stmt.executeUpdate();
+            ResultSet resultSet = stmt.getGeneratedKeys();
+            resultSet.next();
+            team.setId(resultSet.getInt(1));
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
