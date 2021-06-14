@@ -23,7 +23,7 @@ public class RepositoryFactory {
 
     public static TeamRepository teamRepositoryInstance() {
         if(teamRepository == null) {
-            teamRepository = new FakeTeamRepository();
+            teamRepository = new SqlTeamRepository();
         }
         return teamRepository;
     }

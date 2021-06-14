@@ -5,16 +5,16 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class Team implements Serializable {
-    private final UUID id;
+    private int id;
     private final String name;
 
     public Team(final String name) {
-        this.id = UUID.randomUUID();
         this.name = name;
     }
 
-    public UUID getId() {
-        return id;
+    public Team(final int id, final String name) {
+        this.id = id;
+        this.name = name;
     }
 
     public String getName() {
