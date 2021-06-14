@@ -51,7 +51,6 @@ public class SqlUserRepository implements UserRepository {
             stmt.setString(1, username);
             ResultSet resultSet = stmt.executeQuery();
             if (resultSet.next()) {
-                System.out.println("HERE");
                 user = Optional.of(userFromResultSet(resultSet));
             }
         } catch (SQLException exception) {

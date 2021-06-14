@@ -1,5 +1,7 @@
 package swe4.server.repositories;
 
+import swe4.server.config.DataAccessLayerConfig;
+
 public class RepositoryFactory {
 
     private static UserRepository userRepository = null;
@@ -16,14 +18,22 @@ public class RepositoryFactory {
 
     public static UserRepository userRepositoryInstance() {
         if(userRepository == null) {
-            userRepository = new SqlUserRepository();
+            if(DataAccessLayerConfig.isInMemory()) {
+                userRepository = new FakeUserRepository();
+            } else {
+                userRepository = new SqlUserRepository();
+            }
         }
         return userRepository;
     }
 
     public static TeamRepository teamRepositoryInstance() {
         if(teamRepository == null) {
-            teamRepository = new SqlTeamRepository();
+            if(DataAccessLayerConfig.isInMemory()) {
+                teamRepository = new FakeTeamRepository();
+            } else {
+                teamRepository = new SqlTeamRepository();
+            }
         }
         return teamRepository;
     }
