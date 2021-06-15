@@ -2,26 +2,32 @@ package swe4.domain;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 public class Bet implements Serializable {
     private static final float POINTS = 10;
     private static final float POINT_MULTIPLICATION = 0.5f;
-    private final UUID id;
+    private int id;
     private final User user;
     private final Game game;
     private Team winner;
     private PlacementTime placed;
 
-    public Bet(User user, Game game, Team winner, PlacementTime placed) {
-        this.id = UUID.randomUUID();
+    public Bet(int id, User user, Game game, Team winner, PlacementTime placed) {
+        this.id = id;
         this.user = user;
         this.game = game;
         this.winner = winner;
         this.placed = placed;
     }
 
-    public UUID getId() {
+    public Bet(User user, Game game, Team winner, PlacementTime placed) {
+        this.user = user;
+        this.game = game;
+        this.winner = winner;
+        this.placed = placed;
+    }
+
+    public int getId() {
         return id;
     }
 

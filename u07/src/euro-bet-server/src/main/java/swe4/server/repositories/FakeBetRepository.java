@@ -14,7 +14,6 @@ public class FakeBetRepository implements BetRepository {
 
     private final List<Bet> bets = new ArrayList<>();
 
-
     @Override
     public Collection<Bet> findAllBets() {
         return bets;

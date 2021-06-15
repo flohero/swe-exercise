@@ -51,7 +51,11 @@ public class RepositoryFactory {
 
     public static BetRepository betRepositoryInstance() {
         if (betRepository == null) {
-            betRepository = new FakeBetRepository();
+            if (DataAccessLayerConfig.isInMemory()) {
+                betRepository = new FakeBetRepository();
+            } else {
+                betRepository = new SqlBetRepository();
+            }
         }
         return betRepository;
     }

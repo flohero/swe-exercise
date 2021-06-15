@@ -6,6 +6,7 @@ import swe4.server.ConnectionFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,7 +40,8 @@ public class SqlGameRepository implements GameRepository {
         try (var stmt =
                      ConnectionFactory.getConnection().prepareStatement(
                              "INSERT INTO games (team1, team2, score_team1, score_team2, start_time, venue) " +
-                                     "VALUE (?, ?, ?, ?, ?, ?)"
+                                     "VALUE (?, ?, ?, ?, ?, ?)",
+                             Statement.RETURN_GENERATED_KEYS
                      )) {
             stmt.setInt(1, game.getTeam1().getId());
             stmt.setInt(2, game.getTeam2().getId());
@@ -48,6 +50,9 @@ public class SqlGameRepository implements GameRepository {
             stmt.setObject(5, game.getStartTime());
             stmt.setString(6, game.getVenue());
             stmt.executeUpdate();
+            ResultSet resultSet = stmt.getGeneratedKeys();
+            resultSet.next();
+            game.setId(resultSet.getInt(1));
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
@@ -143,10 +148,10 @@ public class SqlGameRepository implements GameRepository {
         List<Game> games = new ArrayList<>();
         final String queryString =
                 "SELECT games.id, team1, t1.name as team1_name, team2, t2.name as team2_name, score_team1, score_team2, start_time, venue " +
-                "FROM games " +
-                "join teams t1 on t1.id = games.team1 " +
-                "join teams t2 on t2.id = games.team2 " +
-                "WHERE (t1.id = ? OR t2.id = ?) AND ((start_time <= ? AND DATE_ADD(games.start_time, INTERVAL 105 MINUTE) >= ?))";
+                        "FROM games " +
+                        "join teams t1 on t1.id = games.team1 " +
+                        "join teams t2 on t2.id = games.team2 " +
+                        "WHERE (t1.id = ? OR t2.id = ?) AND ((start_time <= ? AND DATE_ADD(games.start_time, INTERVAL 105 MINUTE) >= ?))";
         return findGamesWithTimeComponent(team, startTime, endTime, games, queryString);
     }
 
