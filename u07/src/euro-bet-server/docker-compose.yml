@@ -9,3 +9,5 @@ services:
       MYSQL_ROOT_PASSWORD: toor
     ports:
       - 3306:3306
+    volumes:
+      - ./src/main/resources/sql:/docker-entrypoint-initdb.d

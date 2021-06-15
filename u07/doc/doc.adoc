@@ -18,9 +18,166 @@
 
 <<<
 == Lösungsidee
+Es kann das Projekt eins zu eins übernommen werden.
+Die `RepositoryFactory` ist die einzige Klasse, welche mit den konkreten Implementierungen der Repositories interagiert.
+Deshalb müssen nur dort die Repositories ersetzt werden.
+
+Um die Repositories unabhängig von der SQL Datenbank zu halten, wird eine `ConnectionFactory` implementiert,
+diese erstellt bei Bedarf eine neue Verbindung zur Datenbank, dafür wird die `DataSource`-Klasse genutzt.
+
+Zur Konfiguration der Datenbank-Schnittstelle und des Data Access Layers, wird ein Properties File erstellt.
+Dieses wird über den Class-Path geladen. +
+Über das File kann man zwischen der Fake Repository Implementierung und der SQL Implementierung wechseln(`inMemory` oder `mysql`),
+sowie die Schnittstelle der Datenbank konfigurieren.
+
+Für die Mysql Datenbank gibt es ein create und insert Script.
+Um die Datenbank zu starten, muss nur `docker-compose up` im selben Directory wie das `docker-compose.yml` ausgeführt werden.
 
 <<<
 == Source-Code
+.ConnectionFactory.java
+[source,java]
+----
+include::../src/euro-bet-server/src/main/java/swe4/server/ConnectionFactory.java[]
+----
+
+<<<
+=== config
+.DataAccessLayerConfig.java
+[source,java]
+----
+include::../src/euro-bet-server/src/main/java/swe4/server/config/DataAccessLayerConfig.java[]
+----
+
+<<<
+=== domain
+.User.java
+[source,java]
+----
+include::../src/euro-bet-server/src/main/java/swe4/domain/User.java[]
+----
+
+<<<
+.Team.java
+[source,java]
+----
+include::../src/euro-bet-server/src/main/java/swe4/domain/Team.java[]
+----
+
+<<<
+.Game.java
+[source,java]
+----
+include::../src/euro-bet-server/src/main/java/swe4/domain/Game.java[]
+----
+
+<<<
+.Bet.java
+[source,java]
+----
+include::../src/euro-bet-server/src/main/java/swe4/domain/Bet.java[]
+----
+
+.PlacementTime.java
+[source,java]
+----
+include::../src/euro-bet-server/src/main/java/swe4/domain/PlacementTime.java[]
+----
+
+<<<
+=== Repositories
+.UserRepository.java
+[source,java]
+----
+include::../src/euro-bet-server/src/main/java/swe4/server/repositories/UserRepository.java[]
+----
+
+<<<
+.SqlUserRepository.java
+[source,java]
+----
+include::../src/euro-bet-server/src/main/java/swe4/server/repositories/SqlUserRepository.java[]
+----
+
+<<<
+.TeamRepository.java
+[source,java]
+----
+include::../src/euro-bet-server/src/main/java/swe4/server/repositories/TeamRepository.java[]
+----
+
+<<<
+.SqlTeamRepository.java
+[source,java]
+----
+include::../src/euro-bet-server/src/main/java/swe4/server/repositories/SqlTeamRepository.java[]
+----
+
+<<<
+.GameRepository.java
+[source,java]
+----
+include::../src/euro-bet-server/src/main/java/swe4/server/repositories/GameRepository.java[]
+----
+
+<<<
+.SqlGameRepository.java
+[source,java]
+----
+include::../src/euro-bet-server/src/main/java/swe4/server/repositories/SqlGameRepository.java[]
+----
+
+<<<
+.BetRepository.java
+[source,java]
+----
+include::../src/euro-bet-server/src/main/java/swe4/server/repositories/BetRepository.java[]
+----
+
+<<<
+.SqlBetRepository.java
+[source,java]
+----
+include::../src/euro-bet-server/src/main/java/swe4/server/repositories/SqlBetRepository.java[]
+----
+
+<<<
+.RepositoryFactory.java
+[source,java]
+----
+include::../src/euro-bet-server/src/main/java/swe4/server/repositories/RepositoryFactory.java[]
+----
+
+<<<
+=== Properties
+.dataAccess.properties
+[source,properties]
+----
+include::../src/euro-bet-server/src/main/resources/dataAccess.properties[]
+----
+
+<<<
+=== Docker
+.docker-compose.yml
+[source,yml]
+----
+include::../src/euro-bet-server/docker-compose.yml[]
+----
+
+<<<
+=== SQL
+.DB_CREATE.sql
+[source,sql]
+----
+include::../src/euro-bet-server/src/main/resources/sql/DB_CREATE.sql[]
+----
+
+<<<
+.DB_INSERT.sql
+[source,sql]
+----
+include::../src/euro-bet-server/src/main/resources/sql/DB_INSERT.sql[]
+----
 
 <<<
 == Test Cases
