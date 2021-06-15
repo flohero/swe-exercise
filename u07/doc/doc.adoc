@@ -1,4 +1,4 @@
-= Übung 06
+= Übung 07
 :author: Florian Weingartshofer
 :email: <S1910307103@students.fh-hagenberg.at>
 :reproducible:
@@ -21,6 +21,7 @@
 Es kann das Projekt eins zu eins übernommen werden.
 Die `RepositoryFactory` ist die einzige Klasse, welche mit den konkreten Implementierungen der Repositories interagiert.
 Deshalb müssen nur dort die Repositories ersetzt werden.
+An der UI wurde nichts verändert, daher werden eher die Backend lastigen Features getestet.
 
 Um die Repositories unabhängig von der SQL Datenbank zu halten, wird eine `ConnectionFactory` implementiert,
 diese erstellt bei Bedarf eine neue Verbindung zur Datenbank, dafür wird die `DataSource`-Klasse genutzt.
@@ -32,6 +33,57 @@ sowie die Schnittstelle der Datenbank konfigurieren.
 
 Für die Mysql Datenbank gibt es ein create und insert Script.
 Um die Datenbank zu starten, muss nur `docker-compose up` im selben Directory wie das `docker-compose.yml` ausgeführt werden.
+Damit wird auch gleich das Datenbankschema erstellt und erste Testdaten eingefügt.
+
+<<<
+=== Datenbank-Schema
+Das Datenbank-Schema sollte keine Überraschung sein, es sind nur ein paar Constraints dazu gekommen.
+
+.UML Diagram
+[plantuml]
+....
+!theme sketchy-outline
+entity Team {
+  * id: INT <<generated>>
+  --
+  * name: VARCHAR(45) <<unique>>
+}
+
+entity User {
+  * id: INT <<generated>>
+  --
+  * firstname: VARCHAR(1000)
+  * lastname: VARCHAR(1000)
+  * username: VARCHAR(1000) <<unique>>
+  * password: VARCHAR(255)
+}
+
+entity Game {
+  * id: INT <<generated>>
+  --
+  * team1: INT <<FK>>
+  * team2: INT <<FK>>
+  * score_team1: INT = 0
+  * score_team2: INT = 0
+  * start_time: DATETIME
+  * venue: VARCHAR(1000)
+}
+
+entity Bet {
+  * id: INT <<generated>>
+  --
+  * user: INT <<FK>>
+  * game: INT <<FK>>
+  * winner_team: INT <<FK>>
+  * placed: VARCHAR
+}
+
+Team ||..{ Game
+Team ||..{ Game
+Team ||..{ Bet
+Game ||..{ Bet
+User ||..{ Bet
+....
 
 <<<
 == Source-Code
@@ -156,7 +208,6 @@ include::../src/euro-bet-server/src/main/java/swe4/server/repositories/Repositor
 include::../src/euro-bet-server/src/main/resources/dataAccess.properties[]
 ----
 
-<<<
 === Docker
 .docker-compose.yml
 [source,yml]
@@ -181,3 +232,119 @@ include::../src/euro-bet-server/src/main/resources/sql/DB_INSERT.sql[]
 
 <<<
 == Test Cases
+=== Add User
+Einen User hinzufügen.
+
+.Test Data
+image::img/default_users.png[]
+
+Es wird versucht einen User mit demselben Usernamen hinzuzufügen.
+
+.Non Unique Username
+image::img/add_user_with_non_unique_username.png[]
+
+Nun einen validen Input eingeben.
+
+.User with Valid Input
+image::img/add_user_with_valid_input.png[]
+
+<<<
+Und der User wurde hinzugefügt.
+
+.Added User
+image::img/added_user.png[]
+
+<<<
+=== Update User
+Daten von einem User müssen aktualisiert werden.
+
+.Users
+image::img/added_user.png[]
+
+<<<
+Der User wurde nun erfolgreich editiert.
+
+.Updated User
+image::img/edited_user.png[]
+
+<<<
+=== Update Game
+Ein bereits vorhandenes Spiel soll nun aktualisiert werden.
+
+.All Games
+image::img/games.png[]
+
+<<<
+Das Spiel wurde erfolgreich aktualisiert.
+
+.Updated Game
+image::img/updated_game.png[]
+
+<<<
+=== Add Game
+Ein Spiel soll hinzugefügt werden.
+
+.Overlapping game
+image::img/overlapping_game.png[]
+
+<<<
+Sollte das Spiel nicht überlappen, kann es auch hinzugefügt werden.
+
+.Valid Game
+image::img/valid_game.png[]
+
+.Added Game
+image::img/added_game.png[]
+
+<<<
+=== Login
+Ein User möchte sich anmelden, dabei läuft die Katze über die Tastatur.
+
+.Invalid Login
+image::img/invalid_login.png[]
+
+.Invalid Login Error
+image::img/invalid_login_error.png[]
+
+<<<
+Der User kann nun erfolgreich seine Daten eingeben und wird angemeldet.
+
+.Successful Login
+image::img/successful_login.png[]
+
+=== Place Bet
+Der User möchte nun eine Wette platzieren.
+
+.All Bets and Games
+image::img/all_bets.png[]
+
+<<<
+Der User platziert seine Wette.
+
+.Placed Bet
+image::img/placed_bet.png[]
+
+<<<
+Dann entscheidet sich der User doch um.
+
+.Updated Bet
+image::img/updated_bet.png[]
+
+<<<
+=== New Highscore
+Eine neue Wette wurde auf ein live Spiel platziert.
+
+.Live Game Bet
+image::img/new_bet.png[]
+
+<<<
+Der momentane Highscore.
+
+.Current Highscore
+image::img/old_highscore.png[]
+
+<<<
+Und der neue Highscore.
+
+.New Highscore
+image::img/new_highscore.png[]
