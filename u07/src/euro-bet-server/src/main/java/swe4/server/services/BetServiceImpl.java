@@ -1,9 +1,9 @@
 package swe4.server.services;
 
-import swe4.dto.UserScore;
 import swe4.domain.Bet;
 import swe4.domain.Game;
 import swe4.domain.User;
+import swe4.dto.UserScore;
 import swe4.server.repositories.BetRepository;
 import swe4.server.repositories.GameRepository;
 import swe4.server.repositories.RepositoryFactory;

@@ -2,7 +2,6 @@ package swe4.domain;
 
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.UUID;
 
 public class Team implements Serializable {
     private int id;

@@ -13,6 +13,8 @@ import java.util.Optional;
 
 public class SqlBetRepository implements BetRepository {
 
+    SqlBetRepository() {}
+
     private Bet betFromResultSet(ResultSet resultSet) throws SQLException {
         final Team team1 = new Team(
                 resultSet.getInt("team1_id"),

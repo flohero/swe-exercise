@@ -2,7 +2,6 @@ package swe4.domain;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 public class Game implements Serializable {
 

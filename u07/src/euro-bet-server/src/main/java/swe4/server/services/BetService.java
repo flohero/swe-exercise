@@ -1,9 +1,9 @@
 package swe4.server.services;
 
-import swe4.dto.UserScore;
 import swe4.domain.Bet;
 import swe4.domain.Game;
 import swe4.domain.User;
+import swe4.dto.UserScore;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
